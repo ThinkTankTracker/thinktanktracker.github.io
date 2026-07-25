@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>坊间 · 键政圈 · 近况 (experimental)</title>
+<style>
+  /* Informal identity, distinct from the digest's navy: this page is
+     individual chatter, not institutional research. Explicit color-scheme +
+     background: without them, forced-dark browsers repaint the page into
+     dark-on-dark unreadability (observed live on the monthly page). */
+  :root { color-scheme: light dark;
+          --accent: #0f766e; --muted: #6b7280; --rule: #e5e7eb;
+          --bg: #ffffff; --fg: #111827; --chip-bg: #ffffff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --accent: #2dd4bf; --muted: #94a3b8; --rule: #334155;
+            --bg: #0f172a; --fg: #e2e8f0; --chip-bg: #1e293b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 760px; padding: 2rem 1.25rem 4rem;
+         font-family: -apple-system, "Segoe UI", "PingFang SC",
+         "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+         background: var(--bg); color: var(--fg); line-height: 1.6; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: .75rem;
+           margin-bottom: 1.5rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; color: var(--accent); }
+  .exp { display: inline-block; vertical-align: middle; margin-left: .5rem;
+         font-size: .68rem; font-weight: 600; letter-spacing: .05em;
+         color: #92400e; background: #fef3c7; border: 1px solid #fcd34d;
+         border-radius: 3px; padding: .05rem .4rem; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: .85rem; margin: 0; }
+  .sub a { color: var(--muted); }
+  .topics { margin: 1.2rem 0 0; }
+  .topics button { font: inherit; font-size: .8rem; color: var(--muted);
+                   background: none; border: 1px solid var(--rule);
+                   border-radius: 999px; padding: .1rem .7rem;
+                   margin: 0 .35rem .35rem 0; cursor: pointer; }
+  .topics button.on { color: var(--accent); border-color: var(--accent); }
+  .chips { margin: .6rem 0 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+  .chip { font-size: .78rem; border: 1px solid var(--rule);
+          border-radius: 999px; padding: .1rem .6rem; cursor: pointer;
+          background: var(--chip-bg); color: var(--fg); user-select: none; }
+  .chip .n { color: var(--muted); margin-left: .25rem; }
+  .chip.on { background: var(--accent); border-color: var(--accent);
+             color: var(--bg); }
+  .chip.on .n { color: var(--bg); opacity: .7; }
+  .chip.zero { opacity: .45; }
+  .topicdiv { color: var(--accent); font-size: .78rem; font-weight: 600;
+              letter-spacing: .12em; border-bottom: 1px solid var(--rule);
+              padding-bottom: .25rem; margin: 2.5rem 0 -1rem; }
+  .crumbs { display: flex; justify-content: space-between; align-items: baseline;
+            gap: 1rem; font-size: .9rem; margin: 0 0 .7rem; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+  h2 { font-size: 1.02rem; margin: 2rem 0 .1rem; }
+  h2 a { color: var(--accent); text-decoration: none; }
+  h2 a:hover { text-decoration: underline; }
+  h2 .cn { font-weight: 400; color: var(--muted); margin-left: .4rem; }
+  .badge { font-size: .68rem; font-weight: 600; border-radius: 3px;
+           padding: .05rem .35rem; margin-left: .5rem; vertical-align: middle; }
+  .badge.stale { color: #92400e; background: #fef3c7; }
+  .badge.err { color: #991b1b; background: #fee2e2; }
+  .accnote { color: var(--muted); font-size: .8rem; margin: 0 0 .5rem; }
+  ul.posts { list-style: none; margin: 0; padding: 0; }
+  ul.posts li { border-top: 1px solid var(--rule); padding: .55rem 0; }
+  .when { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+  .reply, .mbadge { color: var(--muted); font-size: .72rem;
+           border: 1px solid var(--rule); border-radius: 3px;
+           padding: 0 .25rem; margin-left: .35rem; }
+  .ptext { margin: .15rem 0 0; white-space: pre-wrap; word-break: break-word; }
+  .ptext a { color: var(--accent); font-size: .8rem; text-decoration: none;
+             margin-left: .4rem; white-space: nowrap; }
+  blockquote.qt { border-left: 2px solid var(--rule); margin: .35rem 0 0;
+                  padding: .05rem .6rem; color: var(--muted); font-size: .9em;
+                  white-space: pre-wrap; word-break: break-word; }
+  blockquote.qt a { color: var(--accent); font-size: .85em;
+                    text-decoration: none; margin-right: .45rem; }
+  .more, .none { color: var(--muted); font-size: .8rem; padding: .4rem 0 0; }
+  footer { margin-top: 3rem; border-top: 1px solid var(--rule);
+           padding-top: .75rem; color: var(--muted); font-size: .78rem; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="crumbs">
+    <span><a href="index.html">← Think Tank Tracker</a> ·
+      <a href="x-monthly-zh-2026-07.html">月度全览</a></span>
+    <span><a href="x-pulse-en.html">⇄ ChinaX</a></span>
+  </nav>
+  <h1>坊间 · 键政圈 · 近况<span class="exp">experimental</span></h1>
+  <p class="sub">中文键政圈的个人发言与坊间议论——吃瓜、读帖、看风向;轻松、即时、未经编辑。</p>
+  <p class="sub">近 14 天 · 名单出自 Asia Society <a href="https://asiasociety.org/policy-institute/china-watching-chinese" target="_blank" rel="noopener" style="color:inherit">China Watching in the Chinese Language</a>
+ · 更新于 2026-07-26 05:36(北京时间)</p>
+  
+  <div class="chips" id="chips">
+    <span class="chip on" data-handle="">全部</span>
+    <span class="chip" data-handle="CaoLei1">曹山石<span class="n">11</span></span>
+    <span class="chip zero" data-handle="CinnabarOcean">云青天<span class="n">0</span></span>
+    <span class="chip" data-handle="CNPoliWatch">中国人事观察<span class="n">13</span></span>
+    <span class="chip" data-handle="FollowCnRules">中规中矩<span class="n">9</span></span>
+    <span class="chip" data-handle="Guoguang_Wu">吴国光<span class="n">2</span></span>
+    <span class="chip" data-handle="HankInBeijing">HankInBeijing<span class="n">19</span></span>
+    <span class="chip" data-handle="JosephWen___">Joseph.W 約瑟<span class="n">9</span></span>
+    <span class="chip" data-handle="MacroMargin">宏观边际<span class="n">23</span></span>
+    <span class="chip" data-handle="MaoViews">MaoViews<span class="n">3</span></span>
+    <span class="chip zero" data-handle="ZhongXinXi1">鍾馨溪<span class="n">0</span></span>
+  </div>
+</header>
+
+
+
+<section class="acct" data-handle="CaoLei1">
+  <h2><a href="https://x.com/CaoLei1" target="_blank" rel="noopener">@CaoLei1</a><span class="cn">曹山石</span></h2>
+  <p class="accnote">金融圈出身,监管动向和相关人事的早期风声常从这里出;准头时好时坏, 看的是金融圈内部在议论什么。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-24 20:46</span>
+      <div class="ptext">转融通之父、量化推手，明天需要临时换嘉宾了。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2080635695744327940" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 10:34</span>
+      <div class="ptext">(图片/媒体帖)<a href="https://x.com/caolei1/status/2080481803140276652" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 09:12</span>
+      <div class="ptext">A股公募基金半年持仓占比：电子、通信满配。美容护理、服装服饰、商贸零售三个行业加总0.3%——还比不过煤炭一个行业（0.36%）。
+持仓K型割裂到达历史峰值。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2079736351788769630" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 21:10</span>
+      <div class="ptext">广发证券今晚公告上调两融总规模上限，调整为净资本2.5倍。截至一季度，广发净资本为1131亿元，调整后融资融券业务总规模上限为2875亿【之前上限为1900亿】。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2079192293773373738" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-19 21:10</span>
+      <div class="ptext">私募比公募还讲政治率先托市。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2078829897917554993" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-18 11:21</span>
+      <div class="ptext">之前高抛，现在低吸。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2078319132445958372" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-17 18:33</span>
+      <div class="ptext">(图片/媒体帖)<a href="https://x.com/caolei1/status/2078065602724294893" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-17 16:06</span>
+      <div class="ptext">本周A股：是中证500和创业板指近10年跌得最多的一周，是中证1000和中证2000近10年跌得第二多的一周。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2078028653439365322" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">窗口内还有 3 条未展示。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="CinnabarOcean">
+  <h2><a href="https://x.com/CinnabarOcean" target="_blank" rel="noopener">@CinnabarOcean</a><span class="cn">云青天</span><span class="badge stale">久无原创 · 最后 2026-06-20 18:04</span></h2>
+  <p class="accnote">老练的读帖高手,历史功底扎实;李强专机降格是他先报的,何立峰仕途 的深度长文也出自其手。</p>
+  
+  <div class="none">窗口内无帖子。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="CNPoliWatch">
+  <h2><a href="https://x.com/CNPoliWatch" target="_blank" rel="noopener">@CNPoliWatch</a><span class="cn">中国人事观察</span></h2>
+  <p class="accnote">盯《新闻联播》抠细节的人事分析专业户——座次、着装、背景板,处处 是信号。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 14:53</span>
+      <div class="ptext">张华伟的单位主官任职经历：副战区级、正军级、副军级、正师级、正团级、正营级、正连级。佩戴空军胸标，因此在空军机关或某战区空军任职。
+
+张华伟担任副战区级单位主官，说明张华伟的职务是某战区空军司令员（各个战区的空军为副战区级单位），而不是空军副司令员。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080909191108010488" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2080576657170034990" target="_blank" rel="noopener">@cnpoliwatch</a>7月24日，董军访问泰国，张华伟空军中将首次亮相，具体职务暂未披露。
+
+张华伟曾任空军航空兵某师师长，参与了2019年国庆阅兵，担任领队机梯队 长机 机长。
+
+空军补缺的速度在各军种中继续一骑绝尘。</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 19:25</span>
+      <div class="ptext">李峻（1975.07）任中国电子信息产业集团（“中国电子”）总经理，晋升副部级，是第24位“75后”副部级干部，也是继东航高飞、东风汽车冯长军、中国移动陈扬帆之后的第四位“75后”副部级央企的总经理。
+
+李峻的上一个职务是中国航天科技集团副总经理，但他并非出身于航天央企，而是早年就在中国电子工作。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080615457757736978" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 16:51</span>
+      <div class="ptext">7月24日，董军访问泰国，张华伟空军中将首次亮相，具体职务暂未披露。
+
+张华伟曾任空军航空兵某师师长，参与了2019年国庆阅兵，担任领队机梯队 长机 机长。
+
+空军补缺的速度在各军种中继续一骑绝尘。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080576657170034990" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2049488393159999494" target="_blank" rel="noopener">@cnpoliwatch</a>尹伟中将已任空军参谋长：
+
+4月23日至28日，董军访问俄罗斯、吉尔吉斯斯坦，并出席上合组织成员国国防部长会议。新任空军参谋长尹伟中将陪同。
+
+此前，尹伟担任空军副参谋长。去年9月，尹伟主持长春航展开幕式，当时他还只是一名少将。
+
+相比其他军种，空军将领不但“幸存”的多，补缺也补的更快。</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 16:32</span><span class="reply">回复</span>
+      <div class="ptext">前任国家矿山安监局山西局党组书记、局长胡海军，已经在这个月落马。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080571891396358474" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 16:09</span>
+      <div class="ptext">山西矿难后，国家矿山安监局副局长王海腾（1971.12）已兼任该局山西局党组书记、局长。国家局领导兼任本机构省级派出机构一把手的安排非常少见。王海腾在执行层面肩负着山西煤矿安全整顿的重任。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080566013163127106" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 11:01</span><span class="reply">回复</span>
+      <div class="ptext">背景
+https://x.com/zaobaosg/status/2077967237793616312<a href="https://x.com/cnpoliwatch/status/2080126020879819173" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/zaobaosg/status/2077967237793616312" target="_blank" rel="noopener">@zaobaosg</a>菲律宾强烈谴责中国官媒《中国日报》上传一段将菲律宾人描绘为猴子的人工智能（AI）生成视频，斥责这一带有“种族主义”色彩的画面“极具冒犯性且令人痛苦”，并要求撤回视频。 https://www.zaobao.com.sg/news/china/story20260717-9377168?utm_medium=Social&amp;utm_source=Twitter#Echobox=1784255144</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-23 11:01</span>
+      <div class="ptext">中国驻菲律宾大使井泉：
+
+这只是媒体的行为，跟政府没有任何关系。中国有那么多媒体，不可能要求每一家媒体、每一个视频、每一篇文章、每一份报纸都去管控。不可能。而且……我认为我们对此不作评论。这就是立场。其实，当我们说&#34;不作评论&#34;时，那本身就是我们的立场。<a href="https://x.com/cnpoliwatch/status/2080126018271007176" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/ABSCBNNews/status/2079743900886155526" target="_blank" rel="noopener">@ABSCBNNews</a>Chinese Ambassador Jing Quan distanced Beijing from the China Daily editorial depicting Filipinos as a scraggly and timid monkey in barong and salakot, saying it was &#34;just the media&#39;s action&#34; and &#34;nothing related to government.&#34; | via @zenhernandez</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 22:55</span>
+      <div class="ptext">全国最年轻的地级市市长更新。
+
+姚凯（1982.02）任安徽省铜陵市代市长，是首位出生于1982年的地级市市长。今年44岁。
+
+38年前也有一位年轻的铜陵市长。1988年，汪洋任铜陵市长，时年33岁。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2079943522593988948" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2066401914942541947" target="_blank" rel="noopener">@cnpoliwatch</a>白云峰（1981.09）任湖南省彬州市代市长。今年45岁的他是目前全国最年轻的地级市市长（与山西省阳泉市市长陈凯并列）。
+
+目前，全国最年轻的地级市市长的纪录仍然由刘凯（1983.07）保持。他在2021年担任甘肃省嘉峪关市市长时，年仅38岁。</blockquote>
+    </li>
+    
+  </ul>
+  <div class="more">窗口内还有 5 条未展示。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="FollowCnRules">
+  <h2><a href="https://x.com/FollowCnRules" target="_blank" rel="noopener">@FollowCnRules</a><span class="cn">中规中矩</span></h2>
+  <p class="accnote">据信是资深时政记者操盘;人事变动和官僚系统动态的高质量分析,另有 YouTube 频道。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-23 22:38</span>
+      <div class="ptext">刊登着“批评形式主义”的人民日报，一摞摞崭新的被当成废品卖。耗费大量民脂民膏，却无人问津，形同垃圾，从印刷厂出来就直接进了废品站。这个才是最大的形式主义。黑色幽默的完美闭环。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2080301562711441571" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 21:33</span>
+      <div class="ptext">王沪宁会见的这个不是日本官员，而是捷克议长。冈村富夫1972年生于东京，父亲是日韩混血，母亲是捷克人。冈村富夫1977年随母亲回到当时还是社会主义国家的捷克斯洛伐克。1993年返回日本，后来再重返捷克。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2080285267496427857" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 20:56</span>
+      <div class="ptext">中国腐败官员的奇葩罪名😁😁😁
+【温家宝秘书田学斌】伪造身份证。
+【政治局委员马兴瑞】帮助亲属低价买房。
+【光大集团董事长唐双宁】既想当官又想出名。
+【新疆兵团副司令员焦小平】干扰碳达峰碳中和目标。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2080275916136345971" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 13:12</span>
+      <div class="ptext">“红色大掌柜”陈云长子陈元，一手打理的国家开发银行，显然成了“红色摇钱树”。谁来都要摇一把。王用生估计很后悔，早知道量刑差不多，应该再多贪4000万，太吃亏了😭😭😭<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2079071945828773946" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 08:49</span>
+      <div class="ptext">其实，张国清比袁家军还小2岁。但站在一起，似乎张比袁要苍老好多。二人平级，都是副国级的政治局委员，都出身军工央企，张是兵器工业集团总经理，袁是航天科技集团副总经理。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2079005832885502412" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-17 00:17</span>
+      <div class="ptext">【“正部级编剧大师”蔡赴朝】贾庆林、王岐山、李长春3位政治局常委提携；蔡赴朝和肖培的兄弟情；蔡赴朝与贾庆林大秘谭维克；六位中宣部副部长落马；蔡赴朝与孙政才的选举事故；“央视后宫”“央视公主”关系网。【详细解读】https://youtu.be/MqcGygFWhy8<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2077789767727796335" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-14 20:47</span>
+      <div class="ptext">为什么陈希的职务，被分拆到蔡奇、石泰峰两个人头上？【详细解读】https://youtu.be/nkil3q2ue9E?si=eQ4BIJyZo8uHbJGG<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2077012229447381391" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-14 13:48</span>
+      <div class="ptext">马兴瑞，我不擦去你名字😁😁😁<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2076906665941856322" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">窗口内还有 1 条未展示。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="Guoguang_Wu">
+  <h2><a href="https://x.com/Guoguang_Wu" target="_blank" rel="noopener">@Guoguang_Wu</a><span class="cn">吴国光</span><span class="badge stale">久无原创 · 最后 2026-07-18 10:47</span></h2>
+  <p class="accnote">斯坦福学者(兼 CCA 高级研究员);人民日报编辑出身、做过赵紫阳幕僚, 体制内经验打底的评论。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-18 10:47</span>
+      <div class="ptext">胡锦涛梦中复仇记😅😂👍<a href="https://x.com/guoguang_wu/status/2078310595498303604" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/i/status/2077789424792846578" target="_blank" rel="noopener">@jintao194212</a>没想到你习近平也有这一天吧🤣🤣🤣</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-17 12:46</span>
+      <div class="ptext">最近中共官场流行一种叫作“突发疾病”的致命疫情啊，染上必死，芳龄五十啷当岁的副省级、正司局级官员是高发人群。<span class="mbadge">带图</span><a href="https://x.com/guoguang_wu/status/2077978167088964094" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<section class="acct" data-handle="HankInBeijing">
+  <h2><a href="https://x.com/HankInBeijing" target="_blank" rel="noopener">@HankInBeijing</a></h2>
+  <p class="accnote">科技政策、国际组织与人事动向的前瞻观察,眼光稳准。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-24 05:39</span>
+      <div class="ptext">Thanks for the repost by the very prolific @mattsheehan88. 
+
+Just want to clarify a few points: 
+
+1. Hank knows very little/cannot tell much of what the said commission is or does;
+
+2. It wasn&#39;t formed in 2023;
+
+3. It wasn&#39;t designed to balance CAC.
+
+Correlation =/= Causation.<a href="https://x.com/hankinbeijing/status/2080407433294590057" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/mattsheehan88/status/2080371801809449288" target="_blank" rel="noopener">@mattsheehan88</a>📢For China AI policy watchers. In ~2023 NDRC was tapped to coordinate AI policy across gov (imo, to balance the security focus of CAC). I heard this was a done via a ~commission led by an NDRC vice-chair. 
+Hank identifies that person as Huang Ru, CS PhD w/ background in semicon.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 11:47</span><span class="reply">回复</span>
+      <div class="ptext">Prep is ongoing, but like the last few rounds of pre-summit talks, this one taps more into geopolitics than the technical theme on paper. 
+
+Both sides would want the rest of the world to believe that it would only be abt AI tech, but all other topics would be bundled in together.<a href="https://x.com/hankinbeijing/status/2079775363509436676" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 11:40</span>
+      <div class="ptext">Beijing knows very little what DC has in place to curb China AI. 
+
+DC also knows literally nothing of who sets Beijing&#39;s AI policies, how they work across institutions &amp; how that reflect on tension with the US.
+
+There needs to be a talk just to gauge each other&#39;s expectations.<a href="https://x.com/hankinbeijing/status/2079773549213139447" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/lauriechenwords/status/2079526649717195013" target="_blank" rel="noopener">@lauriechenwords</a>The United States and China will hold talks over AI in September, five people familiar with the matter told Reuters, as the rival superpowers grapple ​with how to mitigate the risks posed by each other&#39;s increasingly powerful frontier models. https://www.reuters.com/world/china/us-china-hold-ai-talks-september-sources-say-2026-07-21/</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 06:31</span>
+      <div class="ptext">Can only say that Kaifu has a bit too much wishful thinking right now. Not saying http://01.AI has none of Palantir&#39;s tech (which they have none). Kaifu&#39;s roots in US and Taiwan makes his product impossible to be procured &amp; deployed by the said &#34;regulated industries&#34;.<a href="https://x.com/hankinbeijing/status/2079695886050050177" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/JeffreyTowson/status/2079383574428696743" target="_blank" rel="noopener">@JeffreyTowson</a>From WAIC, Kai Fu Li’s http://01.AI is great biz strategy. 
+
+But kinda weird marketing. 
+
+This is the Palantir of China.
+
+Focused on top-down direct sales for customized AI deployment into regulated industries.
+
+Using their isolated data pools. 
+
+And avoiding the model building frenzy.
+
+That’s good strategy. 
+
+But the marketing is odd. 
+
+They use:
+
+-“money leopards” in the jungle. 
+
+It’s Chinese word play for focusing on monetizing AI asap for clients. 
+
+Smart. But the jungle stuff is odd.
+
+-Kai fu li as celebrity,
+
+Half their waic booth was his books and cut outs to take pictures with.
+
+Overall, An important business to watch.
+
+But very unique.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-21 08:13</span>
+      <div class="ptext">China&#39;s AI Tsarina, Huang Ru, finally started to make public and international appearances this past weekend at WAIC, meaning that her role as the interministerial coordinator on AI covers not just domestic AI development, but also international exchanges on AI.<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2079358966308782473" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 22:53</span>
+      <div class="ptext">Talk of the town: @kaifulee signing his books on how to make fortunes through AI. 
+
+On the very last day of WAIC, a work day, on site, in person, and impressive turnout. 
+
+By the time Hank took this pic, 200+ ppl were queueing up. 
+
+祝各位付费读者豹富 😂，祝开复老师暴富。<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2079218217395089551" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 22:38</span>
+      <div class="ptext">Same at the @MiniMax_AI stall where you get one chance at a claw machine for each rednote post. No AI, just sheer and cheap speculation. Real WAIC AI wasn&#39;t at the Expo, nor West bund, nor Zhangjiang.<a href="https://x.com/hankinbeijing/status/2079214262027948172" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/ruima/status/2079201275607216491" target="_blank" rel="noopener">@ruima</a>The Kimi booth at WAIC had literally nothing except “post a 100 word note about us on RedNote and receive a free canvas bag” (at least I think that’s what was happening) and this was the line at 9am anyways
+
+I asked the guy next to me “why do you want this bag, just to post to WeChat Moments?” 
+
+“Yeah I guess I dunno”
+
+Lots of confusion and FOMO</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-20 20:25</span>
+      <div class="ptext">Good take by a fellow audience at #waic opening ceremony.
+
+Still, the ceremony and the speech are shows designed for the rest of the world. Not the real deal of what WAIC means for chinese AI.
+
+What really happened happened at the NDRC pilot site visits during WAIC.<a href="https://x.com/hankinbeijing/status/2079180870901199350" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/matthew_d_white/status/2079052880372535757" target="_blank" rel="noopener">@matthew_d_white</a>A remarkable vantage point in Shanghai: I was among a limited number of attendees from Western academic and nonprofit organizations invited to the opening ceremony of #WAIC2026, seated only a few rows from the stage.
+
+President Xi Jinping presented four major themes for global AI governance: open innovation and collaboration; security and continued human control; cultural inclusion; and multilateral coordination.
+
+His central proposition was unmistakable: China intends to present its approach to AI—including open-source development and support for the Global South—as global rather than exclusively national. Xi argued that AI should not become a “solo performance” by one country, but a “symphony of global cooperation.”
+
+UN Secretary-General António Guterres offered an important test for every national AI strategy: technology must serve people—not the other way around.
+
+These statements deserve analysis rather than simple acceptance. Later this week, I’ll write about what Xi’s framework means for open-source AI, U.S. strategic interests, the Global South and the emerging contest over global AI governance.
+
+It has been a busy week in Shanghai. More soon on Substack.
+
+#opensourceai</blockquote>
+    </li>
+    
+  </ul>
+  <div class="more">窗口内还有 11 条未展示。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="JosephWen___">
+  <h2><a href="https://x.com/JosephWen___" target="_blank" rel="noopener">@JosephWen___</a><span class="cn">Joseph.W 約瑟</span></h2>
+  <p class="accnote">台湾的解放军开源情报第一人,逐帧抠央视军事画面;据称军方媒体都因 他改过镜头细节。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-19 23:39</span><span class="reply">回复</span>
+      <div class="ptext">報導連結：
+https://tv.cctv.com/2026/07/19/VIDEfuQQLkLqgZF8kWzbOaow260719.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.6
+
+關於該旅之過往貼文：
+1.
+https://x.com/JosephWen___/status/1780633522283364835
+2. https://x.com/JosephWen___/status/1779179069260857652
+3. https://x.com/JosephWen___/status/1681302332007649282?s=20
+4. https://x.com/JosephWen___/status/1661304831158673408?s=20<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078867426306134065" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/JosephWen___/status/1661304831158673408" target="_blank" rel="noopener">@JosephWen___</a>昨日，央視發佈“记者在战位 直击合成营全要素实弹射击演练”軍事報導。
+
+該單位為83集團軍中型第60合成旅（71897部隊）駐陝西西安臨潼新豐街道陵新路，演訓中，3營扮藍方，4營扮紅方進行紅藍對抗。
+
+別稱：一江山旅
+榮譽稱號：江陰老虎團、沙家浜團。
+車牌號：LZ53
+
+該訓場位於河南駐馬店泌陽五峰山腳。</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-19 23:39</span>
+      <div class="ptext">今晚，央視發布“全面加强练兵备战 豫南平原 装甲分队组织综合战斗演练”軍事報導。
+
+報導顯示，83集團軍中型第60合成旅（71897部隊）4營1連近日於河南信陽平橋區小丁莊之訓場組織綜合戰鬥演練。
+
+副旅長：韓慶波 上校 
+該旅3營營長：于魁偉 中校 
+該旅： 楊華忠、周玉科、王家鵬、周玉科 上校
+曹淑田、毛濤、曹志強、嚴加富、臧青松、賈曉輝、李佳斯 中校 
+王寧、張未萌 少校<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078867421977559250" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-19 21:15</span>
+      <div class="ptext">入伍前夕，紀念我的頭髮，人生也只剩下服兵役會剃這麼短了🙂<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078831175343472828" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/JosephWen___/status/2066755994202648724" target="_blank" rel="noopener">@JosephWen___</a>輪到我服兵役了🫶
+7月20日開始會停止更新至少兩個月。</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-19 02:36</span><span class="reply">回复</span>
+      <div class="ptext">報導連結： https://tv.cctv.com/2026/07/18/VIDES7DVICcCxyauzZyHDRyX260718.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.7 
+
+20260716江阴实弹射击交通管制 福州海事局 https://fjnews.fjsen.com/2026-07/15/content_32219033.htm 
+
+補充： 東部戰區陸軍參謀部邊海防處303海防旅（31612部隊）72分隊，8月24到25日7時至20時於福州興化灣江陰港遂行火炮射擊演訓 
+1.
+https://x.com/JosephWen___/status/1699005777195958374?s=20
+2.  https://x.com/JosephWen___/status/1694585823524794604?s=20<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078549527901151707" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/JosephWen___/status/1694585823524794604" target="_blank" rel="noopener">@JosephWen___</a>福建海事局近日發佈“闽航警38/23 实弹射击演习”通告。
+
+該範圍約108平方公里、位於中國內水，可判斷為火砲射擊，內容與細節則須繼續觀察。
+
+可留意，近期東部戰區陸軍三個集團軍砲兵單位皆有於東南沿海射擊操演，目前可知浙江寧波鄞州區、大目灣和旦門鄉，且2022年中在大目灣設訓場，較以往罕見。
+
+1/3</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-19 02:36</span>
+      <div class="ptext">昨晚，央視發布“全面加强练兵备战 高温环境 炮兵分队跨昼夜实弹训练”軍事報導。  
+
+搭配福建海事局通告可知，東部戰區陸軍參謀部邊海防處303海防旅（31612部隊），7月到16日1時至18時於福州興化灣江陰港遂行火炮射擊演訓。  
+
+此為央視繼2023年8月後第二度報導該單位於此演訓。<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078549523421638880" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-19 00:56</span><span class="reply">回复</span>
+      <div class="ptext">補充：
+同一處之訓場
+連結：
+https://tv.cctv.com/2026/07/16/VIDEA50QP4Bcvn6I9OkK0urA260716.shtml?spm=C52346.PQw42etIf8YI.Edvk0IT63y7P.2<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078524414849859704" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-15 00:39</span><span class="reply">回复</span>
+      <div class="ptext">@isekaimint 補充：
+馮啟迪 上校
+范海濱 中校
+
+連結：
+https://tv.cctv.com/2026/07/14/VIDEMTVdtHj7rL1PCPp0kzMi260714.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.3<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2077070472035111115" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-15 00:34</span><span class="reply">回复</span>
+      <div class="ptext">補充：
+史靈雙 上校
+
+連結：
+https://tv.cctv.com/2026/07/14/VIDEMTVdtHj7rL1PCPp0kzMi260714.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.3<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2077069353313570850" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">窗口内还有 1 条未展示。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="MacroMargin">
+  <h2><a href="https://x.com/MacroMargin" target="_blank" rel="noopener">@MacroMargin</a><span class="cn">宏观边际</span></h2>
+  <p class="accnote">自称宏观研究员;数据驱动的经济政策分析,官方文件交叉核对做得扎实。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-24 09:24</span>
+      <div class="ptext">川普压力指数最近直线攀升，
+从川普上任以来，这个指数对于一些大的事件转折，都还非常有效。
+包括本次美伊战火重燃，转折点也恰在指数“膨胀”区域，经过一两周发酵，最新指数也来到了“中压”区域<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2080464193141297570" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 15:39</span><span class="reply">回复</span>
+      <div class="ptext">这篇被删文章的存档<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2079108824297025612" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 15:36</span>
+      <div class="ptext">笑了，监管撤回了一个做空科技的文章。
+
+央行主管的《中国金融》 盘中发了一篇标题为《科技股估值“纠偏”刻不容缓》的评论文章，没一会儿就又火速删除。
+
+不管这篇文章是央行有意或无意的，但文章说得没问题，
+
+在科技攻坚战的背景下，现在几大金融部委，除了金融稳定外，最重要的工作就是“科技金融”，所谓“五篇大文章”，科技金融才是最大、最核心的一篇。
+
+因此很大部分的金融工作，都是围绕“如何再金融稳定的前提下做好科技金融？”而展开。
+进而可以得出三个基本结论：
+
+1、高层比过去更重视资本市场，因为可以给科技和产业输血（利于科技攻坚），而不再是“金融羞耻论”、“搞不好就关掉”这种嫌弃态度；
+
+2、相比其他板块的泡沫，监管更能容忍甚至乐见适度的科技泡沫，毕竟历来科技都在泡沫中催生，有利于科技攻坚。
+
+3、但不能容忍极端的科技泡沫。
+一是，和“金融稳定”要求相冲突；
+二是，这篇文章说的“扭曲科创激励机制”，不利于科技攻坚。
+
+这也是证监会想要的“慢牛”，
+然而“慢牛”不是想想要就有的，经常是要么疯牛、要么死给你看，这个度如何把握？
+很难，只有边做边看、看能不能慢慢调教。
+
+于是证监会今年初首次提出了“逆周期”调节、防止“大起大落”的监管思路...<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2079108172619665839" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-17 18:07</span>
+      <div class="ptext">(更新图表)  这个鬼故事还是成真了...
+6月的M1和M2比之前预估的要差不少，下半年M1和M2也够呛，除非货币政策发力😮‍💨<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2078058945395192182" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2062831695288791429" target="_blank" rel="noopener">@MacroMargin</a>更新一下这张图，一个鬼故事。
+后续的沪深300走势还没这么明显，
+但如果看上证指数，目前还是亦步亦趋，</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-17 11:51</span>
+      <div class="ptext">不担大佬。。粗略预估指向的是，下半年M1和M2并不太好，
+除非货币政策发力，但目前没有明显要发力的迹象<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077964332307276279" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/NjudD93528/status/2077336410508710338" target="_blank" rel="noopener">@NjudD93528</a>@MacroMargin 大佬对于m1m2下半年的预估如何</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-17 11:39</span>
+      <div class="ptext">Kimi K3进一步缩短了中美AI差距，各前沿领域奋起直追👏<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077961338199179272" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2075912829635596430" target="_blank" rel="noopener">@MacroMargin</a>这个段子版本不停迭代，从AI到机器人，再到航天，唯一不变的是瓶盖🤣</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-15 16:48</span>
+      <div class="ptext">今天因为是半年度数据发布高峰期，央行也发了最新金融数据，
+
+不过，我比较喜欢的另一个数据，即央行一季度的调查数据，到到现在还没发。
+
+往年都比较及时，去年一季度的调查拖到7月底才发，看来今年又要等到7月底😮‍💨<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077314438370357385" target="_blank" rel="noopener">原帖 ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/MacroMargin/status/1950089628352205148" target="_blank" rel="noopener">@MacroMargin</a>央行的季度调查，拖了这么久，终于是出了。
+ 就业、收入、房价、物价预期继续下探，储蓄倾向更强，投资倾向更少...
+年轻人也活明白了，购房消费倾向趴窝后，专注自身的消费（社交、文娱和旅游消费）倾向持续上升
+关键图表一览↓</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-15 16:41</span><span class="reply">回复</span>
+      <div class="ptext">居民长贷还是弱得没话说，企业相对修复了点<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077312470927220814" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">窗口内还有 15 条未展示。</div>
+  
+</section>
+
+
+<section class="acct" data-handle="MaoViews">
+  <h2><a href="https://x.com/MaoViews" target="_blank" rel="noopener">@MaoViews</a></h2>
+  <p class="accnote">高层政治的顶级观察者,二十大常委名单最早就是他暗示的;疑似大媒体 资深时政记者。</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-23 10:14</span>
+      <div class="ptext">菲律宾总统见鲁比奥 也不客气啊。之前见王毅也是这样<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2080114327290548456" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-17 14:23</span>
+      <div class="ptext">金核心会晤王沪宁<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2078002627670081809" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-16 11:35</span>
+      <div class="ptext">沈瑩不再担任工商联党组书记、常务副主席<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2077598011228930234" target="_blank" rel="noopener">原帖 ↗</a></div>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<section class="acct" data-handle="ZhongXinXi1">
+  <h2><a href="https://x.com/ZhongXinXi1" target="_blank" rel="noopener">@ZhongXinXi1</a><span class="cn">鍾馨溪</span><span class="badge stale">久无原创 · 最后 2026-03-20 17:01</span></h2>
+  <p class="accnote">疑似身在大陆的匿名号,人事调整与清洗的猜测性爆料;有命中也有落空, 吃瓜请自带判断。</p>
+  
+  <div class="none">窗口内无帖子。</div>
+  
+</section>
+
+
+<footer>
+  实验性栏目;只收原创帖,转推不计。内容为账号作者个人观点,不代表任何机构立场。
+</footer>
+<script>
+  (function () {
+    var topic = "", handle = "";
+    var tbtns = document.querySelectorAll(".topics button");
+    var chips = document.querySelectorAll("#chips .chip");
+    function apply() {
+      tbtns.forEach(function (b) {
+        b.classList.toggle("on", b.dataset.topic === topic);
+      });
+      chips.forEach(function (c) {
+        c.classList.toggle("on", c.dataset.handle === handle);
+        c.hidden = Boolean(c.dataset.handle) && Boolean(topic)
+                   && c.dataset.topic !== topic;
+      });
+      document.querySelectorAll("section.acct").forEach(function (el) {
+        el.hidden = (Boolean(topic) && el.dataset.topic !== topic)
+                    || (Boolean(handle) && el.dataset.handle !== handle);
+      });
+      document.querySelectorAll(".topicdiv").forEach(function (el) {
+        el.hidden = Boolean(handle)
+                    || (Boolean(topic) && el.dataset.topic !== topic);
+      });
+    }
+    tbtns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        topic = b.dataset.topic; handle = ""; apply();
+      });
+    });
+    chips.forEach(function (c) {
+      c.addEventListener("click", function () {
+        handle = (c.dataset.handle === handle) ? "" : c.dataset.handle;
+        apply();
+      });
+    });
+  })();
+</script>
+</body>
+</html>

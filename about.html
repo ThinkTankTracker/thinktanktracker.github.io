@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Tank Tracker — About</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --line: #21262d; --line-2: #30363d;
+    --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1;
+    --accent: #4cc9f0; --ok: #3fb950; --warn: #f0b72f;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scrollbar-gutter: stable; }
+  body { font-family: var(--sans); font-size: 14px; line-height: 1.55;
+         color: var(--ink); background: var(--bg); overflow-x: clip; }
+  /* container width matches the other pages so the nav/title never shift
+     between views; content blocks cap narrower for reading comfort */
+  main { max-width: 1080px; margin: 0 auto; padding: 36px 24px 80px; }
+  main h2, .src, .rankfold, .intro { max-width: 860px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 27px; font-weight: 650; margin: 0 0 2px; }
+  .issue { font: 500 15px var(--mono); color: var(--soft); }
+  .topnav { position: sticky; top: 0; z-index: 30; display: flex;
+            align-items: center; gap: 22px; margin: 10px 0 8px;
+            height: 44px; font: 13.5px var(--mono); letter-spacing: .05em;
+            background: var(--bg);  /* solid under no-JS pinning; .stuck adds the glass */
+            view-transition-name: ttt-nav;
+            transition: background-color .25s ease, border-color .25s ease,
+                        font-size .2s ease; }
+  .topnav a { color: var(--accent); padding-bottom: 2px;
+              border-bottom: 1px solid transparent; }
+  .topnav a:hover { border-bottom-color: var(--accent); text-decoration: none; }
+  .topnav .here { color: var(--ink); border-bottom: 1px solid var(--line-2);
+                  padding-bottom: 2px; }
+  .topnav .brand { display: none; font: 700 11.5px var(--mono);
+                   letter-spacing: .22em; color: var(--accent);
+                   text-transform: uppercase; margin-right: auto;
+                   white-space: nowrap; }
+  .topnav.stuck { font-size: 14px;
+                  background: color-mix(in srgb, var(--bg) 90%, transparent);
+                  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                  border-bottom: 1px solid var(--line);
+                  margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+                  padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%); }
+  .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
+  @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
+  @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
+  .intro { color: var(--soft); max-width: 640px; margin-bottom: 8px; }
+  .intro + .intro { margin-bottom: 0; }
+  h2 { font: 11px var(--mono); letter-spacing: .2em; text-transform: uppercase;
+       color: var(--muted); margin: 32px 0 12px; display: flex;
+       align-items: center; gap: 10px; }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .src { background: var(--panel); border: 1px solid var(--line);
+         border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+  .row1 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .row1 .name { font-size: 15px; font-weight: 600; }
+  .row1 .name a { color: var(--ink); }
+  .row1 .name a:hover { color: var(--accent); }
+  .badge { font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase;
+           border-radius: 4px; padding: 1px 7px; border: 1px solid var(--line-2);
+           color: var(--muted); }
+  .badge.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, var(--line-2)); }
+  .badge.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--line-2)); }
+  .row1 .fill { flex: 1; }
+  .row1 .n { font: 12px var(--mono); color: var(--muted); }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 5px; max-width: 640px; }
+  .rankfold { margin-top: 30px; }
+  .rankfold .note { margin-bottom: 12px; }
+  .rankfold summary { cursor: pointer; list-style: none; }
+  .rankfold summary::-webkit-details-marker { display: none; }
+  .rankfold summary h2::before { content: "▸ "; color: var(--accent); }
+  .rankfold[open] summary h2::before { content: "▾ "; }
+  .rank-group { margin-bottom: 22px; }
+  .rank-h { font: 11px var(--mono); color: var(--soft); margin-bottom: 8px; }
+  .rank-row { display: flex; align-items: baseline; gap: 10px; padding: 3px 8px;
+              border-radius: 4px; font-size: 13px; color: var(--muted); }
+  .rank-row.covered { color: var(--soft); }
+  .rank-row .rk { font: 11px var(--mono); color: var(--muted); min-width: 20px;
+                  text-align: right; }
+  .rank-row .rname { min-width: 260px; }
+  .rank-row.covered .rname { color: var(--ink); }
+  .rank-row .mark { font: 11px var(--mono); color: var(--muted); min-width: 70px; }
+  .rank-row.covered .mark { color: var(--accent); }
+  .rank-row .rnote { font-size: 11.5px; color: var(--muted); font-style: italic; }
+  footer { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 14px;
+           font: 11px var(--mono); color: var(--muted); display: flex; gap: 16px; }
+
+  /* motion */
+  @view-transition { navigation: auto; }
+  h1 { view-transition-name: ttt-title; }
+  details[open] > *:not(summary) { animation: fadein .25s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important;
+                             transition: none !important; }
+    /* the universal selector cannot reach the view-transition pseudo tree */
+    ::view-transition-group(*), ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Think Tank Tracker</h1>
+  <div class="issue">About</div>
+  <div id="navSentinel"></div>
+  <nav class="topnav" id="topnav">
+    <span class="brand">Think Tank Tracker</span>
+    <a href="digest-2026-07-25.html">digest</a>
+    <a href="index.html">archive</a>
+    <a href="all-items.html">all items</a>
+    <a href="x-pulse-en.html">ChinaX</a>
+    <a href="x-pulse-zh.html">坊间</a>
+    <span class="here">about</span>
+  </nav>
+  <p class="intro">Think Tank Tracker follows new publications from the research
+  institutions below and consolidates them into a regularly updated digest.
+  Every item links to the original publication and carries a short summary,
+  topic tags, and a relevance flag oriented toward China, macroeconomics, and
+  international trade.</p>
+  <p class="intro">Institutions whose sites don't permit automated readers
+  appear as unavailable.</p>
+
+  
+  <h2>Economics &amp; Policy</h2>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.piie.com" target="_blank" rel="noopener">PIIE</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">63 tracked</span>
+    </div>
+    <div class="note">Nonpartisan research institute devoted to international economic policy — trade, macroeconomics, and globalization.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.brookings.edu" target="_blank" rel="noopener">Brookings</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">69 tracked</span>
+    </div>
+    <div class="note">The largest US policy research institution; economic studies, foreign policy, and governance.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.aei.org" target="_blank" rel="noopener">AEI</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">37 tracked</span>
+    </div>
+    <div class="note">Right-of-center Washington institute covering economics, foreign policy, and technology policy.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.heritage.org" target="_blank" rel="noopener">Heritage</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">43 tracked</span>
+    </div>
+    <div class="note">Washington&#39;s flagship conservative policy institute, with a direct pipeline into the current administration&#39;s agenda.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.bruegel.org" target="_blank" rel="noopener">Bruegel</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">10 tracked</span>
+    </div>
+    <div class="note">Brussels-based European economics think tank — EU macro, trade, energy, and industrial policy.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.urban.org" target="_blank" rel="noopener">Urban Institute</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">74 tracked</span>
+    </div>
+    <div class="note">Nonpartisan institute on US economic and social policy — fiscal, tax, housing, and social insurance; co-founder of the Tax Policy Center.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://taxfoundation.org" target="_blank" rel="noopener">Tax Foundation</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">25 tracked</span>
+    </div>
+    <div class="note">Specialist tax-policy research and modeling, US federal, state, and international.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.americanprogress.org" target="_blank" rel="noopener">Center for American Progress</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">32 tracked</span>
+    </div>
+    <div class="note">Center-left Washington think tank spanning US economic and domestic policy, with active trade, tariff, and economic-statecraft coverage.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.cato.org" target="_blank" rel="noopener">Cato</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">87 tracked</span>
+    </div>
+    <div class="note">Libertarian public-policy institute — trade, monetary policy, and regulation.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.cgdev.org" target="_blank" rel="noopener">CGD</a></span>
+      <span class="badge warn">unavailable</span>
+      <span class="fill"></span>
+      <span class="n">0 tracked</span>
+    </div>
+    <div class="note">Washington institute on development economics — aid effectiveness, debt, and development finance.</div>
+  </div>
+  
+  
+  <h2>Foreign Policy &amp; Security</h2>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.csis.org" target="_blank" rel="noopener">CSIS</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">631 tracked</span>
+    </div>
+    <div class="note">Bipartisan strategy and international-affairs research, with strong China and trade-security programs.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.cfr.org" target="_blank" rel="noopener">CFR</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">104 tracked</span>
+    </div>
+    <div class="note">Council on Foreign Relations — US foreign policy institution and publisher of Foreign Affairs.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://carnegieendowment.org" target="_blank" rel="noopener">Carnegie</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">48 tracked</span>
+    </div>
+    <div class="note">Global think tank network on international peace, geoeconomics, and regional studies.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.atlanticcouncil.org" target="_blank" rel="noopener">Atlantic Council</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">128 tracked</span>
+    </div>
+    <div class="note">Foreign-policy institute with an active economic-statecraft and geoeconomics practice.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.rand.org" target="_blank" rel="noopener">RAND</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">33 tracked</span>
+    </div>
+    <div class="note">Large-scale research organization best known for defense and public-policy analysis.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.hudson.org" target="_blank" rel="noopener">Hudson</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">46 tracked</span>
+    </div>
+    <div class="note">Conservative-leaning strategy institute; China, trade, and defense.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://cset.georgetown.edu" target="_blank" rel="noopener">CSET</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">18 tracked</span>
+    </div>
+    <div class="note">Georgetown&#39;s center on AI, semiconductors, and China technology policy; translates Chinese policy documents.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.lowyinstitute.org" target="_blank" rel="noopener">Lowy Institute</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">139 tracked</span>
+    </div>
+    <div class="note">Australia&#39;s leading international-policy think tank; Asia-Pacific and China focus, home of The Interpreter.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.foreignaffairs.com" target="_blank" rel="noopener">Foreign Affairs</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">31 tracked</span>
+    </div>
+    <div class="note">CFR&#39;s magazine of international affairs — long-form essays and foreign-policy debate.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://foreignpolicy.com" target="_blank" rel="noopener">Foreign Policy</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">75 tracked</span>
+    </div>
+    <div class="note">Global-affairs news magazine; high-cadence coverage of geopolitics and geoeconomics.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.chathamhouse.org" target="_blank" rel="noopener">Chatham House</a></span>
+      <span class="badge warn">unavailable</span>
+      <span class="fill"></span>
+      <span class="n">0 tracked</span>
+    </div>
+    <div class="note">The UK&#39;s premier international-affairs institute (the Royal Institute of International Affairs).</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.iiss.org" target="_blank" rel="noopener">IISS</a></span>
+      <span class="badge warn">unavailable</span>
+      <span class="fill"></span>
+      <span class="n">0 tracked</span>
+    </div>
+    <div class="note">London-based institute for defence and security studies; publisher of The Military Balance.</div>
+  </div>
+  
+  
+  <h2>China Focus</h2>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://asiasociety.org/policy-institute" target="_blank" rel="noopener">Asia Society Policy Institute</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">104 tracked</span>
+    </div>
+    <div class="note">Asia-focused policy institute; home of the Center for China Analysis.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://merics.org" target="_blank" rel="noopener">MERICS</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">25 tracked</span>
+    </div>
+    <div class="note">Berlin-based institute wholly dedicated to contemporary China research — Europe&#39;s leading China think tank.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://rhg.com" target="_blank" rel="noopener">Rhodium Group</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">10 tracked</span>
+    </div>
+    <div class="note">Independent research provider on China&#39;s economy and US-China economic relations.</div>
+  </div>
+  
+  <div class="src">
+    <div class="row1">
+      <span class="name"><a href="https://www.conference-board.org/asia/china" target="_blank" rel="noopener">Conference Board China Center</a></span>
+      <span class="badge ok">active</span>
+      <span class="fill"></span>
+      <span class="n">57 tracked</span>
+    </div>
+    <div class="note">Business-facing research on China&#39;s economy for a corporate-executive audience.</div>
+  </div>
+  
+  
+
+  
+  <details class="rankfold">
+    <summary><h2>Coverage vs. the UPenn think tank ranking</h2></summary>
+    <p class="note">The reference is the final (2020) edition of the University of Pennsylvania TTCSP Global Go To Think Tank Index — the program ended in 2021, so this remains the canonical ranking. Brookings sits outside the numbered table as the index&#39;s &#34;Center of Excellence.&#34;
+</p>
+    
+    <div class="rank-group">
+      <div class="rank-h">Top Think Tanks Worldwide (US and non-US), 2020</div>
+      
+      <div class="rank-row covered">
+        <span class="rk">★</span>
+        <span class="rname">Brookings Institution (US)</span>
+        <span class="mark">✓ tracked</span>
+        <span class="rnote">ranked apart as Center of Excellence</span>
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">1</span>
+        <span class="rname">Carnegie Endowment for International Peace (US)</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">2</span>
+        <span class="rname">Bruegel (Belgium)</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">3</span>
+        <span class="rname">French Institute of International Relations</span>
+        <span class="mark">—</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">4</span>
+        <span class="rname">Center for Strategic and International Studies (US)</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">5</span>
+        <span class="rname">Fundação Getulio Vargas (Brazil)</span>
+        <span class="mark">—</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">6</span>
+        <span class="rname">Chatham House (UK)</span>
+        <span class="mark">—</span>
+        <span class="rnote">selected, but the site doesn&#39;t permit automated readers</span>
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">7</span>
+        <span class="rname">International Institute for Strategic Studies (UK)</span>
+        <span class="mark">—</span>
+        <span class="rnote">selected, but the site doesn&#39;t permit automated readers</span>
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">8</span>
+        <span class="rname">Heritage Foundation (US)</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">9</span>
+        <span class="rname">Peterson Institute for International Economics (US)</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">10</span>
+        <span class="rname">Woodrow Wilson International Center for Scholars (US)</span>
+        <span class="mark">—</span>
+        <span class="rnote">effectively closed, 2025</span>
+      </div>
+      
+    </div>
+    
+    <div class="rank-group">
+      <div class="rank-h">Top Think Tanks in the United States, 2020</div>
+      
+      <div class="rank-row covered">
+        <span class="rk">★</span>
+        <span class="rname">Brookings Institution</span>
+        <span class="mark">✓ tracked</span>
+        <span class="rnote">ranked apart as Center of Excellence</span>
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">1</span>
+        <span class="rname">Center for Strategic and International Studies</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">2</span>
+        <span class="rname">Carnegie Endowment for International Peace</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">3</span>
+        <span class="rname">Heritage Foundation</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">4</span>
+        <span class="rname">Peterson Institute for International Economics</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">5</span>
+        <span class="rname">Urban Institute</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">6</span>
+        <span class="rname">Woodrow Wilson International Center for Scholars</span>
+        <span class="mark">—</span>
+        <span class="rnote">effectively closed, 2025</span>
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">7</span>
+        <span class="rname">Center for American Progress</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">8</span>
+        <span class="rname">Atlantic Council</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">9</span>
+        <span class="rname">RAND Corporation</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">10</span>
+        <span class="rname">Hudson Institute</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">11</span>
+        <span class="rname">Council on Foreign Relations</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">12</span>
+        <span class="rname">Belfer Center for Science and International Affairs</span>
+        <span class="mark">—</span>
+        
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">13</span>
+        <span class="rname">Cato Institute</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+      <div class="rank-row">
+        <span class="rk">14</span>
+        <span class="rname">Center for a New American Security</span>
+        <span class="mark">—</span>
+        <span class="rnote">see note below</span>
+      </div>
+      
+      <div class="rank-row covered">
+        <span class="rk">15</span>
+        <span class="rname">American Enterprise Institute</span>
+        <span class="mark">✓ tracked</span>
+        
+      </div>
+      
+    </div>
+    
+    <p class="note">Also weighed but not tracked: CNAS (closely tied to Democratic administrations; the tracked list favors sources with signal for current policy direction) and the Australian Strategic Policy Institute (security focus; Lowy Institute selected for the region instead).
+</p>
+  </details>
+  
+
+  <p class="intro">Contact — questions, corrections, or removal requests:
+  <a href="mailto:aerqje@gmail.com">aerqje@gmail.com</a>.</p>
+
+  <footer>
+    <a href="index.html">archive</a>
+    <a href="all-items.html">all items</a>
+    <a href="x-pulse-en.html">ChinaX</a>
+    <a href="x-pulse-zh.html">坊间</a>
+    <span>generated 2026-07-25 17:38</span>
+  </footer>
+</main>
+<script>
+(function () {
+  var nav = document.getElementById("topnav");
+  var sentinel = document.getElementById("navSentinel");
+  if (nav && sentinel && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      nav.classList.toggle("stuck", !entries[0].isIntersecting);
+    }).observe(sentinel);
+  }
+})();
+</script>
+</body>
+</html>

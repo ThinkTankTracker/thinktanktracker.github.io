@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>坊间 · ChinaX · Pulse (experimental)</title>
+<style>
+  /* Informal identity, distinct from the digest's navy: this page is
+     individual chatter, not institutional research. Explicit color-scheme +
+     background: without them, forced-dark browsers repaint the page into
+     dark-on-dark unreadability (observed live on the monthly page). */
+  :root { color-scheme: light dark;
+          --accent: #0f766e; --muted: #6b7280; --rule: #e5e7eb;
+          --bg: #ffffff; --fg: #111827; --chip-bg: #ffffff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --accent: #2dd4bf; --muted: #94a3b8; --rule: #334155;
+            --bg: #0f172a; --fg: #e2e8f0; --chip-bg: #1e293b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 760px; padding: 2rem 1.25rem 4rem;
+         font-family: -apple-system, "Segoe UI", "PingFang SC",
+         "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+         background: var(--bg); color: var(--fg); line-height: 1.6; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: .75rem;
+           margin-bottom: 1.5rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; color: var(--accent); }
+  .exp { display: inline-block; vertical-align: middle; margin-left: .5rem;
+         font-size: .68rem; font-weight: 600; letter-spacing: .05em;
+         color: #92400e; background: #fef3c7; border: 1px solid #fcd34d;
+         border-radius: 3px; padding: .05rem .4rem; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: .85rem; margin: 0; }
+  .sub a { color: var(--muted); }
+  .topics { margin: 1.2rem 0 0; }
+  .topics button { font: inherit; font-size: .8rem; color: var(--muted);
+                   background: none; border: 1px solid var(--rule);
+                   border-radius: 999px; padding: .1rem .7rem;
+                   margin: 0 .35rem .35rem 0; cursor: pointer; }
+  .topics button.on { color: var(--accent); border-color: var(--accent); }
+  .chips { margin: .6rem 0 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+  .chip { font-size: .78rem; border: 1px solid var(--rule);
+          border-radius: 999px; padding: .1rem .6rem; cursor: pointer;
+          background: var(--chip-bg); color: var(--fg); user-select: none; }
+  .chip .n { color: var(--muted); margin-left: .25rem; }
+  .chip.on { background: var(--accent); border-color: var(--accent);
+             color: var(--bg); }
+  .chip.on .n { color: var(--bg); opacity: .7; }
+  .chip.zero { opacity: .45; }
+  .topicdiv { color: var(--accent); font-size: .78rem; font-weight: 600;
+              letter-spacing: .12em; border-bottom: 1px solid var(--rule);
+              padding-bottom: .25rem; margin: 2.5rem 0 -1rem; }
+  .crumbs { display: flex; justify-content: space-between; align-items: baseline;
+            gap: 1rem; font-size: .9rem; margin: 0 0 .7rem; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+  h2 { font-size: 1.02rem; margin: 2rem 0 .1rem; }
+  h2 a { color: var(--accent); text-decoration: none; }
+  h2 a:hover { text-decoration: underline; }
+  h2 .cn { font-weight: 400; color: var(--muted); margin-left: .4rem; }
+  .badge { font-size: .68rem; font-weight: 600; border-radius: 3px;
+           padding: .05rem .35rem; margin-left: .5rem; vertical-align: middle; }
+  .badge.stale { color: #92400e; background: #fef3c7; }
+  .badge.err { color: #991b1b; background: #fee2e2; }
+  .accnote { color: var(--muted); font-size: .8rem; margin: 0 0 .5rem; }
+  ul.posts { list-style: none; margin: 0; padding: 0; }
+  ul.posts li { border-top: 1px solid var(--rule); padding: .55rem 0; }
+  .when { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+  .reply, .mbadge { color: var(--muted); font-size: .72rem;
+           border: 1px solid var(--rule); border-radius: 3px;
+           padding: 0 .25rem; margin-left: .35rem; }
+  .ptext { margin: .15rem 0 0; white-space: pre-wrap; word-break: break-word; }
+  .ptext a { color: var(--accent); font-size: .8rem; text-decoration: none;
+             margin-left: .4rem; white-space: nowrap; }
+  blockquote.qt { border-left: 2px solid var(--rule); margin: .35rem 0 0;
+                  padding: .05rem .6rem; color: var(--muted); font-size: .9em;
+                  white-space: pre-wrap; word-break: break-word; }
+  blockquote.qt a { color: var(--accent); font-size: .85em;
+                    text-decoration: none; margin-right: .45rem; }
+  .more, .none { color: var(--muted); font-size: .8rem; padding: .4rem 0 0; }
+  footer { margin-top: 3rem; border-top: 1px solid var(--rule);
+           padding-top: .75rem; color: var(--muted); font-size: .78rem; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="crumbs">
+    <span><a href="index.html">← Think Tank Tracker</a></span>
+    <span><a href="x-pulse-zh.html">⇄ 键政圈</a></span>
+  </nav>
+  <h1>坊间 · ChinaX · Pulse<span class="exp">experimental</span></h1>
+  <p class="sub">First-hand posts from English-language China watchers — economics, industry, and politics; immediate, unedited, in their own words.</p>
+  <p class="sub">Last 14 days · hand-picked roster, grouped by topic · updated 2026-07-26 05:38 (Beijing time)</p>
+  
+  <nav class="topics">
+    <button class="on" data-topic="">All</button>
+    <button data-topic="Economy &amp; Finance">Economy &amp; Finance</button>
+    <button data-topic="Tech &amp; Industry">Tech &amp; Industry</button>
+    <button data-topic="Politics &amp; Foreign Policy">Politics &amp; Foreign Policy</button>
+    <button data-topic="Journalists">Journalists</button>
+  </nav>
+  
+  <div class="chips" id="chips">
+    <span class="chip on" data-handle="">All</span>
+    <span class="chip" data-handle="michaelxpettis" data-topic="Economy &amp; Finance">Michael Pettis<span class="n">55</span></span>
+    <span class="chip" data-handle="Brad_Setser" data-topic="Economy &amp; Finance">Brad Setser<span class="n">130</span></span>
+    <span class="chip zero" data-handle="gdp1985" data-topic="Economy &amp; Finance">Gerard DiPippo<span class="n">0</span></span>
+    <span class="chip zero" data-handle="ZongyuanZoeLiu" data-topic="Economy &amp; Finance">Zongyuan Zoe Liu 刘宗媛<span class="n">0</span></span>
+    <span class="chip" data-handle="Aligarciaherrer" data-topic="Economy &amp; Finance">Alicia García-Herrero<span class="n">12</span></span>
+    <span class="chip" data-handle="GlennLuk" data-topic="Economy &amp; Finance">Glenn Luk<span class="n">29</span></span>
+    <span class="chip" data-handle="kyleichan" data-topic="Tech &amp; Industry">Kyle Chan<span class="n">77</span></span>
+    <span class="chip" data-handle="jordanschneider" data-topic="Tech &amp; Industry">Jordan Schneider<span class="n">23</span></span>
+    <span class="chip" data-handle="pstAsiatech" data-topic="Tech &amp; Industry">Paul Triolo<span class="n">114</span></span>
+    <span class="chip zero" data-handle="danwwang" data-topic="Tech &amp; Industry">Dan Wang<span class="n">0</span></span>
+    <span class="chip" data-handle="kevinsxu" data-topic="Tech &amp; Industry">Kevin Xu<span class="n">26</span></span>
+    <span class="chip" data-handle="niubi" data-topic="Politics &amp; Foreign Policy">Bill Bishop 利明璋<span class="n">40</span></span>
+    <span class="chip" data-handle="ZichenWanghere" data-topic="Politics &amp; Foreign Policy">Zichen Wang 王子辰<span class="n">20</span></span>
+    <span class="chip" data-handle="vshih2" data-topic="Politics &amp; Foreign Policy">Victor Shih 史宗瀚<span class="n">45</span></span>
+    <span class="chip" data-handle="theChinaDude" data-topic="Politics &amp; Foreign Policy">Manoj Kewalramani<span class="n">1</span></span>
+    <span class="chip zero" data-handle="fravel" data-topic="Politics &amp; Foreign Policy">M. Taylor Fravel<span class="n">0</span></span>
+    <span class="chip" data-handle="BonnieGlaser" data-topic="Politics &amp; Foreign Policy">Bonnie Glaser 葛来仪<span class="n">3</span></span>
+    <span class="chip" data-handle="ryanl_hass" data-topic="Politics &amp; Foreign Policy">Ryan Hass 何瑞恩<span class="n">25</span></span>
+    <span class="chip" data-handle="RushDoshi" data-topic="Politics &amp; Foreign Policy">Rush Doshi 杜如松<span class="n">7</span></span>
+    <span class="chip" data-handle="Lingling_Wei" data-topic="Journalists">Lingling Wei 魏玲灵<span class="n">7</span></span>
+    <span class="chip" data-handle="AsiaLens" data-topic="Journalists">Demetri Sevastopulo<span class="n">16</span></span>
+    <span class="chip" data-handle="fbermingham" data-topic="Journalists">Finbarr Bermingham<span class="n">59</span></span>
+    <span class="chip" data-handle="ewong" data-topic="Journalists">Edward Wong 黄安伟<span class="n">21</span></span>
+    <span class="chip" data-handle="dakekang" data-topic="Journalists">Dake Kang 康达可<span class="n">7</span></span>
+  </div>
+</header>
+
+
+
+<div class="topicdiv" data-topic="Economy &amp; Finance">Economy &amp; Finance</div>
+
+<section class="acct" data-handle="michaelxpettis" data-topic="Economy &amp; Finance">
+  <h2><a href="https://x.com/michaelxpettis" target="_blank" rel="noopener">@michaelxpettis</a><span class="cn">Michael Pettis</span></h2>
+  <p class="accnote">Peking University finance professor and Carnegie senior fellow, based in Beijing; standard-bearer of the rebalancing thesis and the most-cited economics voice in the circle.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 15:18</span>
+      <div class="ptext">SCMP notes that China&#39;s venture capital and private equity industries are mostly state funded: &#34;Last year, state-affiliated investors supplied more than 90% of the committed capital tracked in China’s private-equity market, a surge from just under 79% in 2021.&#34;
+https://sc.mp/x64nq?utm_source=twitter&amp;utm_campaign=3361779&amp;utm_medium=share_widget<a href="https://x.com/michaelxpettis/status/2080915646901051401" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 15:11</span>
+      <div class="ptext">Caixin: &#34;Local governments are struggling to stockpile high-quality projects, which inherently limits their capacity for countercyclical fiscal expansion.&#34;
+
+In the past any time economic activity dropped to below a politically-determined minimum level, local governments responded &#34;countercyclically&#34; with large increases in spending, especially on infrastructure, whether or not these generated positive economic returns. In China, economic problems are almost always described as cyclical rather than structural, which is why the rection to any slowdown has usually been to double down on the existing growth model.
+
+But as the costs to this strategy have accumulated – in the form of the second highest debt-to-GDP ratio in the world (after Japan&#39;s) and the fastest-growing debt-to-GDP ratio in history – it has become increasingly hard for local governments to continue this strategy.
+
+However rather than abandon the strategy of using increasingly non-productive investment to meet political growth targets, i.e. rather than acknowledge the structural nature of the problem, it seems that Beijing will instead just shift the borrowing onto the central government balance sheets.
+
+I think this is likely to be a mistake for the Chinese economy over the longer term, but I also think it is politically hard for them not to make this mistake.
+https://www.caixinglobal.com/2026-07-24/commentary-chinas-fiscal-engine-faces-a-local-bottleneck-102467735.html?cxg=web&amp;Sfrom=twitter<a href="https://x.com/michaelxpettis/status/2080913899600150761" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 14:47</span>
+      <div class="ptext">There was a lot of talk last year about fighting involution and reversing excess capacity, but while capacity has indeed declined, according to Caixin it hasn&#39;t declined by nearly enough to end severe overcapacity problems in the solar industry.
+
+&#34;China’s newly installed solar capacity plummeted 66% year-on-year in the first half of 2026 as the sector grappled with overcapacity and depressed prices. Since the start of 2026, the prices of polysilicon, wafers and solar cells have dropped 42.3%, 28.7% and 27.7%, respectively. The module price was an exception, edging up 3%. Under the current circumstances, major solar manufacturers are struggling to turn a profit.&#34;
+
+In some ways this is good for the world, as China&#39;s huge losses and transfers effectively subsidize global new solar installations, but, like Japan in the 1980s, China may be bankrupting itself to keep excess capacity from reversing. This is certainly what its debt numbers suggest.
+https://www.caixinglobal.com/2026-07-24/chart-of-the-day-chinas-new-solar-build-out-plunges-102467666.html?cxg=web&amp;Sfrom=twitter<a href="https://x.com/michaelxpettis/status/2080907865414402442" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 14:32</span>
+      <div class="ptext">Yicai: &#34;China has set a target to increase the installed capacity share of wind and solar power to more than 50 percent from 47 percent within the next five years, with relevant annual electricity generation to account for 30 percent of the total.&#34;
+https://www.yicaiglobal.com/news/china-targets-wind-solar-power-to-make-up-over-half-of-installed-capacity-by-2030<a href="https://x.com/michaelxpettis/status/2080903878086664544" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 20:12</span>
+      <div class="ptext">FT: &#34;Ex-European trade commissioner Karel De Gucht advocated for the EU to form an alliance of open trading nations as an alternative to the World Trade Organization, which he claimed was “dead”.&#34;
+
+This makes a great deal of sense if done along the lines Keynes proposed at Bretton Woods, in which the members of the trade union maintain completely open trade among themselves while restricting unfettered financial flows and imposing penalties on those that try to resolve domestic imbalances by exporting them to trade partners.
+https://www.ft.com/content/36c412b6-ed17-4784-97ef-87b98dbd73e8<a href="https://x.com/michaelxpettis/status/2080264674814415316" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 19:43</span><span class="reply">reply</span>
+      <div class="ptext">9/9
+If these consumption-suppressing policies also cause production to rise, as they are designed to do, total consumption can actually rise more quickly than it otherwise might have – which is precisely what happened in China over the past three decades.<a href="https://x.com/michaelxpettis/status/2080257558108119108" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 19:43</span><span class="reply">reply</span>
+      <div class="ptext">8/9
+That&#39;s because while tariffs and devaluation cause the consumption SHARE of production to decline, overall consumption doesn&#39;t necessarily decline.
+
+Many economists have trouble understanding this, but what happens to production also matters.
+https://www.ft.com/content/89110b66-153c-47a4-a3d4-851be3c0fc93<a href="https://x.com/michaelxpettis/status/2080257555503468920" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 19:43</span>
+      <div class="ptext">1/9
+This interesting Soumaya Keynes piece makes several important points about the success (or lack) of Trump&#39;s tariff policies, but I think she makes one important mistake in assessing the impact of tariffs that too many other analysts also make. 
+https://www.ft.com/content/7b53032e-894d-43ac-9dd1-2b94572b8489<a href="https://x.com/michaelxpettis/status/2080257539363795406" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">47 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="Brad_Setser" data-topic="Economy &amp; Finance">
+  <h2><a href="https://x.com/Brad_Setser" target="_blank" rel="noopener">@Brad_Setser</a><span class="cn">Brad Setser</span></h2>
+  <p class="accnote">Council on Foreign Relations senior fellow; forensic charts on trade and capital flows — surpluses, transshipment, reserves — nobody works the data harder.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-26 00:30</span>
+      <div class="ptext">Have been looking for a way to illustrate the impact of the second China shock on Europe&#39;s chemical sector -- trade in KG may be the answer
+
+A clear shift after the property bubble bursts/ Russian gas shock 5 years ago, with a new leg up now<span class="mbadge">media</span><a href="https://x.com/Brad_Setser/status/2081054460378329300" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 23:51</span><span class="reply">reply</span>
+      <div class="ptext">But a norm against countries with large surpluses pursuing a micro and macro policies that would result in an even larger surplus is desperately needed, and if one doesn&#39;t emerge quickly, blocks like the EU will need to engage in collective self defense ...
+
+7/7<a href="https://x.com/Brad_Setser/status/2081044636894671215" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 23:49</span><span class="reply">reply</span>
+      <div class="ptext">I am not as convinced though that it will be possible to integrate currency into the global trade rules -- rules seem a bridge too far these days (hard to see either Xi or Trump accepting real constraints), soft norms seem more realistic
+
+6/<a href="https://x.com/Brad_Setser/status/2081044250074984624" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 23:42</span>
+      <div class="ptext">Interesting and I think important piece in project syndicate from Jean-Pierre Landau and Sébastien Jean - indicative of the shifting consensus inside Europe as China&#39;s true surplus keeps on marching up
+
+1/<span class="mbadge">media</span><a href="https://x.com/Brad_Setser/status/2081042477994102799" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 05:51</span><span class="reply">reply</span>
+      <div class="ptext">And now Germany&#39;s surplus (correctly measured) has shrunk dramatically and Europe&#39;s goods surplus (ex Irish distortions) has disappeared while China&#39;s surplus has exploded.  Time to update a few priors
+
+https://www.cfr.org/articles/china-not-europe-is-the-source-of-worlds-imbalances<a href="https://x.com/Brad_Setser/status/2080772807571440102" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 05:48</span>
+      <div class="ptext">15 years ago I was inside the Treasury criticizing Germany&#39;s excess surplus and misguided belief that its austerity set a good example for the rest of the euro area.   and 10 years ago I was making similar points in public
+
+https://archive.nytimes.com/krugman.blogs.nytimes.com/2016/08/26/germanys-drag/<a href="https://x.com/Brad_Setser/status/2080772085312266253" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/jdamijan/status/2080771112472887400" target="_blank" rel="noopener">@jdamijan</a>I did. But where were you 15 years ago, when Germany was running a trade surplus of around 6% of GDP and lecturing other euro area countries—hamstrung by Germany-invented austerity doctrine—that it was not Germany&#39;s fault if its manufacturing sector was simply far more</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 05:45</span><span class="reply">reply</span>
+      <div class="ptext">But set that aside, there is no real way to look at settlement over the July 2025 to June 2026 period and reach a determination that isn&#39;t &#34;manipulation&#34; or &#34;manipulation lite&#34;<span class="mbadge">media</span><a href="https://x.com/Brad_Setser/status/2080771473434665182" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 05:44</span><span class="reply">reply</span>
+      <div class="ptext">onshore fx deposits stay out of settlement -- and historically China has encouraged these deposits at times so as to reduce reported reserve growth (the fx deposit series doesn&#39;t map to standard economic variables)<a href="https://x.com/Brad_Setser/status/2080771059037384752" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">122 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="gdp1985" data-topic="Economy &amp; Finance">
+  <h2><a href="https://x.com/gdp1985" target="_blank" rel="noopener">@gdp1985</a><span class="cn">Gerard DiPippo</span><span class="badge stale">no recent originals · last 2026-07-09 18:43</span></h2>
+  <p class="accnote">Associate director of the RAND China Research Center, formerly CSIS and Bloomberg Economics; rigorous and measured, reliably pours cold water on overheated narratives.</p>
+  
+  <div class="none">No posts in this window.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="ZongyuanZoeLiu" data-topic="Economy &amp; Finance">
+  <h2><a href="https://x.com/ZongyuanZoeLiu" target="_blank" rel="noopener">@ZongyuanZoeLiu</a><span class="cn">Zongyuan Zoe Liu 刘宗媛</span><span class="badge stale">no recent originals · last 2026-03-30 21:45</span></h2>
+  <p class="accnote">CFR fellow and author of Sovereign Funds; financial statecraft and how Beijing mobilizes the state balance sheet.</p>
+  
+  <div class="none">No posts in this window.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="Aligarciaherrer" data-topic="Economy &amp; Finance">
+  <h2><a href="https://x.com/Aligarciaherrer" target="_blank" rel="noopener">@Aligarciaherrer</a><span class="cn">Alicia García-Herrero</span></h2>
+  <p class="accnote">Chief Asia-Pacific economist at Natixis and senior fellow at Bruegel; high-frequency APAC macro, delivered without hedging.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-24 17:07</span>
+      <div class="ptext">Standpunten geciteerd door @destandaard: “De afhankelijkheid daarvanheeft de macro-economische autonomie van staten al een halve eeuw bepaald. De afhankelijkheid van AI reikt zelfs nog dieper, bijvoorbeeld tot in de volksgezondheid, derechtspraak, de landbouwplanning en de nationale veiligheid.”
+
+https://www.standaard.be/buitenland/ai-wordt-een-geopolitiek-wapen-europa-op-achtervolgen-aangewezen/159015611.html<a href="https://x.com/Aligarciaherrer/status/2080580683161063687" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 10:56</span>
+      <div class="ptext">My Op-Ed for @Euractiv : &#34;#Europe&#39;s search for profitable investment should lead to #India&#34;. Profitability, not politics, is pushing European capital out of China. India is the logical destination.
+
+https://www.euractiv.com/opinion/europes-search-for-profitable-investment-should-lead-to-india/<a href="https://x.com/Aligarciaherrer/status/2080487136604893519" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 19:13</span>
+      <div class="ptext">After three weeks in the #US, heading back to #Asia with mixed views. The intellectual capacity is still here, and the dynamism, but the echo chambers are everywhere. The lucidity to understand how much the world is turning its back on the US is missing. This is the US&#39;s most dangerous enemy, not China.<span class="mbadge">media</span><a href="https://x.com/Aligarciaherrer/status/2080250060344877240" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 09:45</span>
+      <div class="ptext">Views for @SCMPNews: “The shift to a more flexible Section 301 legal basis gives the administration greater scope for targeted, expandable actions compared to broad emergency tariffs. Consistent with President Trump’s reciprocal trade approach and past record, including the phase one negotiations, we should anticipate further measures – potentially higher rates or sector-specific duties – if trade imbalances, IP issues or national security concerns persist. This framework represents a long-term strategic tool rather than a one-off measure.”
+
+https://www.scmp.com/economy/global-economy/article/3361480/china-braces-new-us-global-tariffs-loom-fresh-trade-war-or-managed-friction<a href="https://x.com/Aligarciaherrer/status/2080107000416080271" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 09:24</span>
+      <div class="ptext">My TV interview with The Ukrainian Week: “The Price of &#34;Friendship&#34;: #Russia Pays Dearly for Its Partnership with #China.&#34;
+In the conversation, we talked about: 
+- why the alliance between Russia and China is deeply asymmetric;
+- is the Kremlin really gradually losing sovereignty;
+- why is Beijing blocking the “Power of Siberia-2” project;
+- what concessions does China demand from Russia;
+- do Russian elites resist increasing dependence on the PRC;
+- why is China selling goods to Russia but not transferring critical technologies;
+- how Europe should build relations with China, not forgetting about Russia&#39;s war against Ukraine;
+- under what conditions the EU can lift sanctions against Russia.
+https://www.youtube.com/watch?v=xOW-o_zzQ18<span class="mbadge">media</span><a href="https://x.com/Aligarciaherrer/status/2079739207258722371" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 17:43</span>
+      <div class="ptext">Ansichten für @DiePressecom „KI könnte die USA in Zukunft zu einem großen Nettoexporteur digitaler Dienstleistungen machen. Hier lässt sich viel Geld verdienen. China will diese Entwicklung nicht verpassen.“
+
+https://www.diepresse.com/37690691/china-will-die-dominanz-der-usa-bei-kuenstlicher-intelligenz-brechen<a href="https://x.com/Aligarciaherrer/status/2079140057865396416" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 15:39</span>
+      <div class="ptext">Views for @WSJ on #China: “They aren’t taking steps to boost consumption because that’s not the model they want. Beijing wants to move up the ladder fast and dominate technologies. For that, the fact that people consume and go to the cinema doesn’t really help.”
+
+https://www.wsj.com/world/china/china-economy-tech-property-03444d83<a href="https://x.com/Aligarciaherrer/status/2079108850721185989" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-15 17:19</span>
+      <div class="ptext">Sharing our paper that I co-authored with Rajeswari Sengupta and Nina Vujanović for @Bruegel_org : &#34;Beyond tariffs: why #Europe and #India must prioritise investment into manufacturing&#34;.
+https://www.bruegel.org/working-paper/beyond-tariffs-why-europe-and-india-must-prioritise-investment-manufacturing<a href="https://x.com/Aligarciaherrer/status/2077322111342047687" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">4 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="GlennLuk" data-topic="Economy &amp; Finance">
+  <h2><a href="https://x.com/GlennLuk" target="_blank" rel="noopener">@GlennLuk</a><span class="cn">Glenn Luk</span></h2>
+  <p class="accnote">Finance background; long threads on infrastructure, manufacturing and the growth model — bullish tilt, dense with data and industry detail.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 09:00</span><span class="reply">reply</span>
+      <div class="ptext">Like it or not, China is going to have an increasingly disproportionate impact on the global economy. That aspect of “China Shock 2.0” makes rational sense.
+
+But painting China’s rising impact as a universal negative for the global economy is misleading. In any disruptive shift, there will be relative winners and losers, and I find it far more useful to identify who they are.<a href="https://x.com/GlennLuk/status/2080820403237458430" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:47</span><span class="reply">reply</span>
+      <div class="ptext">It was American, European and Japanese MNCs that made key decisions in the 90s and 2000s to divert manufacturing FDI away from other developing countries and concentrate in China, because it was more efficient.
+
+They are the ones who “pulled up the ladder” on developing countries during that time period.
+
+What’s happening today is that after three decades of continuous development of its manufacturing ecosystem, China caught up and is now starting to replace these MNCs at the frontier for manufacturing and increasingly tech.
+
+So now Chinese MNCs are the ones starting to decide where they want to build factories overseas.<span class="mbadge">media</span><a href="https://x.com/GlennLuk/status/2080817195345736106" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:25</span>
+      <div class="ptext">Unlikely? It’s already happening even as China is still in the very early innings of expanding FDI in overseas manufacturing.
+
+BYD’s EV plant in Rayong, Thailand is a *full-production* plant with stamping, welding, painting and final assembly and sources components (e.g. seat assemblies) locally through JVs.
+
+Its new plant in Brazil is moving to full production by the end of this year (Brazil requires 50% local component supply to qualify for lower import tariffs).
+
+He is treating other countries like they are children that cannot exercise agency in trade and investment negotiations.
+
+Instead of offering a viable local manufacturing alternative to countries that want to jump on the transport electrification trend, it’s just empty whining. Not a good look.<span class="mbadge">media</span><a href="https://x.com/GlennLuk/status/2080811699142267240" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 11:09</span><span class="reply">reply</span>
+      <div class="ptext">The more friction you cut out of each node in the virtuous cycle, the faster the velocity of activity.
+
+The goal of &#34;technology as a public good&#34;-centered policy is to reduce the friction costs of technology diffusion, speeding up productivity growth and quality of life improvements.
+
+Those innovation centers I visited were just one example of policy implementation where the key objective is to speed up technology diffusion.<a href="https://x.com/GlennLuk/status/2080490499140731064" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 11:09</span><span class="reply">reply</span>
+      <div class="ptext">This becomes a repeatable, virtuous cycle.
+
+If core technology improves downstream products and services, consumers will consume more of those products and services.
+
+Increased consumption activity supports further investment in future productivity-enhancing R&amp;D.
+
+It also supports rising incomes for workers — who are also consumers.<a href="https://x.com/GlennLuk/status/2080490496947061006" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 11:09</span>
+      <div class="ptext">One of my takeaways from this recent trip I took in Beijing is that Chinese policymakers view core technology as a public good and exhibit strong policy bias encouraging wide diffusion into the broad economy.
+
+One of the key mechanisms that illustrates this approach are the proliferation of &#34;innovation centers&#34; where public institutions (e.g. research institutes) and private sector companies come together to share and demonstrate core technologies and capabilities.
+
+We visited innovation centers focused on the low-altitude economy and robotics. We also visited other companies that were very open about sharing their technology and operations.<span class="mbadge">media</span><a href="https://x.com/GlennLuk/status/2080490474419454381" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 09:48</span><span class="reply">reply</span>
+      <div class="ptext">… but also this …<a href="https://x.com/GlennLuk/status/2080470068258086942" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/MaxAnderson/status/2080229375773941871" target="_blank" rel="noopener">@MaxAnderson</a>As someone who has personally spent $500k / mo+ on Google Ads for years, I can tell you with certainty: 
+
+This revenue growth in Search is artificial &amp; extremely unhealthy for Google’s business long term
+
+Search volumes are declining as legacy search is being increasingly cannibalized by non-monetized LLM queries
+
+Google’s response? 
+
+Manufacture revenue growth via short-sighted, highly extractive, customer-hostile tactics. I.e. charge advertisers more for lower quality clicks, including clicks they do not want and explicitly did not approve Google to charge them for
+
+A few examples to illustrate: 
+
+For all of its history until recently, Google operated on a 2nd price auction model
+
+I.e. if you bid $5 CPC and the next highest bidder bids $1 CPC, Google charged you $1.01 for the click (one penny more than the 2nd highest bidder) rather than the $5 you bid
+
+This was a genius move by Google early on as it incentivizes advertisers to input their true maximum willingness to pay rather than trying to play the game of bidding low and constantly adjusting to try to stay just ahead of the next highest bidder while still not paying too much
+
+However recently, Google silently deprecated the 2nd price auction and began charging advertisers as much as their bid and budget caps allow, regardless of what anyone else is bidding
+
+It’s a short-sighted cash grab at the expense of the long term health of the  advertiser ecosystem
+
+Making thing worse, Google also recently nerfed keyword targeting precision
+
+Google previously had precise keyword targeting settings that allowed advertisers pick individual search phrases to bid on, defined down to the character w/ exact match or phrase match targeting 
+
+This was one of the core features that made search advertising magic, enabling advertisers to run extremely precise campaigns based on exactly what their target customer typed 
+
+But now, even if you bid on a specific term or phrase using the strictest exact 
+-match targeting settings, Google will show your ad across 1000’s of unrelated keywords, labeling them as as “exact match (close variant)” 
+
+The definition of “close variant” means whatever they want it to and changes constantly. The result is advertisers get billed for clicks that are totally irrelevant to their business and that their targeting settings explicitly forbid Google from targeting. Google does it anyway and there’s no ability to turn this off
+
+So now exact match is broad match, and broad match is just meaningless spam
+
+This is all very bad for advertisers, but for Google, it allows them to show your ad and bill you for clicks across 1000x more searches that were previously going unmonetized (mainly because they’re garbage queries no one wants) 
+
+This is how you grow revenue atop declining search volumes 
+
+Lastly, and perhaps most egregiously, Google quietly stopped respecting budget caps by a factor of 2x. For example campaigns we’ve been running for years with $1000 daily budget caps suddenly began spending $2000+ per day 
+
+And the extra spend is entirely on the garbage keywords Google arbitrarily throws in as “exact match (close variants)” which have no value to our business, but can’t be turned off
+
+Google offers no refunds nor any recourse for overspend or spend on keywords you explicitly did not target
+
+These are not the actions of a healthy business. These are the actions of company whose core business is in decline but desperately needs to pump quarterly earnings so Wall Street will continue to fund insane capex while hopefully looking through their rapidly deteriorating negative free cash flow 
+
+Google operated a benevolent monopoly for the better part of 25 yrs
+
+Meaning the value Google captured from Search was but a small fraction of the value it created, and that spread produced a potential energy that justified expectations of high earnings growth far, far into the future 
+
+This is now no longer the case
+
+At the alter of AI capex, Google is sacrificing the golden goose</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 09:47</span>
+      <div class="ptext">This …<a href="https://x.com/GlennLuk/status/2080470014659059714" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/rohanpaul_ai/status/2080029216540926421" target="_blank" rel="noopener">@rohanpaul_ai</a>So the &#34;AI will kill Search&#34; story still hasn&#39;t shown up in the money.
+
+Google Search actually sped up, growing 17% this year against 12% a year ago.
+
+Search alone added about $9B, more than the rest of the division combined. Interesting part is the margin, which widened to 41.8% from 40.1%.
+
+This division is the cash engine quietly funding the whole AI buildout.</blockquote>
+    </li>
+    
+  </ul>
+  <div class="more">21 more in this window not shown.</div>
+  
+</section>
+
+
+<div class="topicdiv" data-topic="Tech &amp; Industry">Tech &amp; Industry</div>
+
+<section class="acct" data-handle="kyleichan" data-topic="Tech &amp; Industry">
+  <h2><a href="https://x.com/kyleichan" target="_blank" rel="noopener">@kyleichan</a><span class="cn">Kyle Chan</span></h2>
+  <p class="accnote">Princeton researcher, writes High Capacity; industrial policy and the Chinese manufacturing system — the fastest-rising voice of the past two years.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-26 04:19</span>
+      <div class="ptext">The debate over open source models is actually part of several major political fault lines in the US right now:
+- Allow vs. ban Chinese models
+- Open vs. closed AI
+- Pro-AI safety vs. anti-doomer
+- Engage vs. decouple with China
+- Pro-AI vs. AI and data center backlash<a href="https://x.com/kyleichan/status/2081112020892434800" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/CNBC/status/2080699590907445551" target="_blank" rel="noopener">@CNBC</a>Nvidia, Microsoft, Meta, Palantir and more than 20 other companies released a letter on Friday urging policymakers to avoid “premature restrictions” on open-weight artificial intelligence models that would “stifle competition or drive innovation overseas.”
+
+Open-weight AI models are available for users to download, modify and run on their own infrastructure, and they have been the subject of fierce debate within the tech sector in recent weeks.
+
+Full details: http://cnb.cx/4gPkWrE</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-26 03:56</span><span class="reply">reply</span>
+      <div class="ptext">Here&#39;s a great English version from @GaoYingshi: https://www.fredgao.com/p/deepseeks-liang-wenfeng-breaks-his<a href="https://x.com/kyleichan/status/2081106401510732272" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-26 03:56</span>
+      <div class="ptext">I was a bit hesitant to believe the leaked DeepSeek investor call. Seemed almost too good to be true. This makes me a bit less skeptical.
+
+If it&#39;s real, Liang Wenfeng was incredibly detailed about working with Huawei, chip production bottlenecks, CUDA moat being broken, etc.<a href="https://x.com/kyleichan/status/2081106219566059978" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/AndrewCurran_/status/2081058053777244485" target="_blank" rel="noopener">@AndrewCurran_</a>DeepSeek has put its second funding round on indefinite hold after an investor in the first round leaked the full transcript of founder Liang Wenfeng&#39;s comments to investors. The comments have been widely posted and discussed on X over the last few days.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-26 02:32</span>
+      <div class="ptext">A German couple in Berlin asked me today what languages I speak: German, English…
+
+I said: “…and Chinese.”
+
+The husband said: “I also speak Chinese: B-Y-D.”<a href="https://x.com/kyleichan/status/2081085115401121839" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 14:55</span>
+      <div class="ptext">Really interesting discussion of Kimi K3 and Chinese open-source models.
+
+Points out US labs will increasingly distill on Chinese models, not just the other way around.<a href="https://x.com/kyleichan/status/2080909835978047852" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/arena/status/2080664980823949777" target="_blank" rel="noopener">@arena</a>Kimi K3 passed Fable 5 on Code Arena just 6 weeks after Fable&#39;s release, landing #1 in 6 of 7 frontend domains. 
+
+We sat down with Arena CEO and co-founder @ml_angelopoulos for a rapid fire conversation on what the data from real-world use tells us 👇
+
+0:00 Biggest release of the year, or overreaction?
+ 0:33 Kimi K3 beats Fable on Code Arena: verifying the votes
+ 1:35 1679 points: a 17-place jump from K2.6
+ 2:37 #1 in 6 of 7 frontend domains — but still #2 in gaming
+ 3:15 Permanent shift or snapshot? Labs distilling Chinese models
+ 4:23 Regulating Chinese models: the case for and against
+ 6:30 $3 in, $15 out: open source is no longer 10% of the price
+ 7:30 If you&#39;re Anthropic or OpenAI, what&#39;s your move?
+ 8:09 How long before the leaderboard flips again?</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 03:17</span>
+      <div class="ptext">Unitree is the global market leader in quadruped robots. This new model can go over 30 km / 18 miles on a single charge.<span class="mbadge">media</span><a href="https://x.com/kyleichan/status/2080734144821186653" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 02:43</span>
+      <div class="ptext">Two of this year’s Fields Medalists are Chinese mathematicians at American universities.
+
+This is not just a victory for China or the US, but a victory for global science.<a href="https://x.com/kyleichan/status/2080725518609957134" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/mathemetica/status/2080312382736543926" target="_blank" rel="noopener">@mathemetica</a>The 2026 Fields Medals have been awarded at the International Congress of Mathematicians in Philadelphia.  
+
+The recipients are:
+• Yu Deng (University of Chicago)
+• John Pardon (Stony Brook University)
+• Hong Wang (New York University &amp; IHES)
+• Jacob Tsimerman (University of Toronto)  
+
+The Fields Medal recognizes outstanding mathematical achievement by researchers under 40. Each post below summarizes the official citation and key contributions.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 02:24</span>
+      <div class="ptext">Huawei and CXMT clashing over memory prices. There’s fierce competition beneath the surface of China’s tech industry.
+
+Fascinating reporting on CXMT and YMTC: https://www.reuters.com/world/china/chinas-memory-chip-makers-ride-ai-boom-new-power-us-scrutiny-2026-07-24/<span class="mbadge">media</span><a href="https://x.com/kyleichan/status/2080720897212559590" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">69 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="jordanschneider" data-topic="Tech &amp; Industry">
+  <h2><a href="https://x.com/jordanschneider" target="_blank" rel="noopener">@jordanschneider</a><span class="cn">Jordan Schneider</span></h2>
+  <p class="accnote">Runs ChinaTalk; interviews and translations across tech and policy, the broadest aggregation point in the circle.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 00:15</span>
+      <div class="ptext">cannot wait for the first round knicks sweep
+
+what a punk<span class="mbadge">media</span><a href="https://x.com/jordanschneider/status/2080688356329992268" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:15</span>
+      <div class="ptext">lolllllll<span class="mbadge">media</span><a href="https://x.com/jordanschneider/status/2080688277418377640" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:14</span>
+      <div class="ptext">the guy who killed USAID has an interesting evil detector<a href="https://x.com/jordanschneider/status/2080688018466161119" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/Hadas_Gold/status/2080339595623891188" target="_blank" rel="noopener">@Hadas_Gold</a>he also says @DarioAmodei is a &#34;principled&#34; person and no one at Anthropic set off his evil detector.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 21:21</span>
+      <div class="ptext">matt is correct<a href="https://x.com/jordanschneider/status/2080644437705634273" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/mattsheehan88/status/2080349675618529620" target="_blank" rel="noopener">@mattsheehan88</a>New from me: The 🇺🇸 and 🇨🇳 are getting ready for a high-level dialogue on AI in September. But can two rival superpowers actually do anything to mitigate risks from frontier AI?
+
+Yes, if we take the right approach. I call that approach “AI Safety in Parallel.”
+🧵</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 01:39</span>
+      <div class="ptext">please help me peer pressure @AISecurityInst into coming on chinatalk<a href="https://x.com/jordanschneider/status/2080346960653926840" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/AISecurityInst/status/2080343066389479706" target="_blank" rel="noopener">@AISecurityInst</a>Together with the US Center for AI Standards and Innovation (@NIST), we ran evaluations of Kimi K3 focused on its cyber capabilities. Kimi K3 performs below leading US frontier models on our preliminary cyber evaluations.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-23 02:26</span>
+      <div class="ptext">here for it<a href="https://x.com/jordanschneider/status/2079996491217711293" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/mkratsios47/status/2079692038627532896" target="_blank" rel="noopener">@mkratsios47</a>In response to @POTUS&#39;s call for a revival of America&#39;s scientific enterprise, today I’m releasing Science: A New Golden Age.
+
+This report is a blueprint for renewing American scientific leadership for the 21st century.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 02:42</span>
+      <div class="ptext">we americans are a charismatic people! why is it so hard for any other politician to do this?<a href="https://x.com/jordanschneider/status/2079638246351421484" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/Acyn/status/2079259644514746393" target="_blank" rel="noopener">@Acyn</a>Mamdani: In a win for every ice cream lover across New York City, we will work with the state to do away with the frozen dessert permit that requires restaurants to seek out a superfluous second permit for what they’re already doing: serving food.
+
+No more treat-sploitation, as we say.
+
+Right now, barbershops need three licenses to cut hair: one to be a barber, one to own the shop, and one from the city on top of both.
+
+The state of affairs is frankly anti-fade, and we will not stand for it, which is why we will work with the state to streamline these licenses as well.
+
+And to the bingo enthusiasts out there, for too long, the potential earnings of a hot streak at bingo have been capped by arcane rules that no longer reflect how the game is actually being played.
+
+With OPEN, DCWP will remove unnecessary regulations, including prize limits.
+
+These are just a few of the improvements we are proud to announce today as we make it clear we are in the pocket of Big Abuela.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 02:37</span>
+      <div class="ptext">how do you adapt the odyssey and not use any of the lines from history&#39;s greatest poets? does nolan really think he&#39;s a better writer than homer or that we&#39;re just too dumb today for at least a taste of the genuine article?<a href="https://x.com/jordanschneider/status/2079636950470848694" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">15 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="pstAsiatech" data-topic="Tech &amp; Industry">
+  <h2><a href="https://x.com/pstAsiatech" target="_blank" rel="noopener">@pstAsiatech</a><span class="cn">Paul Triolo</span></h2>
+  <p class="accnote">Partner at DGA Group; veteran of semiconductors, export controls and tech policy, strong on technical detail.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 12:22</span>
+      <div class="ptext">Trump Caught Between Apple and Micron in Fight Over Chinese Chips
+
+Two of the president’s priorities—cutting prices for U.S. consumers and increasing domestic semiconductor output—come into conflict. https://www.wsj.com/tech/trump-apple-micron-china-chips-784bbd3d?st=ycDR1j<a href="https://x.com/pstAsiatech/status/2080871210964164748" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 11:42</span>
+      <div class="ptext">U.S. Is About to Design an AI Regulator. Here’s How to Get It Right. AI industry and administration could soon converge on FINRA-style regulator for frontier AI...ultimate viability and effectiveness will be decided by design choices being made right now. https://www.cfr.org/articles/the-u-s-is-about-to-design-an-ai-regulator-heres-how-to-get-it-right<a href="https://x.com/pstAsiatech/status/2080861222690574713" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 09:25</span>
+      <div class="ptext">#OpenWeightModelDebate<a href="https://x.com/pstAsiatech/status/2080826813929152553" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/firstadopter/status/2080818109141631210" target="_blank" rel="noopener">@firstadopter</a>OpenAI tells me they signed the Nvidia–Microsoft open-source/open-weights AI model letter today.
+
+What an amazing turn of events. Your move, Anthropic!</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:11</span>
+      <div class="ptext">Wow, Jensen joins X just for this!<a href="https://x.com/pstAsiatech/status/2080808053654634998" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/JensenHuang/status/2080643682408321103" target="_blank" rel="noopener">@JensenHuang</a>For my first post, I’m sharing a letter @NVIDIA signed on why open models matter.
+
+AI will transform every industry, power every company, and be built by every country.
+
+Open models strengthen safety and cybersecurity, accelerate innovation and diffusion, and enable sovereignty.
+
+The world needs both frontier closed models and frontier open models.
+
+https://images.nvidia.com/pdf/Open-Weights-and-American-AI-Leadership.pdf</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:10</span>
+      <div class="ptext">Everyone is doing it....<a href="https://x.com/pstAsiatech/status/2080807818115023210" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/sama/status/2080683363174945065" target="_blank" rel="noopener">@sama</a>i want the US to win in AI both in open source and proprietary models, and i am glad to see this</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:07</span>
+      <div class="ptext">China’s Kimi K3 well behind US rivals in cyberattack ability, study shows
+Kimi K3’s overall score of 32.2 per cent compares with top, unnamed US models that average 76.2 per cent
+Moonshot has not optimized on coding?
+ https://sc.mp/p01mo?utm_source=twitter&amp;utm_campaign=3361711&amp;utm_medium=share_widget via @scmpnews<a href="https://x.com/pstAsiatech/status/2080807128009429499" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:05</span>
+      <div class="ptext">#OpenWeightModelDebate<a href="https://x.com/pstAsiatech/status/2080806586185060486" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/satyanadella/status/2080646162483417097" target="_blank" rel="noopener">@satyanadella</a>Open-weight models are essential to a healthy AI ecosystem. Together with others across our industry, we are outlining a path for open-weight models to strengthen American competitiveness and expand economic opportunity, while protecting national security. https://www.microsoft.com/en-us/corporate-responsibility/topics/open-weight/</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 08:03</span>
+      <div class="ptext">This....<a href="https://x.com/pstAsiatech/status/2080806008256135537" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/USWREMichael/status/2080729826512519479" target="_blank" rel="noopener">@USWREMichael</a>Interesting to hear that you are supporting national security @SarahKHeck! There is no AI company more hostile to the warfighter than @AnthropicAI.  Your products are being fully removed from the @DeptofWar because your company refuses allow the LAWFUL use your AI model. No attempted psyop will change that.</blockquote>
+    </li>
+    
+  </ul>
+  <div class="more">106 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="danwwang" data-topic="Tech &amp; Industry">
+  <h2><a href="https://x.com/danwwang" target="_blank" rel="noopener">@danwwang</a><span class="cn">Dan Wang</span><span class="badge stale">no recent originals · last 2026-03-19 04:44</span></h2>
+  <p class="accnote">Hoover Institution fellow, author of Breakneck; posts sparingly but each one lands — the &#34;engineering state&#34; lens.</p>
+  
+  <div class="none">No posts in this window.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="kevinsxu" data-topic="Tech &amp; Industry">
+  <h2><a href="https://x.com/kevinsxu" target="_blank" rel="noopener">@kevinsxu</a><span class="cn">Kevin Xu</span></h2>
+  <p class="accnote">Writes Interconnected; US-China tech, open source, and go-global strategy from an operator-investor vantage.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 05:32</span>
+      <div class="ptext">Resharing my article on the (long) history of open source in China, given how relevant Chinese open source is today
+
+If you run a quality podcast and want to do a deep dive episode on this, especially a business or tech podcast that isn&#39;t focused on China, DM me!<a href="https://x.com/kevinsxu/status/2080768036034724174" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/kevinsxu/status/2029961571296743585" target="_blank" rel="noopener">@kevinsxu</a>(media post)</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:52</span>
+      <div class="ptext">Be on Team Open
+
+Be on Team Competition
+
+Be on the right side of history<a href="https://x.com/kevinsxu/status/2080697732457447669" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/JensenHuang/status/2080643682408321103" target="_blank" rel="noopener">@JensenHuang</a>For my first post, I’m sharing a letter @NVIDIA signed on why open models matter.
+
+AI will transform every industry, power every company, and be built by every country.
+
+Open models strengthen safety and cybersecurity, accelerate innovation and diffusion, and enable sovereignty.
+
+The world needs both frontier closed models and frontier open models.
+
+https://images.nvidia.com/pdf/Open-Weights-and-American-AI-Leadership.pdf</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 01:52</span>
+      <div class="ptext">I hope this OpenAI-HuggingFace incident puts to bed the (very false) assumption that closed is somehow inherently more safe than open, when the opposite is (and has been) true<a href="https://x.com/kevinsxu/status/2080350268143657377" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/Thom_Wolf/status/2080343858022354975" target="_blank" rel="noopener">@Thom_Wolf</a>it&#39;s ironic that the first autonomous AI attack was done by a close weight model defended by an open weight model, where everyone was expecting the opposite</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-23 21:30</span>
+      <div class="ptext">Solid segment. 
+
+Commend @RyanFedasiuk &#39;s effort to identify all the different risks rather than one solution that solves all
+
+We are conflating a bunch of different risks into one, when there are distinct risks that can (and should be) dealt with individually
+
+(also nice kitchen)<a href="https://x.com/kevinsxu/status/2080284513322602812" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/RyanFedasiuk/status/2080074533155860680" target="_blank" rel="noopener">@RyanFedasiuk</a>It’s wrong to conceive of China as some sort of “Robin Hood” stealing from rich frontier labs and giving to poor software developers.
+
+The Trump administration has well-founded concerns about outsourcing the backbone of the global intelligence economy to 🇺🇸’s chief competitor.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-23 05:32</span>
+      <div class="ptext">Google Cloud growing more than 80, eigh-ty, 8 zero(!) percent is mind boggling. Just incredible!<a href="https://x.com/kevinsxu/status/2080043217609785615" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 03:28</span>
+      <div class="ptext">As of today&#39;s America, an AI model&#39;s output or chain of thought is not copyrighted nor treated as trade secrets.
+
+So it is not IP. 
+
+You may *feel* like it is because of something you&#39;ve read. But it isn&#39;t. 
+
+Thus, alleging distillation as &#34;IP theft&#34; is not a serious legal argument. It is a political and lobbying talking point masquerading as a legal argument.
+
+The one pillar about America I respect and cherish the most is our independent, self-correcting legal system. It isn&#39;t perfect. It doesn&#39;t get everything right. But it employs a rigorous process that tries to be immune to lobbying, political pressure, and &#34;feelings&#34;, in order to deliver impartial and fair judgments, if not immediately, at least eventually.
+
+You may not *feel* like a rectangle should get an IP patent either. But it did (Apple for the iPhone, patent no. D618,677)
+
+Laws are laws. Until they are, they aren&#39;t. Until they aren&#39;t, they are.<a href="https://x.com/kevinsxu/status/2080012039825830290" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 23:21</span>
+      <div class="ptext">Data center moratorium has officially reached the Music City...
+
+https://fox17.com/news/growing-nashville/metro-council-approves-data-center-regulations-moratorium-davidson-county-nashville-dc-blox-project-near-zoo-mayor-freddie-oconnell<a href="https://x.com/kevinsxu/status/2079949954689188054" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 23:01</span>
+      <div class="ptext">Closed source frontier commercial APIs are behaving like a Chinese search engine<span class="mbadge">media</span><a href="https://x.com/kevinsxu/status/2079944874220998733" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">18 more in this window not shown.</div>
+  
+</section>
+
+
+<div class="topicdiv" data-topic="Politics &amp; Foreign Policy">Politics &amp; Foreign Policy</div>
+
+<section class="acct" data-handle="niubi" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/niubi" target="_blank" rel="noopener">@niubi</a><span class="cn">Bill Bishop 利明璋</span></h2>
+  <p class="accnote">Founder of Sinocism and the &#34;godfather&#34; of English-language China watching; the circle&#39;s agenda-setter and clearinghouse.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 20:51</span>
+      <div class="ptext">So Cxmt caught huawei installing a backdoor and trying to steal key data?<a href="https://x.com/niubi/status/2080999431420215749" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 09:23</span>
+      <div class="ptext">Wish I had discovered wild senna earlier. Cool, useful plant that loves dc climate, and bees love it<span class="mbadge">media</span><a href="https://x.com/niubi/status/2080826239841955933" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:35</span>
+      <div class="ptext">Scott Galloway: China Is Undercutting America’s AI Boom https://open.substack.com/pub/profgmedia/p/the-week-china-is-undercutting-americas?r=2e&amp;utm_campaign=post-expanded-share&amp;utm_medium=web<a href="https://x.com/niubi/status/2080693280266723793" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:23</span>
+      <div class="ptext">&#34;Huawei’s report on its progress gave Ding leeway to be more aggressive. He delivered a blunt warning to China’s largest AI users, according to people familiar with the message: Anyone who resisted employing domestic chips was a traitor&#34; and Lutnick is a clown<span class="mbadge">media</span><a href="https://x.com/niubi/status/2080690461467930764" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/WSJ/status/2080526300553306267" target="_blank" rel="noopener">@WSJ</a>Behind closed doors, China is directing a feverish campaign to catch up to U.S. chips and win the AI war. https://on.wsj.com/4bK9B8P</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:15</span>
+      <div class="ptext">PRC markets may need some more policy support ahead of the massive CXMT IPO next week<span class="mbadge">media</span><a href="https://x.com/niubi/status/2080688298507333812" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 23:09</span>
+      <div class="ptext">Hungary probes deal with China&#39;s BYD carmaker after ex-foreign minister takes job there https://apnews.com/article/hungary-probe-byd-deal-szijjarto-2aaa8f568762e2cd92dd1c65bd3c59bd?utm_source=twitter&amp;utm_medium=share this was a dumb hire by BYD<a href="https://x.com/niubi/status/2079222134551765479" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 21:34</span>
+      <div class="ptext">Second thomas shoal<a href="https://x.com/niubi/status/2079198269658263845" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/newswatchplusph/status/2079119920248586715" target="_blank" rel="noopener">@newswatchplusph</a>AFP RELEASES VIDEO OF CHINA COAST GUARD HITTING PH NAVY PERSONNEL
+
+WATCH: The Armed Forces of the Philippines released video showing China Coast Guard personnel aboard a rigid hull inflatable boat hitting Philippine Navy personnel on a rubber boat with wooden batons near Ayungin Shoal in the West Philippine Sea on July 20.
+
+The AFP said one navy personnel suffered a head injury after he was struck with a wooden baton. It said the China Coast Guard also damaged a navy rubber boat during the confrontation.
+
+📹 AFP</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-20 19:57</span>
+      <div class="ptext">A quant fund at DeepSeek founder Liang Wenfeng’s investment firm slumped 15.7% in the week ended July 17 https://www.bloomberg.com/news/articles/2026-07-20/deepseek-founder-s-fund-slumps-16-as-ai-rout-hits-china-quants?utm_source=website&amp;utm_medium=share&amp;utm_campaign=twitter<a href="https://x.com/niubi/status/2079173834649804872" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">32 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="ZichenWanghere" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/ZichenWanghere" target="_blank" rel="noopener">@ZichenWanghere</a><span class="cn">Zichen Wang 王子辰</span></h2>
+  <p class="accnote">Writes Pekingnology (CCG fellow); first-hand translations and context from Beijing — the main window into in-system narratives.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 02:14</span>
+      <div class="ptext">我一天到晚都在干嘛呀<a href="https://x.com/ZichenWanghere/status/2080718213818843205" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 02:05</span>
+      <div class="ptext">https://www.noemamag.com/the-real-problem-plaguing-asias-most-important-relationship/<a href="https://x.com/ZichenWanghere/status/2080715900123291712" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 07:13</span>
+      <div class="ptext">鸡蛋灌饼好吃。<a href="https://x.com/ZichenWanghere/status/2080431019732484328" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 20:03</span>
+      <div class="ptext">怎么就八点了<a href="https://x.com/ZichenWanghere/status/2079175264526098565" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-19 21:27</span>
+      <div class="ptext">unusual candor.<a href="https://x.com/ZichenWanghere/status/2078834117870039217" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/deanwball/status/2078827994785644675" target="_blank" rel="noopener">@deanwball</a>@DavidSacks The departments of war, transportation, energy, agriculture, commerce, NASA, and Congress have all blocked their employees from using Chinese AI, citing ill-justified claims of danger. This already has sent a message to regulated firms. All of this happened during this admin.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-19 01:37</span><span class="reply">reply</span>
+      <div class="ptext">source https://mp.weixin.qq.com/s/TVlO-h2z2MetfbloyPYmZA<a href="https://x.com/ZichenWanghere/status/2078534748172132857" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-19 01:37</span>
+      <div class="ptext">The city of Beijing emphasizes that China&#39;s two latest high-performing LLMs, the Kimi K3 and GLM-5.2, originate from Beijing.  
+
+It cannot allow Shanghai, the city hosting the ongoing World Artificial Intelligence Conference (WAIC), steal the limelight of AI without a fight.<span class="mbadge">media</span><a href="https://x.com/ZichenWanghere/status/2078534745542349029" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-18 19:52</span>
+      <div class="ptext">Nicknamed PixTinder by some, PIX has even become a last resort for jilted lovers. After an ex blocks them by phone and on social media, they can still send a one-cent transfer with a short message begging for forgiveness in the transaction description.  https://www.wsj.com/world/americas/trump-brazil-payment-system-pix-097bacaa?st=um46T2<a href="https://x.com/ZichenWanghere/status/2078447858869837988" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">12 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="vshih2" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/vshih2" target="_blank" rel="noopener">@vshih2</a><span class="cn">Victor Shih 史宗瀚</span></h2>
+  <p class="accnote">UCSD professor; elite politics plus local-government debt and the banking system — spans politics and economics like few others.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-26 03:00</span>
+      <div class="ptext">Ok that’s pretty cool<a href="https://x.com/vshih2/status/2081092287497744435" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/XH_Lee23/status/2081022398875496734" target="_blank" rel="noopener">@XH_Lee23</a>The portable counter-drone system self-developed by a Chinese company:
+
+One person, 30 seconds to deploy for rapid emergency response.
+
+Locks onto targets in 5 seconds, interceptor with a max speed of 420 km/h, and a 90% success rate.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-26 02:35</span>
+      <div class="ptext">Classic rock? 😢<a href="https://x.com/vshih2/status/2081085963376419257" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/stevehou/status/2080987102964048307" target="_blank" rel="noopener">@stevehou</a>Moonshot, the Chinese AI lab behind Kimi, names the meeting rooms in their Beijing HQ office after the classic Western rock bands and musicians. The name “Moonshot” itself of course pays homage to Pink Floyd. Contrasting with how adversarial the US tech/VC sector has become.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-26 02:18</span>
+      <div class="ptext">That’s true, a few lucky countries have gotten extensive industrial investment from Chinese companies but that still leaves many developing countries with less FDI than they would’ve received without massive financial subsidies to Chinese firms<a href="https://x.com/vshih2/status/2081081707579744683" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/GlennLuk/status/2080811699142267240" target="_blank" rel="noopener">@GlennLuk</a>Unlikely? It’s already happening even as China is still in the very early innings of expanding FDI in overseas manufacturing.
+
+BYD’s EV plant in Rayong, Thailand is a *full-production* plant with stamping, welding, painting and final assembly and sources components (e.g. seat assemblies) locally through JVs.
+
+Its new plant in Brazil is moving to full production by the end of this year (Brazil requires 50% local component supply to qualify for lower import tariffs).
+
+He is treating other countries like they are children that cannot exercise agency in trade and investment negotiations.
+
+Instead of offering a viable local manufacturing alternative to countries that want to jump on the transport electrification trend, it’s just empty whining. Not a good look.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 13:33</span>
+      <div class="ptext">that’s an inherent conflict for many products<a href="https://x.com/vshih2/status/2080889067538096511" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/pstAsiatech/status/2080871210964164748" target="_blank" rel="noopener">@pstAsiatech</a>Trump Caught Between Apple and Micron in Fight Over Chinese Chips
+
+Two of the president’s priorities—cutting prices for U.S. consumers and increasing domestic semiconductor output—come into conflict. https://www.wsj.com/tech/trump-apple-micron-china-chips-784bbd3d?st=ycDR1j</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 07:27</span>
+      <div class="ptext">Yeah that would have great military use cases and maybe deliver supplies to Indiana Jones?<a href="https://x.com/vshih2/status/2080797104734392805" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/kyleichan/status/2080734144821186653" target="_blank" rel="noopener">@kyleichan</a>Unitree is the global market leader in quadruped robots. This new model can go over 30 km / 18 miles on a single charge.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 01:51</span>
+      <div class="ptext">And are working and living in America. This is what we want more of as a country<a href="https://x.com/vshih2/status/2080712452204085601" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/BBCWorld/status/2080520721378271680" target="_blank" rel="noopener">@BBCWorld</a>Two Chinese win world&#39;s top Maths prize for first time https://bbc.in/4fgEhRo</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-25 01:39</span>
+      <div class="ptext">will listen!<a href="https://x.com/vshih2/status/2080709383173120449" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/FengmingLuPE/status/2080669446918840620" target="_blank" rel="noopener">@FengmingLuPE</a>Such a pleasure to join my long-time friend @kyleichan for this wonderful discussion about China’s EV rise. Industrial policies from Beijing, local governments’ development strategies, and entrepreneurs motivated by the global capital market all played their roles!</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 23:44</span>
+      <div class="ptext">Yes and just like in the US, the costs are piling up<a href="https://x.com/vshih2/status/2080680571098030540" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/WSJ/status/2080526300553306267" target="_blank" rel="noopener">@WSJ</a>Behind closed doors, China is directing a feverish campaign to catch up to U.S. chips and win the AI war. https://on.wsj.com/4bK9B8P</blockquote>
+    </li>
+    
+  </ul>
+  <div class="more">37 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="theChinaDude" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/theChinaDude" target="_blank" rel="noopener">@theChinaDude</a><span class="cn">Manoj Kewalramani</span><span class="badge err">fetch failed</span></h2>
+  <p class="accnote">Takshashila Institution (India); reads People&#39;s Daily every day (Tracking People&#39;s Daily) — the closest watch on official discourse.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-17 10:44</span>
+      <div class="ptext">We talk about Beijing as if it were one actor with one plan. It isn&#39;t.
+New episode of The Great Power Show: I speak to Xiao Ma on how China is actually governed--the bureaucracy, the incentives, and the millions of officials who make or break policy.
+🎧 https://trackingpeoplesdaily.substack.com/p/the-actual-governance-of-china<a href="https://x.com/theChinaDude/status/2077947569393832287" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<section class="acct" data-handle="fravel" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/fravel" target="_blank" rel="noopener">@fravel</a><span class="cn">M. Taylor Fravel</span><span class="badge stale">no recent originals · last 2026-06-29 23:16</span></h2>
+  <p class="accnote">Director of MIT&#39;s Security Studies Program; the academic authority on the PLA and territorial disputes.</p>
+  
+  <div class="none">No posts in this window.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="BonnieGlaser" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/BonnieGlaser" target="_blank" rel="noopener">@BonnieGlaser</a><span class="cn">Bonnie Glaser 葛来仪</span></h2>
+  <p class="accnote">Managing director of GMF&#39;s Indo-Pacific program; high-frequency authority on Taiwan and cross-strait security.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-23 02:25</span>
+      <div class="ptext">NEW CHINA GLOBAL EPISODE on how China&#39;s toolkit for economic statecraft is evolving &amp; its efficacy. Great conversation with one of the sharpest analysts on Chinese foreign policy, Evan Medeiros, Director of Georgetown Univ.&#39;s Asia program, @asianstudiesgu https://www.youtube.com/watch?v=eVLYq4sBwBc&amp;t=14s<span class="mbadge">media</span><a href="https://x.com/BonnieGlaser/status/2079996318806688225" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/gmfus/status/2079959831067201646" target="_blank" rel="noopener">@gmfus</a>🌐🇨🇳 China&#39;s toolkit of economic power is growing more sophisticated and reshaping international competition. 
+
+Georgetown&#39;s Dr. Evan Medeiros joins @GMFAsia&#39;s @BonnieGlaser to discuss how China&#39;s economic statecraft has evolved and how governments can respond.
+
+🎧 Listen here: https://bit.ly/44Ee8Wz</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 07:40</span>
+      <div class="ptext">Trump said the country is “maybe a little bit different today than it  was then” and that “we’ve talked to them about it” and “it took place a  long time ago”.
+
+Oh, right. China is a completely different country than it was 6 years ago.  https://www.bloomberg.com/news/articles/2026-07-21/trump-plays-down-chance-of-china-punishment-over-election-claims?utm_source=website&amp;utm_medium=share&amp;utm_campaign=twitter<a href="https://x.com/BonnieGlaser/status/2079713117223682144" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-12 08:22</span>
+      <div class="ptext">Joint statement by the US, Australia, Canada, Estonia, Germany, Italy, Japan, Latvia, Lithuania, New Zealand, the Philippines, Romania, Slovenia, and the UK on the 10th anniversary of the Philippines-China South China Sea Arbitral Tribunal Award. https://www.state.gov/releases/office-of-the-spokesperson/2026/07/joint-statement-on-the-tenth-anniversary-of-the-philippines-china-south-china-sea-arbitral-tribunal-award/<a href="https://x.com/BonnieGlaser/status/2076099774965502062" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<section class="acct" data-handle="ryanl_hass" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/ryanl_hass" target="_blank" rel="noopener">@ryanl_hass</a><span class="cn">Ryan Hass 何瑞恩</span></h2>
+  <p class="accnote">Director of the Brookings China Center, former NSC China director; the steady read on US-China diplomacy.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-26 02:32</span>
+      <div class="ptext">Important space to watch. 
+
+Debates around China policy increasingly becoming orthogonal to debates around AI regulation.
+https://www.nytimes.com/2026/07/25/technology/open-source-silicon-valley-china.html?smid=nytcore-ios-share via @NYTimes<a href="https://x.com/ryanl_hass/status/2081085073453957168" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 03:47</span>
+      <div class="ptext">Interesting to observe senior-level US-PRC security-related exchanges this week (Rubio-Wang Yi; EVFM Ma Zhaoxu meetings with State, DoD, NSC; FBI Director Patel in Beijing). I expect trade and economic interactions to follow suit as both sides lay groundwork for Sept 24 Xi visit.<a href="https://x.com/ryanl_hass/status/2080741797181952390" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 22:02</span>
+      <div class="ptext">Great to have @kyleichan providing a timely dose of sanity in conversation with @SoumayaKeynes<a href="https://x.com/ryanl_hass/status/2080654756494655916" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/SoumayaKeynes/status/2080510334998061340" target="_blank" rel="noopener">@SoumayaKeynes</a>Is China catching up with the US in AI? With Kyle Chan https://ift.tt/ikneSNj</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 00:31</span><span class="reply">reply</span>
+      <div class="ptext">Here is a full link to the piece. This piece is part of Brookings Taiwan-US Quarterly, which features the original writings of experts with the goal of providing a range of perspectives on developments relating to Taiwan. 
+
+https://www.brookings.edu/articles/the-us-taiwan-relationship-is-stronger-than-the-headlines-suggest/<a href="https://x.com/ryanl_hass/status/2080330073366769758" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 00:30</span>
+      <div class="ptext">Amidst concern in Washington and Taipei about the impact of President Trump’s characterization of Taiwan arms sales as a bargaining chip with Beijing, former AIT Director Brent Christensen provides a counter-argument that US-Taiwan relations are flourishing. (Link in next post)<span class="mbadge">media</span><a href="https://x.com/ryanl_hass/status/2080329635959599594" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 21:34</span>
+      <div class="ptext">I expect we&#39;re going to hear more about fears of Chinese domination of AI and implications in period to come. It&#39;s an open question how much this argument will move sentiment inside Beltway. I am fairly confident it won&#39;t have dramatic impact on public opinion outside Beltway.<a href="https://x.com/ryanl_hass/status/2080285537777209417" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/WSJ/status/2079533131061706755" target="_blank" rel="noopener">@WSJ</a>OpenAI and Anthropic executives are sounding the alarm about the rise of cheap AI, particularly powerful new models produced in China, suggesting they will lead to a “dystopian” AI future and present unacceptable security risks without regulation. https://on.wsj.com/4ft5XBt</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 23:56</span>
+      <div class="ptext">Rubio and Wang Yi meeting focuses on managing differences, exploring areas of cooperation, laying groundwork for &#34;positive&#34; state visit by Xi to Washington in September. 
+
+&#34;Rubio said the allegations of ​election interference were not discussed with Wang.&#34;
+https://www.reuters.com/world/china/rubio-says-he-discussed-china-presidents-us-visit-meeting-with-wang-yi-2026-07-22/<a href="https://x.com/ryanl_hass/status/2079958749981069510" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-21 23:08</span><span class="reply">reply</span>
+      <div class="ptext">4/ This debate likely will not resolve soon or break neatly and exclusively to favor one side over the other. Nevertheless, Kagan provides a powerful argument for applying history to anticipate future PRC behavior. END.
+https://www.brookings.edu/articles/will-china-replace-america-on-the-world-stage/?b=1<a href="https://x.com/ryanl_hass/status/2079584302929518618" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">17 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="RushDoshi" data-topic="Politics &amp; Foreign Policy">
+  <h2><a href="https://x.com/RushDoshi" target="_blank" rel="noopener">@RushDoshi</a><span class="cn">Rush Doshi 杜如松</span></h2>
+  <p class="accnote">Georgetown professor and director of CFR&#39;s China Strategy Initiative, former NSC deputy senior director; author of The Long Game.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 01:06</span>
+      <div class="ptext">Your argument is far more ideological than empirical, and it is wrong on multiple levels. Below, I list three of them.
+
+1) The United States actively transferred technology and process knowledge throughout the Cold War to its allies to strengthen their economic capacity. This even included sensitive defense technology. This is so well-substantiated that entire European and Asian industrial policy efforts were organized around harnessing access to U.S. know-how to scale up the value chain.
+
+2) The United States even transferred technology to its potential adversaries. It freely transferred the auto assembly line to the Soviet Union, Germany, and Japan during the interwar period. Henry Ford was directly supportive of the transfer to the Soviet Union. This too is well-established. And no lesser Communist than Deng Xiaoping acknowledged that a critical benefit of partnership with the United States was access to, of all things, technology transfer.
+
+3) Finally, my claim on comparative tech transfer is, well, comparative. The United States transferred more than China is likely to transfer or, of course, has transferred so far. China&#39;s overall preference is to support final assembly abroad and retain high-value manufacturing. As a Party-led Leninist system with mercantilist policy, it is far better positioned to do so than an free market open democracy like the United States with limited corporate regulation. And many U.S. companies happily transfer technology once they can  persuade shareholders that doing so would increase share price in the short-term. By contrast, the NDRC, MIIT, and MSS are actively working to restrict these transfers - as failed agreements from India to Europe and beyond already show. And Chinese companies, of course, have Party cells involved in governance per Article 19 of the PRC Company Law, which is an internal mechanism for ensuring compliance with central preference on this matter.<a href="https://x.com/RushDoshi/status/2080701054669205530" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/haugejostein/status/2080691073811124624" target="_blank" rel="noopener">@haugejostein</a>This claim — that China is de-industrializing the rest of the Global South while the US has helped it industrialize — is one of the most inaccurate claims I&#39;ve come across in my career as a development economist.
+
+The US actively contributed to de-industrialization in Africa and Latin America in the 1980s and 1990s by dismantling most domestic industrial policy efforts, either directly or via international organisations over which it held outsized influence.
+
+Subsequently, US involvement in the Global South has has not in any meaningful way focused on raising investment rates in manufacturing. If anything, it&#39;s been about corporate access to natural resources and setting up sweatshops to serve US consumers.
+
+China, on the other hand, does focus on raising investment rates in manufacturing in the Global South and helps build and provide crucial infrastructure that enables this.
+
+China, of course, is not a magic bullet for industrialization in the Global South. In addition to economic partnerships that have the potential for domestic industrialization, China is a competitive threat.
+
+I recently spoke to an Indonesian government official long involved with Indonesia&#39;s industrial policy who essentially shared this view. He described the relationship with China as one with upsides and downsides for industrialization in Indonesia, and the relationship with the US as one with mostly downsides.
+
+On the one hand, he said, China invests in manufacturing and energy infrastructure, provides crucial goods and inputs, and is even willing to engage in technology transfer deals. When I asked about the US, he essentially said they are hunting for natural resources and will threaten with various trade policies if they can&#39;t get them.
+
+You can rightfully claim that China&#39;s impact on industrialization in the Global South is complicated. But it&#39;s a joke to claim the US is better than China for industrialization in the South.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 23:26</span>
+      <div class="ptext">I can’t say I agree with the analysis below for a range of reasons.
+
+1) China isn’t just de-industrializing the West. It’s also de-industrializing the developing world. They too are putting up protective barriers.
+
+2) The idea that China would transfer anything other than final assembly to the developing world seems unlikely. China will, indeed it already is, pull up the ladder. Even the deals in Indonesia on refining Nickel and Spain on building EVs reveal this.
+
+3) The US, by contrast, transferred much more than final assembly to others — including China. China is still asking for those transfers while denying them to the world.
+
+So this reads to me as disconnected with China’s own policy, which is to — as @YashengHuang wrote — achieve absolute advantage from umbrellas to cars to robots.<a href="https://x.com/RushDoshi/status/2080676100351336532" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/kejimao/status/2080460264454164616" target="_blank" rel="noopener">@kejimao</a>Why is “China Shock 2.0” even a problem? 
+
+Precisely because China has beaten the West at its own game—on the very playing field the West chose, using the methods the West has long favored—and the West never saw it coming.
+
+Think about it: if Vietnam, Morocco and Mexico can team up with China to build world-class EVs, tap China’s open-source AI models for affordable solutions, and lean on China’s green energy to dodge those punishing dollar-denominated fossil-fuel bills, then who’s really the one fretting about this China Shock?</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 02:08</span>
+      <div class="ptext">Very clear that Mercedes Benz has gravely erred here, with criticism coming from the left, the right, from major labor unions, and from reindustrializers and startups. 
+
+The bipartisan consensus on China, by the way, does seem alive -- particularly on matters of reindustrialization.
+
+@RoKhanna weighing in here is notable, and he is right. Mercedes is 20% owned by Chinese entities. It is pushing to weaken the Connected Vehicle Security Act and working to weaken provisions meant to increase battery production domestically. 
+
+It is, in effect, working to increase American dependence on China&#39;s supply. 
+
+All this is occurring , incidentally, while Mercedes becomes increasingly dependent on the high-margin US market as its China sales stall.
+
+We should not weaken the thresholds in the Connected Vehicle Security at the behest of a German company that is betting against American industry.<a href="https://x.com/RushDoshi/status/2079629664536969323" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/RepRoKhanna/status/2079625589388935231" target="_blank" rel="noopener">@RepRoKhanna</a>Congress should stand with American workers and manufacturers, not companies tied to China. @business reports @MercedesBenz is pushing to weaken the Connected Vehicle Security Act to preserve its nearly 20% Chinese ownership structure while keeping access to the U.S. market.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-18 01:03</span>
+      <div class="ptext">Mitch, I identify with the “owl” orientation.
+
+But the real “owl” perspective is not an indefinite carveout because that makes the licensing or investment or tech transfer deals you’d support less likely than final assembly deals which are bad for us.
+
+Btw, plenty of auto companies oppose the carve out, so it’s not a unified industry view. That means the practical realities aren’t all what they seem. 
+
+So owl’s should oppose the carveouts!<a href="https://x.com/RushDoshi/status/2078163742500483380" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/mitchpresnick/status/2078159450846703954" target="_blank" rel="noopener">@mitchpresnick</a>The reason industry groups are pushing for carve-outs is straightforward: they’ve been deeply briefed on the practical realities.
+
+It seems likely that they share the same strategic objective as policymakers—reducing U.S. dependence on Chinese supply chains. Where they differ is not on the destination, but on the critical path to getting there. Their view is that the United States must first rebuild key industrial capabilities and close important technology and supply-chain gaps before it can sustainably reduce that dependence.
+
+Business strategy is like sailing. Knowing your destination isn’t enough. When the wind is against you, you don’t point the bow straight into it—you tack.
+
+Sometimes the fastest route to independence is an indirect one. 🦉</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-18 00:37</span>
+      <div class="ptext">Open to having China make batteries here or license the tech with: 
+
+1) full use of US suppliers and software, and we have some good companies that could scale up with that offtake
+2) full transfer of technology 
+
+Ask yourself how we will achieve that outcome if we make it easier to straight import batteries.<a href="https://x.com/RushDoshi/status/2078157194856435961" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/Rmanning4/status/2078150800207958067" target="_blank" rel="noopener">@Rmanning4</a>Are not cars and their software a separate issue? What&#39;s the downside of licensing superior battery tech? Who doesn&#39;t want their car charged in 10 minutes?</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-17 22:24</span>
+      <div class="ptext">This is deindustrial policy.
+
+We need to scale up in batteries. These carveouts, pushed by lobbyists, ensure we will depend on PRC batteries for the foreseeable future.
+
+Do we really want a rare earths problem at the heart of the electrical stack?<a href="https://x.com/RushDoshi/status/2078123660573868148" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/DEricSayers/status/2077831123351277624" target="_blank" rel="noopener">@DEricSayers</a>Hearing the markup was pushed (again) to next week, but worth watching closely. The real fight is not whether to ban the vehicles, but if the battery and component language survives intact. If the car is covered but the PRC battery inside it is not, what have we actually secured? The carve-outs are the whole game.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-17 20:27</span>
+      <div class="ptext">All this attention shows that Mercedes has badly miscalculated.<a href="https://x.com/RushDoshi/status/2078094126554218915" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/ChinaSelect/status/2077862335545499699" target="_blank" rel="noopener">@ChinaSelect</a>For decades, German automakers engaged with China and now their factories and employees are being decimated by imports from the very country they wanted to partner with. One of these German companies is @MercedesBenz, which is nearly 20% Chinese-owned. The company is actively lobbying the Senate in opposition to the Connected Vehicle Security Act, which is led by Chairman @RepMoolenaar and would stop that same decimation from happening to our auto industry. The bill is supported by American auto companies and autoworkers. All Americans should be watching as this German-based, Chinese-owned company tries to tell U.S. lawmakers how to set the rules for our own country. The real choice for the company should be: does it want to compete in America or have China-based ownership?</blockquote>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<div class="topicdiv" data-topic="Journalists">Journalists</div>
+
+<section class="acct" data-handle="Lingling_Wei" data-topic="Journalists">
+  <h2><a href="https://x.com/Lingling_Wei" target="_blank" rel="noopener">@Lingling_Wei</a><span class="cn">Lingling Wei 魏玲灵</span></h2>
+  <p class="accnote">Chief China correspondent at the Wall Street Journal; the Zhongnanhai economic-policy scoops usually break here first.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 02:34</span>
+      <div class="ptext">Fang Xinghai — a former star Chinese securities regulator trusted by Wall Street and beyond — is under party investigation, nearly 2 yrs after he retired. Beijing also blocked his bid for a World Bank job last year. Retirement is no longer a shield in Xi&#39;s China. w/@jamestareddy 
+
+https://www.wsj.com/world/china/market-friendly-chinese-securities-regulator-faces-communist-party-probe-3928fba5?st=Mt7y35 via @WSJ<a href="https://x.com/Lingling_Wei/status/2080723261617238477" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-21 23:12</span>
+      <div class="ptext">White House is divided on how to respond to recent advances in Chinese AI, has weighed crackdown measures @AmrithRamkumar https://www.wsj.com/tech/ai/top-american-ai-execs-sound-alarm-on-chinese-models-3c74f8c1?st=o43K5t via @WSJ<a href="https://x.com/Lingling_Wei/status/2079585331293098245" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-21 23:05</span>
+      <div class="ptext">Washington and Beijing are trading barbs in public over election claims and journalist visas. Privately, Beijing is playing a longer game: using the promise of Xi&#39;s September visit to freeze Taiwan arms sales. Read more in this week’s WSJ China newsletter: https://www.wsj.com/world/china/washington-and-beijing-are-sparringand-still-making-plans-cb296a17?st=LJ6As8 via @WSJ<a href="https://x.com/Lingling_Wei/status/2079583533694116088" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-16 20:40</span>
+      <div class="ptext">“I’ve been a foreign correspondent in China, and I’ve seen the way an authoritarian government can keep journalists from reporting on a huge amount of news and information that’s very clearly in the public interest. It’s really essential to American democracy that that kind of erosion of press freedoms doesn’t happen here.” @nytimes top editor Joseph Khan<a href="https://x.com/Lingling_Wei/status/2077735032232226831" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/johncbussey/status/2077630505433112806" target="_blank" rel="noopener">@johncbussey</a>https://www.nytimes.com/video/insider/100000011030047/our-top-editor-on-subpoenas-of-times-journalists.html?smid=url-share</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-14 21:28</span>
+      <div class="ptext">He told the truth about China&#39;s economy. Beijing muzzled him for it. Last week, he died at 55. My tribute to economist Gao Shanwen--and the line of his I&#39;ve never forgotten.
+
+https://www.wsj.com/world/china/he-called-out-chinas-economy-then-he-went-silentfor-good-04da8563?st=BMpFeu via @WSJ<a href="https://x.com/Lingling_Wei/status/2077022509199679724" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-14 20:58</span>
+      <div class="ptext">My @WSJ story with @tggrove on how Putin&#39;s Ukraine war handed Xi the leverage to finish a power shift already underway--turning a partnership of rough equals into one China now dominates.
+
+https://www.wsj.com/world/x-putin-junior-partner-df611b88?st=FhXybn via @WSJ<a href="https://x.com/Lingling_Wei/status/2077014794205319267" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-14 09:39</span>
+      <div class="ptext">Xi once saw Putin as a role model. Now he’s someone the Chinese leader manages. With @tggrove https://www.wsj.com/world/x-putin-junior-partner-df611b88?st=R7CQLb<a href="https://x.com/Lingling_Wei/status/2076844053115674751" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<section class="acct" data-handle="AsiaLens" data-topic="Journalists">
+  <h2><a href="https://x.com/AsiaLens" target="_blank" rel="noopener">@AsiaLens</a><span class="cn">Demetri Sevastopulo</span></h2>
+  <p class="accnote">Financial Times correspondent in Washington on the US-China beat; a steady source of policy and security exclusives.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-26 03:37</span>
+      <div class="ptext">Top Democrat says Trump administration is worsening chip shortage &amp; asks if administration will allow US companies to buy memory chips from CXMT, Chinese company blacklisted by the Pentagon. 
+
+https://as.ft.com/r/24651daf-1315-4252-a622-14159436d8ed<a href="https://x.com/AsiaLens/status/2081101612253159614" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-25 00:20</span>
+      <div class="ptext">Can the ‘Johnny Cash of the Allagash’ win the US Senate for the Democrats?  https://www.ft.com/content/9048c284-e516-42af-bd1c-b636fb2a3462 via @ft<a href="https://x.com/AsiaLens/status/2080689502125756750" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 12:06</span>
+      <div class="ptext">Mercedes risks US sales ban under Senate China bill https://as.ft.com/r/7bfa3dfc-5a59-4417-88f0-52d4d600d559<span class="mbadge">media</span><a href="https://x.com/AsiaLens/status/2080142456952074421" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 22:09</span>
+      <div class="ptext">Senate commerce committee voting on bill this morning. Supporters worried it may be diluted due to lobbying from Mercedes and others. Another provision would crack down on the use of Chinese batteries - but that may also be watered down. Lots of focus on panel chair @tedcruz<a href="https://x.com/AsiaLens/status/2079931835828617723" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/AsiaLens/status/2079930225618464928" target="_blank" rel="noopener">@AsiaLens</a>Mercedes risks US sales ban under Senate China bill
+ https://as.ft.com/r/9ccb0377-5737-498f-87e3-bae5e71a40e1</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 22:03</span>
+      <div class="ptext">Mercedes risks US sales ban under Senate China bill
+ https://as.ft.com/r/9ccb0377-5737-498f-87e3-bae5e71a40e1<a href="https://x.com/AsiaLens/status/2079930225618464928" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 08:35</span>
+      <div class="ptext">Mountain goats at 4300m
+
+Mount Blue Sky #Colorado<span class="mbadge">media</span><a href="https://x.com/AsiaLens/status/2079002107982565591" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/AsiaLens/status/2078862534514524406" target="_blank" rel="noopener">@AsiaLens</a>Rocky Mountain National Park #Colorado
+
+3659 metres</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-17 13:41</span>
+      <div class="ptext">Xi Jinping sets out China’s goal to be global AI leader https://www.ft.com/content/ddb316b4-c6ae-4b9b-9d4a-63d63201d4fc via @ft<a href="https://x.com/AsiaLens/status/2077992069071815081" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-17 07:42</span>
+      <div class="ptext">At #AspenSecurityForum, I asked @RahmEmanuel if he becomes US president, would he tweet as much as he did when ambassador to Japan. He says the last thing people would have to worry about is his social media. #ASF26
+
+Watch 📽️👉
+https://www.youtube.com/live/hnSB8GX3BMg?si=RP03fGJCq5WJ1wCb&amp;t=23618<span class="mbadge">media</span><a href="https://x.com/AsiaLens/status/2077901666956050662" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">8 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="fbermingham" data-topic="Journalists">
+  <h2><a href="https://x.com/fbermingham" target="_blank" rel="noopener">@fbermingham</a><span class="cn">Finbarr Bermingham</span></h2>
+  <p class="accnote">South China Morning Post correspondent in Brussels; the first-hand record of the EU-China trade lane.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 20:50</span>
+      <div class="ptext">Be still my beating heart<a href="https://x.com/fbermingham/status/2080999093749362932" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/David_Ornstein/status/2080998434505474268" target="_blank" rel="noopener">@David_Ornstein</a>🚨 EXCL: Arsenal exploring move to sign Vinicius Junior from Real Madrid. #AFC interest early stage + clubs not yet in talks but idea approved at all levels. Much rests on contract process as no breakthrough yet &amp; #RMFC do not want free exit @TheAthleticFC https://www.nytimes.com/athletic/7469515/2026/07/25/vinicius-junior-arsenal-real-madrid-transfer-news/</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-24 19:34</span><span class="reply">reply</span>
+      <div class="ptext">EU spox Paula Pinho
+
+&#34;We are analysing the measures &amp; will be liaising with member states &amp; through them with companies concerned, to understand what is the impact of these measures... we seek clarification with counterparts in China to better understand what exactly is at stake&#34;<a href="https://x.com/fbermingham/status/2080617611914604835" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 18:55</span><span class="reply">reply</span>
+      <div class="ptext">Makes the excellent point that this could be to deter future listings of Chinese entitles:
+
+&#34;This changes the calculation for member states that may previously have regarded the inclusion of Chinese companies as a relatively low-cost measure.&#34;
+
+Read: https://substack.com/inbox/post/208306640<span class="mbadge">media</span><a href="https://x.com/fbermingham/status/2080607832748052503" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 18:44</span>
+      <div class="ptext">China and the EU have renewed their joint research agreement, according to Chinese state media, signalling a willingness to collaborate on climate and agriculture despite trade tensions.
+
+https://www.scmp.com/news/china/diplomacy/article/3361500/china-eu-pushing-ahead-joint-research-despite-trade-tensions<a href="https://x.com/fbermingham/status/2080604987407602040" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 18:43</span><span class="reply">reply</span>
+      <div class="ptext">On TikTok, minors can choose to set their account as ‘public&#39;, meaning any user, including without a TikTok account, can view minors&#39; content. This also allows content published by ‘older&#39; minors (16-17) to be recommended to any other TikTok user through the For You Feed.<a href="https://x.com/fbermingham/status/2080604812949762085" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 18:43</span>
+      <div class="ptext">Big week for EU digital laws:
+
+After big fines for Google and AliExpress, the commission has now found TikTok in breach of Digital Services Act for failing to ensure safe accounts for minors<span class="mbadge">media</span><a href="https://x.com/fbermingham/status/2080604790011183446" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 16:15</span>
+      <div class="ptext">Breaking: China has added 14 EU entities to its export control list a day after the EU added 14 Chinese / HK companies to its 21st package of sanctions<span class="mbadge">media</span><a href="https://x.com/fbermingham/status/2080567546575520134" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 15:56</span>
+      <div class="ptext">EU Commission has delayed the launch of 4 trade defence investigations after staff shortages left its trade defence directorate unable to take on additional cases
+
+Great scoop, @JoannaSopinska<span class="mbadge">media</span><a href="https://x.com/fbermingham/status/2080562877564371184" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">51 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="ewong" data-topic="Journalists">
+  <h2><a href="https://x.com/ewong" target="_blank" rel="noopener">@ewong</a><span class="cn">Edward Wong 黄安伟</span></h2>
+  <p class="accnote">New York Times diplomatic correspondent and former Beijing bureau chief, author of At the Edge of Empire; the Washington end of China diplomacy.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-24 06:40</span>
+      <div class="ptext">The Trump administration dropped subpoenas against 5 @nytimes journalists who had reported on defense weaknesses in Trump’s new Air Force One, a jet given to him by Qatar. The Justice Department made the move after being questioned by a judge for an hour. https://www.nytimes.com/2026/07/23/business/media/new-york-times-subpoenas-withdraw.html<span class="mbadge">media</span><a href="https://x.com/ewong/status/2080422795834470491" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-24 06:19</span>
+      <div class="ptext">Check out the replies on this<a href="https://x.com/ewong/status/2080417648152866997" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/StateDept/status/2080364208407888099" target="_blank" rel="noopener">@StateDept</a>(media post)</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 12:22</span>
+      <div class="ptext">Yes, Trump and Rubio&#39;s new push to have the administration adopt &#34;anti-Communist&#34; language has so far not touched on China, which has the largest Communist Party in the world — more than 100 million members — and is the world&#39;s only other superpower. What is Cuba next to that?<a href="https://x.com/ewong/status/2079784187490713681" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/CurtMills/status/2079739323612536900" target="_blank" rel="noopener">@CurtMills</a>Actual report published by Rubio&#39;s State department: &#34;Cuba: The Capital of 21st Century Communism.&#34; Not China? Or focusing on near literally anything else? The guy could plausibly be POTUS, but he seems higher conviction of being viceroy of Latin America. Embarrassing</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-22 12:06</span><span class="reply">reply</span>
+      <div class="ptext">Here&#39;s a gift link to @nytimes story by @SangerNYT, @WilliamJBroad and me. It confirms a @WSJ report on Trump&#39;s approval. The @nytimes reported early this month that the two nations were finalizing a deal, and that Trump would announce it soon. https://www.nytimes.com/2026/07/21/us/politics/trump-saudi-nuclear-deal.html?unlocked_article_code=1.zlA.fI5_.9ZqVl43UbTJY<a href="https://x.com/ewong/status/2079780007505993867" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-22 11:57</span>
+      <div class="ptext">Trump has reached a deal with Crown Prince MBS of Saudi Arabia to proceed with U.S.-Saudi civil nuclear cooperation. Some US lawmakers  and Israeli officials oppose such an agreement because they fear the prince will make nuclear weapons. He has vowed to do that if Iran does so.<span class="mbadge">media</span><a href="https://x.com/ewong/status/2079777790631747742" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 08:12</span>
+      <div class="ptext">The last act was astounding and unexpected, even though we’ve known for millennia how it ends.<a href="https://x.com/ewong/status/2078996414193877116" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/DavidAFrench/status/2078702460550410247" target="_blank" rel="noopener">@DavidAFrench</a>Just watched the Odyssey. Glorious. Incredible. 
+
+There is so much to unpack, and I&#39;ll be thinking about it for days.
+
+But there if I had to sum up the narrative arc in one sentence, it would be this -- heedless people, you will pay for what you&#39;ve destroyed.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-19 01:28</span>
+      <div class="ptext">If anyone doubts that the US back in a full-blown war against Iran<span class="mbadge">media</span><a href="https://x.com/ewong/status/2078532469020578092" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-18 05:23</span><span class="reply">reply</span>
+      <div class="ptext">Gift link to my @nytimes story: https://www.nytimes.com/2026/07/17/us/politics/trump-speech-china-xi.html?unlocked_article_code=1.yVA.-eXw.nDzDWNo9CEOR<a href="https://x.com/ewong/status/2078229240592334927" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  <div class="more">13 more in this window not shown.</div>
+  
+</section>
+
+
+<section class="acct" data-handle="dakekang" data-topic="Journalists">
+  <h2><a href="https://x.com/dakekang" target="_blank" rel="noopener">@dakekang</a><span class="cn">Dake Kang 康达可</span></h2>
+  <p class="accnote">Associated Press correspondent in Beijing; investigative reporting (Xinjiang, public health) — one of the few still on the ground.</p>
+  
+  <ul class="posts">
+    
+    <li>
+      <span class="when">07-25 15:04</span>
+      <div class="ptext">A six year old girl died in a gene editing trial gone disastrously wrong in China, funded in part by $860,000 raised by her parents
+
+https://www.science.org/content/article/exclusive-death-girl-chinese-gene-editing-trial-was-never-made-public<a href="https://x.com/dakekang/status/2080911959420232057" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-23 23:52</span>
+      <div class="ptext">This is fairly representative these days in my experience. Consumer protection and hotlines in China are effective and efficient. There are lessons here for the U.S., where this area specifically has been going wayy downhill the past couple decades.<a href="https://x.com/dakekang/status/2080320101065310392" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/liqian_ren/status/2080198668695593051" target="_blank" rel="noopener">@liqian_ren</a>I called 055112315 (the govt consumer complaint hotline for Hefei city) yesterday and China Mobil called back and willing to reimburse two years of time the account was suspended. Money was small but the speed of addressing it was impressive.
+
+China Mobil agent said that all in all, they could reactivate virtually. But we’ve already bought a new number. They had mixed messaging. If they had give us the virtual activation option a week ago instead of telling us to go to Hefei to reactivate, we would have kept that number.</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-23 00:43</span>
+      <div class="ptext">worth reading<a href="https://x.com/dakekang/status/2079970553872691635" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/MrKRudd/status/2077131314205954407" target="_blank" rel="noopener">@MrKRudd</a>@ezraklein @nytimes https://www.nytimes.com/2026/07/14/opinion/ezra-klein-podcast-kevin-rudd.html</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-20 22:11</span><span class="reply">reply</span>
+      <div class="ptext">I am not an economist but this feels like textbook deflation. Which, for foreigners coming from literally almost every other country in the world that is suffering the opposite problem, inflation, feels great and surprising and cheap. But there is a flip side to the coin<a href="https://x.com/dakekang/status/2079207457617010911" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 22:07</span><span class="reply">reply</span>
+      <div class="ptext">Nobody feels the economy is doing well.  Everyone is complaining it’s become harder to make a living. I’ve chatted with restaurant &amp; guesthouse managers, locksmiths, fishermen, farmers, barbers, masseuses, jade sellers. I’m actually surprised how universal the sentiment has been<a href="https://x.com/dakekang/status/2079206484735578528" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+    <li>
+      <span class="when">07-20 22:04</span>
+      <div class="ptext">It’s now been almost a month on the road, and this continues to be true - in cities big and small, in the countryside, in the mountains, by the sea, from Hainan to Guangxi to Guizhou to Yunnan to Sichuan (so far…)<a href="https://x.com/dakekang/status/2079205716523659745" target="_blank" rel="noopener">post ↗</a></div>
+      <blockquote class="qt"><a href="https://x.com/dakekang/status/2072036097660461417" target="_blank" rel="noopener">@dakekang</a>Literally nobody I’ve talked to so far thinks the economy is doing well. Zero.
+
+China is cheap. Yes! Its manufacturing capacity is impressive. Things are very functional. And for the inflation-weary Westerner disillusioned (rightly!) with insane costs, China’s a great foil</blockquote>
+    </li>
+    
+    <li>
+      <span class="when">07-12 11:06</span>
+      <div class="ptext">Traveling China by bike, you get to stay in guesthouses all around, and I must sat there’s been serious upgrades since my last long trip in 2021.
+
+See photos below. Cute boutique places, brand new, in beautiful locations, free laundry and breakfast. Average cost? 
+
+~$50 a night.<span class="mbadge">media</span><a href="https://x.com/dakekang/status/2076141220032610483" target="_blank" rel="noopener">post ↗</a></div>
+    </li>
+    
+  </ul>
+  
+  
+</section>
+
+
+<footer>
+  Experimental. Original posts only — retweets are not collected; quoted tweets render indented. Views are the authors&#39; own and represent no institution.
+</footer>
+<script>
+  (function () {
+    var topic = "", handle = "";
+    var tbtns = document.querySelectorAll(".topics button");
+    var chips = document.querySelectorAll("#chips .chip");
+    function apply() {
+      tbtns.forEach(function (b) {
+        b.classList.toggle("on", b.dataset.topic === topic);
+      });
+      chips.forEach(function (c) {
+        c.classList.toggle("on", c.dataset.handle === handle);
+        c.hidden = Boolean(c.dataset.handle) && Boolean(topic)
+                   && c.dataset.topic !== topic;
+      });
+      document.querySelectorAll("section.acct").forEach(function (el) {
+        el.hidden = (Boolean(topic) && el.dataset.topic !== topic)
+                    || (Boolean(handle) && el.dataset.handle !== handle);
+      });
+      document.querySelectorAll(".topicdiv").forEach(function (el) {
+        el.hidden = Boolean(handle)
+                    || (Boolean(topic) && el.dataset.topic !== topic);
+      });
+    }
+    tbtns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        topic = b.dataset.topic; handle = ""; apply();
+      });
+    });
+    chips.forEach(function (c) {
+      c.addEventListener("click", function () {
+        handle = (c.dataset.handle === handle) ? "" : c.dataset.handle;
+        apply();
+      });
+    });
+  })();
+</script>
+</body>
+</html>

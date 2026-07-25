@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>坊间 · 键政圈 · 2026-07 (experimental)</title>
+<style>
+  /* Informal identity, distinct from the digest's navy: this page is
+     individual chatter, not institutional research. Explicit color-scheme +
+     background: without them, forced-dark browsers repaint the page into
+     dark-on-dark unreadability (observed live). */
+  :root { color-scheme: light dark;
+          --accent: #0f766e; --muted: #6b7280; --rule: #e5e7eb;
+          --bg: #ffffff; --fg: #111827; --chip-bg: #ffffff;
+          --seg-rule: #99f6e4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --accent: #2dd4bf; --muted: #94a3b8; --rule: #334155;
+            --bg: #0f172a; --fg: #e2e8f0; --chip-bg: #1e293b;
+            --seg-rule: #134e4a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 760px; padding: 2rem 1.25rem 4rem;
+         font-family: -apple-system, "Segoe UI", "PingFang SC",
+         "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+         background: var(--bg); color: var(--fg); line-height: 1.6; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: .75rem;
+           margin-bottom: 1rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; color: var(--accent); }
+  .exp { display: inline-block; vertical-align: middle; margin-left: .5rem;
+         font-size: .68rem; font-weight: 600; letter-spacing: .05em;
+         color: #92400e; background: #fef3c7; border: 1px solid #fcd34d;
+         border-radius: 3px; padding: .05rem .4rem; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: .85rem; margin: 0; }
+  .crumbs { display: flex; justify-content: space-between; align-items: baseline;
+            gap: 1rem; font-size: .9rem; margin: 0 0 .7rem; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+  .chips { margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+  .chip { font-size: .78rem; border: 1px solid var(--rule); border-radius: 999px;
+          padding: .1rem .6rem; cursor: pointer; background: var(--chip-bg);
+          color: var(--fg); user-select: none; }
+  .chip .n { color: var(--muted); margin-left: .25rem; }
+  .chip.on { background: var(--accent); border-color: var(--accent);
+             color: var(--bg); }
+  .chip.on .n { color: var(--bg); opacity: .7; }
+  .chip.zero { opacity: .45; }
+  h2 { font-size: .95rem; margin: 1.8rem 0 .2rem; color: var(--accent);
+       border-bottom: 1px solid var(--rule); padding-bottom: .2rem; }
+  ul.posts { list-style: none; margin: 0; padding: 0; }
+  ul.posts li { border-top: 1px solid #f3f4f6; padding: .5rem 0; }
+  ul.posts li:first-child { border-top: 0; }
+  .meta { font-size: .78rem; color: var(--muted); }
+  .who { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .cn { color: var(--muted); font-weight: 400; }
+  .reply, .mbadge { font-size: .72rem; border: 1px solid var(--rule); border-radius: 3px;
+           padding: 0 .25rem; margin-left: .3rem; }
+  .ptext { margin: .1rem 0 0; white-space: pre-wrap; word-break: break-word; }
+  .ptext a { color: var(--accent); font-size: .8rem; text-decoration: none;
+             margin-left: .4rem; white-space: nowrap; }
+  blockquote.qt { border-left: 2px solid var(--rule); margin: .3rem 0 .1rem;
+                  padding: .05rem .6rem; color: var(--muted); font-size: .9em;
+                  white-space: pre-wrap; word-break: break-word; }
+  blockquote.qt a { color: var(--accent); font-size: .85em;
+                    text-decoration: none; margin-right: .45rem; }
+  .thr { font-size: .72rem; color: var(--bg); background: var(--accent);
+         border-radius: 3px; padding: 0 .3rem; margin-left: .3rem; }
+  .seg + .seg { border-left: 2px solid var(--seg-rule); margin-top: .35rem;
+                padding-left: .6rem; }
+  footer { margin-top: 3rem; border-top: 1px solid var(--rule);
+           padding-top: .75rem; color: var(--muted); font-size: .78rem; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="crumbs">
+    <span><a href="index.html">← Think Tank Tracker</a> ·
+      <a href="x-pulse-zh.html">近况</a></span>
+    <span><a href="x-pulse-en.html">⇄ ChinaX</a></span>
+  </nav>
+  <h1>坊间 · 键政圈 · 2026-07<span class="exp">experimental</span></h1>
+  <p class="sub">中文键政圈的个人发言与坊间议论——吃瓜、读帖、看风向;轻松、即时、未经编辑。</p>
+  <p class="sub">188 条帖子 · 33 组推文串 ·
+    名单出自 Asia Society <a href="https://asiasociety.org/policy-institute/china-watching-chinese" target="_blank" rel="noopener" style="color:inherit">China Watching in the Chinese Language</a>
+ · 更新于 2026-07-26 05:36(北京时间)</p>
+  <div class="chips" id="chips">
+    <span class="chip on" data-handle="">全部<span class="n">188</span></span>
+    
+    <span class="chip" data-handle="CaoLei1">曹山石<span class="n">16</span></span>
+    
+    <span class="chip zero" data-handle="CinnabarOcean">云青天<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="CNPoliWatch">中国人事观察<span class="n">56</span></span>
+    
+    <span class="chip" data-handle="FollowCnRules">中规中矩<span class="n">23</span></span>
+    
+    <span class="chip" data-handle="Guoguang_Wu">吴国光<span class="n">4</span></span>
+    
+    <span class="chip" data-handle="HankInBeijing">HankInBeijing<span class="n">24</span></span>
+    
+    <span class="chip" data-handle="JosephWen___">Joseph.W 約瑟<span class="n">21</span></span>
+    
+    <span class="chip" data-handle="MacroMargin">宏观边际<span class="n">38</span></span>
+    
+    <span class="chip" data-handle="MaoViews">MaoViews<span class="n">6</span></span>
+    
+    <span class="chip zero" data-handle="ZhongXinXi1">鍾馨溪<span class="n">0</span></span>
+    
+  </div>
+</header>
+
+
+<section class="day">
+  <h2>7月25日 星期六</h2>
+  <ul class="posts">
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>14:53</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">张华伟的单位主官任职经历：副战区级、正军级、副军级、正师级、正团级、正营级、正连级。佩戴空军胸标，因此在空军机关或某战区空军任职。
+
+张华伟担任副战区级单位主官，说明张华伟的职务是某战区空军司令员（各个战区的空军为副战区级单位），而不是空军副司令员。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080909191108010488" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2080576657170034990" target="_blank" rel="noopener">@cnpoliwatch</a>7月24日，董军访问泰国，张华伟空军中将首次亮相，具体职务暂未披露。
+
+张华伟曾任空军航空兵某师师长，参与了2019年国庆阅兵，担任领队机梯队 长机 机长。
+
+空军补缺的速度在各军种中继续一骑绝尘。</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月24日 星期五</h2>
+  <ul class="posts">
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>20:46</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">转融通之父、量化推手，明天需要临时换嘉宾了。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2080635695744327940" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>19:25</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">李峻（1975.07）任中国电子信息产业集团（“中国电子”）总经理，晋升副部级，是第24位“75后”副部级干部，也是继东航高飞、东风汽车冯长军、中国移动陈扬帆之后的第四位“75后”副部级央企的总经理。
+
+李峻的上一个职务是中国航天科技集团副总经理，但他并非出身于航天央企，而是早年就在中国电子工作。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080615457757736978" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>16:51</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">7月24日，董军访问泰国，张华伟空军中将首次亮相，具体职务暂未披露。
+
+张华伟曾任空军航空兵某师师长，参与了2019年国庆阅兵，担任领队机梯队 长机 机长。
+
+空军补缺的速度在各军种中继续一骑绝尘。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080576657170034990" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2049488393159999494" target="_blank" rel="noopener">@cnpoliwatch</a>尹伟中将已任空军参谋长：
+
+4月23日至28日，董军访问俄罗斯、吉尔吉斯斯坦，并出席上合组织成员国国防部长会议。新任空军参谋长尹伟中将陪同。
+
+此前，尹伟担任空军副参谋长。去年9月，尹伟主持长春航展开幕式，当时他还只是一名少将。
+
+相比其他军种，空军将领不但“幸存”的多，补缺也补的更快。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>16:09</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">山西矿难后，国家矿山安监局副局长王海腾（1971.12）已兼任该局山西局党组书记、局长。国家局领导兼任本机构省级派出机构一把手的安排非常少见。王海腾在执行层面肩负着山西煤矿安全整顿的重任。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080566013163127106" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">前任国家矿山安监局山西局党组书记、局长胡海军，已经在这个月落马。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2080571891396358474" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>10:34</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/caolei1/status/2080481803140276652" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>09:24</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">川普压力指数最近直线攀升，
+从川普上任以来，这个指数对于一些大的事件转折，都还非常有效。
+包括本次美伊战火重燃，转折点也恰在指数“膨胀”区域，经过一两周发酵，最新指数也来到了“中压”区域<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2080464193141297570" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>05:39</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Thanks for the repost by the very prolific @mattsheehan88. 
+
+Just want to clarify a few points: 
+
+1. Hank knows very little/cannot tell much of what the said commission is or does;
+
+2. It wasn&#39;t formed in 2023;
+
+3. It wasn&#39;t designed to balance CAC.
+
+Correlation =/= Causation.<a href="https://x.com/hankinbeijing/status/2080407433294590057" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/mattsheehan88/status/2080371801809449288" target="_blank" rel="noopener">@mattsheehan88</a>📢For China AI policy watchers. In ~2023 NDRC was tapped to coordinate AI policy across gov (imo, to balance the security focus of CAC). I heard this was a done via a ~commission led by an NDRC vice-chair. 
+Hank identifies that person as Huang Ru, CS PhD w/ background in semicon.</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月23日 星期四</h2>
+  <ul class="posts">
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>22:38</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">刊登着“批评形式主义”的人民日报，一摞摞崭新的被当成废品卖。耗费大量民脂民膏，却无人问津，形同垃圾，从印刷厂出来就直接进了废品站。这个才是最大的形式主义。黑色幽默的完美闭环。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2080301562711441571" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>21:33</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">王沪宁会见的这个不是日本官员，而是捷克议长。冈村富夫1972年生于东京，父亲是日韩混血，母亲是捷克人。冈村富夫1977年随母亲回到当时还是社会主义国家的捷克斯洛伐克。1993年返回日本，后来再重返捷克。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2080285267496427857" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>20:56</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">中国腐败官员的奇葩罪名😁😁😁
+【温家宝秘书田学斌】伪造身份证。
+【政治局委员马兴瑞】帮助亲属低价买房。
+【光大集团董事长唐双宁】既想当官又想出名。
+【新疆兵团副司令员焦小平】干扰碳达峰碳中和目标。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2080275916136345971" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>11:01</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">中国驻菲律宾大使井泉：
+
+这只是媒体的行为，跟政府没有任何关系。中国有那么多媒体，不可能要求每一家媒体、每一个视频、每一篇文章、每一份报纸都去管控。不可能。而且……我认为我们对此不作评论。这就是立场。其实，当我们说&#34;不作评论&#34;时，那本身就是我们的立场。<a href="https://x.com/cnpoliwatch/status/2080126018271007176" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/ABSCBNNews/status/2079743900886155526" target="_blank" rel="noopener">@ABSCBNNews</a>Chinese Ambassador Jing Quan distanced Beijing from the China Daily editorial depicting Filipinos as a scraggly and timid monkey in barong and salakot, saying it was &#34;just the media&#39;s action&#34; and &#34;nothing related to government.&#34; | via @zenhernandez</blockquote></div>
+      
+      <div class="ptext seg">背景
+https://x.com/zaobaosg/status/2077967237793616312<a href="https://x.com/cnpoliwatch/status/2080126020879819173" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/zaobaosg/status/2077967237793616312" target="_blank" rel="noopener">@zaobaosg</a>菲律宾强烈谴责中国官媒《中国日报》上传一段将菲律宾人描绘为猴子的人工智能（AI）生成视频，斥责这一带有“种族主义”色彩的画面“极具冒犯性且令人痛苦”，并要求撤回视频。 https://www.zaobao.com.sg/news/china/story20260717-9377168?utm_medium=Social&amp;utm_source=Twitter#Echobox=1784255144</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MaoViews">
+      <div class="meta"><span>10:14</span> ·
+        <a class="who" href="https://x.com/MaoViews" target="_blank"
+           rel="noopener">@MaoViews</a></div>
+      
+      <div class="ptext seg">菲律宾总统见鲁比奥 也不客气啊。之前见王毅也是这样<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2080114327290548456" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月22日 星期三</h2>
+  <ul class="posts">
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>22:55</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">全国最年轻的地级市市长更新。
+
+姚凯（1982.02）任安徽省铜陵市代市长，是首位出生于1982年的地级市市长。今年44岁。
+
+38年前也有一位年轻的铜陵市长。1988年，汪洋任铜陵市长，时年33岁。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2079943522593988948" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2066401914942541947" target="_blank" rel="noopener">@cnpoliwatch</a>白云峰（1981.09）任湖南省彬州市代市长。今年45岁的他是目前全国最年轻的地级市市长（与山西省阳泉市市长陈凯并列）。
+
+目前，全国最年轻的地级市市长的纪录仍然由刘凯（1983.07）保持。他在2021年担任甘肃省嘉峪关市市长时，年仅38岁。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>11:40</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">Beijing knows very little what DC has in place to curb China AI. 
+
+DC also knows literally nothing of who sets Beijing&#39;s AI policies, how they work across institutions &amp; how that reflect on tension with the US.
+
+There needs to be a talk just to gauge each other&#39;s expectations.<a href="https://x.com/hankinbeijing/status/2079773549213139447" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/lauriechenwords/status/2079526649717195013" target="_blank" rel="noopener">@lauriechenwords</a>The United States and China will hold talks over AI in September, five people familiar with the matter told Reuters, as the rival superpowers grapple ​with how to mitigate the risks posed by each other&#39;s increasingly powerful frontier models. https://www.reuters.com/world/china/us-china-hold-ai-talks-september-sources-say-2026-07-21/</blockquote></div>
+      
+      <div class="ptext seg">Prep is ongoing, but like the last few rounds of pre-summit talks, this one taps more into geopolitics than the technical theme on paper. 
+
+Both sides would want the rest of the world to believe that it would only be abt AI tech, but all other topics would be bundled in together.<a href="https://x.com/hankinbeijing/status/2079775363509436676" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>09:12</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">A股公募基金半年持仓占比：电子、通信满配。美容护理、服装服饰、商贸零售三个行业加总0.3%——还比不过煤炭一个行业（0.36%）。
+持仓K型割裂到达历史峰值。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2079736351788769630" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>06:31</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Can only say that Kaifu has a bit too much wishful thinking right now. Not saying http://01.AI has none of Palantir&#39;s tech (which they have none). Kaifu&#39;s roots in US and Taiwan makes his product impossible to be procured &amp; deployed by the said &#34;regulated industries&#34;.<a href="https://x.com/hankinbeijing/status/2079695886050050177" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/JeffreyTowson/status/2079383574428696743" target="_blank" rel="noopener">@JeffreyTowson</a>From WAIC, Kai Fu Li’s http://01.AI is great biz strategy. 
+
+But kinda weird marketing. 
+
+This is the Palantir of China.
+
+Focused on top-down direct sales for customized AI deployment into regulated industries.
+
+Using their isolated data pools. 
+
+And avoiding the model building frenzy.
+
+That’s good strategy. 
+
+But the marketing is odd. 
+
+They use:
+
+-“money leopards” in the jungle. 
+
+It’s Chinese word play for focusing on monetizing AI asap for clients. 
+
+Smart. But the jungle stuff is odd.
+
+-Kai fu li as celebrity,
+
+Half their waic booth was his books and cut outs to take pictures with.
+
+Overall, An important business to watch.
+
+But very unique.</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月21日 星期二</h2>
+  <ul class="posts">
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>08:13</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">China&#39;s AI Tsarina, Huang Ru, finally started to make public and international appearances this past weekend at WAIC, meaning that her role as the interministerial coordinator on AI covers not just domestic AI development, but also international exchanges on AI.<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2079358966308782473" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月20日 星期一</h2>
+  <ul class="posts">
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>22:53</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Talk of the town: @kaifulee signing his books on how to make fortunes through AI. 
+
+On the very last day of WAIC, a work day, on site, in person, and impressive turnout. 
+
+By the time Hank took this pic, 200+ ppl were queueing up. 
+
+祝各位付费读者豹富 😂，祝开复老师暴富。<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2079218217395089551" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>22:38</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Same at the @MiniMax_AI stall where you get one chance at a claw machine for each rednote post. No AI, just sheer and cheap speculation. Real WAIC AI wasn&#39;t at the Expo, nor West bund, nor Zhangjiang.<a href="https://x.com/hankinbeijing/status/2079214262027948172" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/ruima/status/2079201275607216491" target="_blank" rel="noopener">@ruima</a>The Kimi booth at WAIC had literally nothing except “post a 100 word note about us on RedNote and receive a free canvas bag” (at least I think that’s what was happening) and this was the line at 9am anyways
+
+I asked the guy next to me “why do you want this bag, just to post to WeChat Moments?” 
+
+“Yeah I guess I dunno”
+
+Lots of confusion and FOMO</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>21:10</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">广发证券今晚公告上调两融总规模上限，调整为净资本2.5倍。截至一季度，广发净资本为1131亿元，调整后融资融券业务总规模上限为2875亿【之前上限为1900亿】。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2079192293773373738" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>20:25</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Good take by a fellow audience at #waic opening ceremony.
+
+Still, the ceremony and the speech are shows designed for the rest of the world. Not the real deal of what WAIC means for chinese AI.
+
+What really happened happened at the NDRC pilot site visits during WAIC.<a href="https://x.com/hankinbeijing/status/2079180870901199350" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/matthew_d_white/status/2079052880372535757" target="_blank" rel="noopener">@matthew_d_white</a>A remarkable vantage point in Shanghai: I was among a limited number of attendees from Western academic and nonprofit organizations invited to the opening ceremony of #WAIC2026, seated only a few rows from the stage.
+
+President Xi Jinping presented four major themes for global AI governance: open innovation and collaboration; security and continued human control; cultural inclusion; and multilateral coordination.
+
+His central proposition was unmistakable: China intends to present its approach to AI—including open-source development and support for the Global South—as global rather than exclusively national. Xi argued that AI should not become a “solo performance” by one country, but a “symphony of global cooperation.”
+
+UN Secretary-General António Guterres offered an important test for every national AI strategy: technology must serve people—not the other way around.
+
+These statements deserve analysis rather than simple acceptance. Later this week, I’ll write about what Xi’s framework means for open-source AI, U.S. strategic interests, the Global South and the emerging contest over global AI governance.
+
+It has been a busy week in Shanghai. More soon on Substack.
+
+#opensourceai</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>15:36</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">笑了，监管撤回了一个做空科技的文章。
+
+央行主管的《中国金融》 盘中发了一篇标题为《科技股估值“纠偏”刻不容缓》的评论文章，没一会儿就又火速删除。
+
+不管这篇文章是央行有意或无意的，但文章说得没问题，
+
+在科技攻坚战的背景下，现在几大金融部委，除了金融稳定外，最重要的工作就是“科技金融”，所谓“五篇大文章”，科技金融才是最大、最核心的一篇。
+
+因此很大部分的金融工作，都是围绕“如何再金融稳定的前提下做好科技金融？”而展开。
+进而可以得出三个基本结论：
+
+1、高层比过去更重视资本市场，因为可以给科技和产业输血（利于科技攻坚），而不再是“金融羞耻论”、“搞不好就关掉”这种嫌弃态度；
+
+2、相比其他板块的泡沫，监管更能容忍甚至乐见适度的科技泡沫，毕竟历来科技都在泡沫中催生，有利于科技攻坚。
+
+3、但不能容忍极端的科技泡沫。
+一是，和“金融稳定”要求相冲突；
+二是，这篇文章说的“扭曲科创激励机制”，不利于科技攻坚。
+
+这也是证监会想要的“慢牛”，
+然而“慢牛”不是想想要就有的，经常是要么疯牛、要么死给你看，这个度如何把握？
+很难，只有边做边看、看能不能慢慢调教。
+
+于是证监会今年初首次提出了“逆周期”调节、防止“大起大落”的监管思路...<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2079108172619665839" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">这篇被删文章的存档<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2079108824297025612" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>13:12</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">“红色大掌柜”陈云长子陈元，一手打理的国家开发银行，显然成了“红色摇钱树”。谁来都要摇一把。王用生估计很后悔，早知道量刑差不多，应该再多贪4000万，太吃亏了😭😭😭<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2079071945828773946" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>08:49</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">其实，张国清比袁家军还小2岁。但站在一起，似乎张比袁要苍老好多。二人平级，都是副国级的政治局委员，都出身军工央企，张是兵器工业集团总经理，袁是航天科技集团副总经理。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2079005832885502412" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>07:10</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">外交部亚洲司司长刘劲松将担任驻澳大利亚大使，继续在正司级蹉跎。刘劲松早在2019年就担任了外交部政策规划司司长。他的下一任政策规划司司长苗得雨，已经晋升副部级。
+
+分管亚洲事务的外交部副部长孙卫东离任后，刘劲松作为外交部亚洲司司长，本来有机会升任分管亚洲事务的外交部部长助理，错过这次机会后，未来估计很难跻身外交部部领导了。
+
+现任驻澳大利亚大使肖千（1964.11）到龄退休。
+https://www.afr.com/world/asia/china-expected-to-appoint-asia-specialist-as-ambassador-to-australia-20260716-p60fu5<a href="https://x.com/cnpoliwatch/status/2078980815489519870" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月19日 星期日</h2>
+  <ul class="posts">
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>23:39</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">今晚，央視發布“全面加强练兵备战 豫南平原 装甲分队组织综合战斗演练”軍事報導。
+
+報導顯示，83集團軍中型第60合成旅（71897部隊）4營1連近日於河南信陽平橋區小丁莊之訓場組織綜合戰鬥演練。
+
+副旅長：韓慶波 上校 
+該旅3營營長：于魁偉 中校 
+該旅： 楊華忠、周玉科、王家鵬、周玉科 上校
+曹淑田、毛濤、曹志強、嚴加富、臧青松、賈曉輝、李佳斯 中校 
+王寧、張未萌 少校<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078867421977559250" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">報導連結：
+https://tv.cctv.com/2026/07/19/VIDEfuQQLkLqgZF8kWzbOaow260719.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.6
+
+關於該旅之過往貼文：
+1.
+https://x.com/JosephWen___/status/1780633522283364835
+2. https://x.com/JosephWen___/status/1779179069260857652
+3. https://x.com/JosephWen___/status/1681302332007649282?s=20
+4. https://x.com/JosephWen___/status/1661304831158673408?s=20<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078867426306134065" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/JosephWen___/status/1661304831158673408" target="_blank" rel="noopener">@JosephWen___</a>昨日，央視發佈“记者在战位 直击合成营全要素实弹射击演练”軍事報導。
+
+該單位為83集團軍中型第60合成旅（71897部隊）駐陝西西安臨潼新豐街道陵新路，演訓中，3營扮藍方，4營扮紅方進行紅藍對抗。
+
+別稱：一江山旅
+榮譽稱號：江陰老虎團、沙家浜團。
+車牌號：LZ53
+
+該訓場位於河南駐馬店泌陽五峰山腳。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>21:15</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span></div>
+      
+      <div class="ptext seg">入伍前夕，紀念我的頭髮，人生也只剩下服兵役會剃這麼短了🙂<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078831175343472828" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/JosephWen___/status/2066755994202648724" target="_blank" rel="noopener">@JosephWen___</a>輪到我服兵役了🫶
+7月20日開始會停止更新至少兩個月。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>21:10</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">私募比公募还讲政治率先托市。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2078829897917554993" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>12:58</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">7月18日，人工智能全球治理高级别会议召开。外交部部长助理刘彬代表中国在这次会议上发言。
+
+刘彬是外交部分管军控事务的部领导，因此他的分工包括了人工智能相关的外交工作。他也分管欧亚事务，未来可能担任驻俄大使。
+
+刘彬在人工智能全球治理高级别会议上的发言：https://www.mfa.gov.cn/wjbxw_new/202607/t20260718_11985613.shtml<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2078705935535518001" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>02:36</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">昨晚，央視發布“全面加强练兵备战 高温环境 炮兵分队跨昼夜实弹训练”軍事報導。  
+
+搭配福建海事局通告可知，東部戰區陸軍參謀部邊海防處303海防旅（31612部隊），7月到16日1時至18時於福州興化灣江陰港遂行火炮射擊演訓。  
+
+此為央視繼2023年8月後第二度報導該單位於此演訓。<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078549523421638880" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">報導連結： https://tv.cctv.com/2026/07/18/VIDES7DVICcCxyauzZyHDRyX260718.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.7 
+
+20260716江阴实弹射击交通管制 福州海事局 https://fjnews.fjsen.com/2026-07/15/content_32219033.htm 
+
+補充： 東部戰區陸軍參謀部邊海防處303海防旅（31612部隊）72分隊，8月24到25日7時至20時於福州興化灣江陰港遂行火炮射擊演訓 
+1.
+https://x.com/JosephWen___/status/1699005777195958374?s=20
+2.  https://x.com/JosephWen___/status/1694585823524794604?s=20<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078549527901151707" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/JosephWen___/status/1694585823524794604" target="_blank" rel="noopener">@JosephWen___</a>福建海事局近日發佈“闽航警38/23 实弹射击演习”通告。
+
+該範圍約108平方公里、位於中國內水，可判斷為火砲射擊，內容與細節則須繼續觀察。
+
+可留意，近期東部戰區陸軍三個集團軍砲兵單位皆有於東南沿海射擊操演，目前可知浙江寧波鄞州區、大目灣和旦門鄉，且2022年中在大目灣設訓場，較以往罕見。
+
+1/3</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>01:54</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Hat off to Yang Zhilin for choosing to return voluntarily to China while having had the many opportunites to stay in the US. 浑身是胆雄赳赳，少年壮志不言愁。China rewarded such courage.<a href="https://x.com/hankinbeijing/status/2078538849630953930" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>01:48</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Shenzhen is even less classy than Beijing. Collective attack by brigades of shenzhen companies on what? Shanghai or WAIC?<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2078537363018670152" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/ZichenWanghere/status/2078534745542349029" target="_blank" rel="noopener">@ZichenWanghere</a>The city of Beijing emphasizes that China&#39;s two latest high-performing LLMs, the Kimi K3 and GLM-5.2, originate from Beijing.  
+
+It cannot allow Shanghai, the city hosting the ongoing World Artificial Intelligence Conference (WAIC), steal the limelight of AI without a fight.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>01:25</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">It doesn&#39;t mean nothing - it means everything, as long as you understand how Chen Jining and Ding Xuexiang prepped Xi&#39;s talk and rehearsed the opening ceremony. The statement itself is politically symbolic - which I will write abt later on.<a href="https://x.com/hankinbeijing/status/2078531728931721252" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/mkwitzke/status/2078198290861146359" target="_blank" rel="noopener">@mkwitzke</a>What does it mean that the very first line of Xi&#39;s WAIC speech notes America as the birthplace of artificial intelligence?</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>00:56</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="reply">回复</span></div>
+      
+      <div class="ptext seg">補充：
+同一處之訓場
+連結：
+https://tv.cctv.com/2026/07/16/VIDEA50QP4Bcvn6I9OkK0urA260716.shtml?spm=C52346.PQw42etIf8YI.Edvk0IT63y7P.2<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2078524414849859704" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月18日 星期六</h2>
+  <ul class="posts">
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>12:16</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Will write more (and with more substance) when I am fully recovered from the past three days of craziness and the next three days of even more craziness. Future of Chinese AI remains strong, just many more hurdles ahead.<a href="https://x.com/hankinbeijing/status/2078333105757474865" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/hankinbeijing/status/2078330510154387651" target="_blank" rel="noopener">@hankinbeijing</a>What really matter are the meetings behind closed doors &amp; the unannounced visits to shanghai ai lab, NDRC AI pilot sites and emerging AI companies by Xi and different ministers. These will define how China treats, develops, uses and regulates AI, not the ceremonies themselves.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>12:06</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">What really matter are the meetings behind closed doors &amp; the unannounced visits to shanghai ai lab, NDRC AI pilot sites and emerging AI companies by Xi and different ministers. These will define how China treats, develops, uses and regulates AI, not the ceremonies themselves.<a href="https://x.com/hankinbeijing/status/2078330510154387651" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/hankinbeijing/status/2078327790836109824" target="_blank" rel="noopener">@hankinbeijing</a>The whole conference looks exactly like an awkward mix of the good old Belt and Road summit (minus the Europeans) and knock-off version of CES/computex, with seemingly robust exhibition on humanoid AI and locally produced compute. HUGE ambitions, HUGE commitment, long way to go.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>11:55</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">The whole conference looks exactly like an awkward mix of the good old Belt and Road summit (minus the Europeans) and knock-off version of CES/computex, with seemingly robust exhibition on humanoid AI and locally produced compute. HUGE ambitions, HUGE commitment, long way to go.<a href="https://x.com/hankinbeijing/status/2078327790836109824" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/hankinbeijing/status/2078326785201385784" target="_blank" rel="noopener">@hankinbeijing</a>So much to write abt WAIC 2026, but where to start? Heat, both in the sense of local temperature and in how AI is framed as the salvation for all economic troubles - short and long term. Bright future ahead, messy reality unfolds.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>11:51</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">So much to write abt WAIC 2026, but where to start? Heat, both in the sense of local temperature and in how AI is framed as the salvation for all economic troubles - short and long term. Bright future ahead, messy reality unfolds.<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2078326785201385784" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>11:21</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">之前高抛，现在低吸。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2078319132445958372" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="Guoguang_Wu">
+      <div class="meta"><span>10:47</span> ·
+        <a class="who" href="https://x.com/Guoguang_Wu" target="_blank"
+           rel="noopener">@Guoguang_Wu</a> <span class="cn">吴国光</span></div>
+      
+      <div class="ptext seg">胡锦涛梦中复仇记😅😂👍<a href="https://x.com/guoguang_wu/status/2078310595498303604" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/i/status/2077789424792846578" target="_blank" rel="noopener">@jintao194212</a>没想到你习近平也有这一天吧🤣🤣🤣</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月17日 星期五</h2>
+  <ul class="posts">
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>18:33</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/caolei1/status/2078065602724294893" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>18:07</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">(更新图表)  这个鬼故事还是成真了...
+6月的M1和M2比之前预估的要差不少，下半年M1和M2也够呛，除非货币政策发力😮‍💨<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2078058945395192182" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2062831695288791429" target="_blank" rel="noopener">@MacroMargin</a>更新一下这张图，一个鬼故事。
+后续的沪深300走势还没这么明显，
+但如果看上证指数，目前还是亦步亦趋，</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>16:06</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">本周A股：是中证500和创业板指近10年跌得最多的一周，是中证1000和中证2000近10年跌得第二多的一周。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2078028653439365322" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MaoViews">
+      <div class="meta"><span>14:23</span> ·
+        <a class="who" href="https://x.com/MaoViews" target="_blank"
+           rel="noopener">@MaoViews</a></div>
+      
+      <div class="ptext seg">金核心会晤王沪宁<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2078002627670081809" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="Guoguang_Wu">
+      <div class="meta"><span>12:46</span> ·
+        <a class="who" href="https://x.com/Guoguang_Wu" target="_blank"
+           rel="noopener">@Guoguang_Wu</a> <span class="cn">吴国光</span></div>
+      
+      <div class="ptext seg">最近中共官场流行一种叫作“突发疾病”的致命疫情啊，染上必死，芳龄五十啷当岁的副省级、正司局级官员是高发人群。<span class="mbadge">带图</span><a href="https://x.com/guoguang_wu/status/2077978167088964094" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>11:51</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">不担大佬。。粗略预估指向的是，下半年M1和M2并不太好，
+除非货币政策发力，但目前没有明显要发力的迹象<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077964332307276279" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/NjudD93528/status/2077336410508710338" target="_blank" rel="noopener">@NjudD93528</a>@MacroMargin 大佬对于m1m2下半年的预估如何</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>11:39</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">Kimi K3进一步缩短了中美AI差距，各前沿领域奋起直追👏<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077961338199179272" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2075912829635596430" target="_blank" rel="noopener">@MacroMargin</a>这个段子版本不停迭代，从AI到机器人，再到航天，唯一不变的是瓶盖🤣</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>00:17</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">【“正部级编剧大师”蔡赴朝】贾庆林、王岐山、李长春3位政治局常委提携；蔡赴朝和肖培的兄弟情；蔡赴朝与贾庆林大秘谭维克；六位中宣部副部长落马；蔡赴朝与孙政才的选举事故；“央视后宫”“央视公主”关系网。【详细解读】https://youtu.be/MqcGygFWhy8<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2077789767727796335" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月16日 星期四</h2>
+  <ul class="posts">
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>17:03</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/cnpoliwatch/status/2077680468795826666" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MaoViews">
+      <div class="meta"><span>11:35</span> ·
+        <a class="who" href="https://x.com/MaoViews" target="_blank"
+           rel="noopener">@MaoViews</a></div>
+      
+      <div class="ptext seg">沈瑩不再担任工商联党组书记、常务副主席<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2077598011228930234" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月15日 星期三</h2>
+  <ul class="posts">
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>23:50</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/caolei1/status/2077420603783487702" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>16:48</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">今天因为是半年度数据发布高峰期，央行也发了最新金融数据，
+
+不过，我比较喜欢的另一个数据，即央行一季度的调查数据，到到现在还没发。
+
+往年都比较及时，去年一季度的调查拖到7月底才发，看来今年又要等到7月底😮‍💨<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077314438370357385" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/1950089628352205148" target="_blank" rel="noopener">@MacroMargin</a>央行的季度调查，拖了这么久，终于是出了。
+ 就业、收入、房价、物价预期继续下探，储蓄倾向更强，投资倾向更少...
+年轻人也活明白了，购房消费倾向趴窝后，专注自身的消费（社交、文娱和旅游消费）倾向持续上升
+关键图表一览↓</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>16:31</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">6月的M1和M2增速不及预期，也低于我年初的粗略测算的走势，
+A股和M1相关度很高，目前走势和年初测算的M1走势还是比较吻合的<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077309961009541387" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">居民长贷还是弱得没话说，企业相对修复了点<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077312470927220814" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>14:33</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">前几个月消费偏离十五五潜在目标，6月有所修复<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077280275516792904" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2076909423537369167" target="_blank" rel="noopener">@MacroMargin</a>即便如此，最近几个月消费也开始偏离这个保守目标，这可能是为什么昨天总理座谈会上，会重申“加快培育消费新增长点”的原因之一。
+但短期未准备拿出什么有含金量的支持政策，还是之前支持服务消费文件（支持供给端）抓好落实</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>14:16</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">《求是》：打好科技强国建设攻坚战
+
+科技“攻坚战”，终于是喊出来了<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077276140553838688" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2075151060482830691" target="_blank" rel="noopener">@MacroMargin</a>今天中国科技股大涨，很大原因是因为昨天总书记的讲话，
+
+这篇讲话可以说是吹响了“大炼科技”的号角，很多话说得非常重，高层非常FOMO，害怕错失本轮科技/产业革命，（我在6月初的简报就判断“大炼科技”正式提速）。
+
+这轮科技/产业革命，让领导层看到了机会，一个中国等了百年甚至千年的，弯道/换道超车的机会，不成功便成仁。
+
+比如几个提法，非常FOMO，
+“形势催人，也逼人....必须抓住历史机遇”，
+
+“引导地方聚焦国家战略需求加大研发投入...
+引导企业增加研发投入，调动更多社会力量支持科技创新...”
+
+这让人想起毛时代的“调动一切积极因素”的提法，于是后面开启了大炼钢铁....
+
+上一轮“大炼”，是追赶第二次工业革命，当时吊车尾，
+这次是第四次工业革命，中国终于处在车头或前列，
+
+加上前人惨痛的失败教训，真希望这次结果会是好的，就看“十五五”这几年了，
+
+借用已故高善文先生的那句名言：
+“30岁以下的年轻人......如果国家这一次走错了路(炼失败了)，这辈子就可以洗洗睡了”</blockquote></div>
+      
+      <div class="ptext seg">上周简报分析刚好提到，接下来可能用上“攻坚战”一词<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077277164060410062" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>11:12</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">6月经济数据成绩单，
+
+投资继续拉跨，6月中旬地方专项债发行才有所提速，还反应不到6月投资数据上来
+
+消费转正符合预期，去年5月基数确实太高了，
+
+外贸非常强劲，AI链和涨价因素是主要推动，
+
+生产有韧性，当然也是伴随出口的结果。<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077229745113305336" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">上半年总的有4.7%，所以还在今年目标区间(4.5%-5%)中值附近，不算太差。
+
+但二季度GDP只有4.3%，趋势不可持续。
+符合我去年底对今年增长的判断，二季度增长压力山大，可能会是今年冰点，前提是下半年存量政策真的要“用好用足”<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077231121520275604" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>10:50</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">6月70城房价数据发布，图表可视化拆解：<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077224309379187110" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">70城房价涨跌热力图<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077225540256452670" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">中国地产泡沫调整到哪儿了？
+https://ocmacro.com/dashboard/data-breakdown<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077225819488010425" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>07:04</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">转机赴沪，喜提进京待遇<span class="mbadge">带图</span><a href="https://x.com/hankinbeijing/status/2077167365427691549" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>00:34</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">補充：
+史靈雙 上校
+
+連結：
+https://tv.cctv.com/2026/07/14/VIDEMTVdtHj7rL1PCPp0kzMi260714.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.3<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2077069353313570850" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">@isekaimint 補充：
+馮啟迪 上校
+范海濱 中校
+
+連結：
+https://tv.cctv.com/2026/07/14/VIDEMTVdtHj7rL1PCPp0kzMi260714.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.3<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2077070472035111115" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月14日 星期二</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>21:05</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">@sanada_ryoma 疫情前的社零增长非常稳<a href="https://x.com/MacroMargin/status/2077016717109383416" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>20:47</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">为什么陈希的职务，被分拆到蔡奇、石泰峰两个人头上？【详细解读】https://youtu.be/nkil3q2ue9E?si=eQ4BIJyZo8uHbJGG<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2077012229447381391" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>20:42</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">美国CPI通胀大幅不及预期，
+昨天Waller说非常看重这次数据，说如果核心通胀继续走坏或扩散，将支持加息。
+
+而今晚的核心CPI大幅不及预期，核心CPI只有2.6%(预期2.9%)，没有一家机构华尔街机构预测到了这么低的数据，
+
+作为美联储风向标的男人Waller，短期应该不会支持加息了，风向标男人没有转向，加息风险就还可控<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2077010756961505598" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>17:53</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Richard Sutton即将参加17-20日在沪举办的世界人工智能大会，发表主旨演讲，担任WAIC Academic学术大会国际联席主席，并主办以其姓名命名的思想者论坛。老骥伏枥。<a href="https://x.com/hankinbeijing/status/2076968404905521580" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MaxForAI/status/2076931119153553913" target="_blank" rel="noopener">@MaxForAI</a>年近70岁的图灵奖得主、强化学习之父Richard Sutton @RichardSSutton ，正式创业。
+
+本周一，他与长期合作者Khurram Javed共同成立Oak Lab，希望用一套不同于当前大模型的路线构建AGI。
+
+@oaklab_ai 的核心目标，是开发能够依靠第一人称经验持续学习的AI智能体。
+
+它不再只依赖人类整理好的静态数据集，也不会在训练结束后停止变化，而是能在与环境交互的过程中不断试错、更新知识并学习新的技能。
+
+Sutton一直认为，当前大模型虽然擅长模仿和组合人类已有知识，却缺少通过行动、反馈和长期经验产生新知识的能力。
+
+为此，Oak Lab将推进他提出的OaK架构，也就是Options and Knowledge。简单来说，就是让智能体一边建立对世界的内部模型，一边学习可以跨越较长时间执行的技能，从而进行持续学习和长期规划。
+
+Oak Lab还提出了一个非常激进的长期目标：打造一个拥有万亿参数，却只需要约20瓦功率，就能实时学习和规划的智能体。
+
+当然，这目前还是愿景，不是已经实现的产品。
+
+值得注意的是，今年1月，Sutton的学生、AlphaGo核心研究者David Silver也宣布创业，同样押注强化学习和经验学习。
+
+这意味着，围绕AGI路线的争论，正在从论文和演讲，变成真正的创业竞争。
+
+当所有人还在继续堆参数时，强化学习之父决定亲自去造一种能够一直学习的机器。
+
+PS：没人没有读过Sutton的《苦涩的教训》吧？？</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>13:55</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">对于《扩大消费“十五五”规划》，最重要的就是消费目标，
+
+一是定性目标，是之前十五五规划提出的“居民消费率明显提高”，
+
+用的“明显提高”一词，加之当时一些核心智囊和官媒建议，“像过去抓投资那样抓消费”，这让很多人对十五五刺激消费有不小幻想。
+
+我去年专门写文反驳了这样的高期待，认为十五五主线是“大炼科技、产业跃迁”，消费啥的都是辅线，只要求稳定就行。
+
+二是定量目标，也就是昨天公布的目标，是“社会消费品零售总额达到60万亿元左右”，印证了我去年的分析。
+
+将十五五目标趋势测算如下，显然，这个目标隐含的是，稳定疫情后的消费趋势不崩即可，没打算让消费重回疫情前的趋势。
+
+这意味着，对应的消费和民生的相关政策，也就自然不要有过多期待，这些都是辅线。
+相应的，对于科技和产业，政策力度将是“超常规”的。<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2076908386080436318" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">即便如此，最近几个月消费也开始偏离这个保守目标，这可能是为什么昨天总理座谈会上，会重申“加快培育消费新增长点”的原因之一。
+但短期未准备拿出什么有含金量的支持政策，还是之前支持服务消费文件（支持供给端）抓好落实<a href="https://x.com/MacroMargin/status/2076909423537369167" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>13:48</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">马兴瑞，我不擦去你名字😁😁😁<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2076906665941856322" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>12:16</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">山东省委常委、济南市委书记刘强（1971.03）任山东省委副书记，是第10位“70后”省委专职副书记。
+
+“70后”省委专职副书记排名：
+1. 诸葛宇杰
+2. 时光辉
+3. 刘捷（已升任省长）
+4. 朱忠明
+5. 杨晋柏
+6. 刘小涛（已升任省长）
+7. 郭宁宁
+8. 谢卫江
+9. 刘洪建
+10. 刘强<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2076883543993495606" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/1989329455727218808" target="_blank" rel="noopener">@cnpoliwatch</a>刘洪建（1973.1）任云南省委副书记，是第9位“70后”省委专职副书记，卢东亮、杨晋柏、谢卫江之后的第4位出生于1973年的省委副书记。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>12:06</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">在被罢免全国人大代表职务之后，7月14日“官宣”：马兴瑞被开除党籍、开除公职。
+
+经中共中央批准，中央纪委国家监委对马兴瑞严重违纪违法问题立案审查调查。6月30日，中共中央政治局会议审议并通过中共中央纪律检查委员会《关于马兴瑞问题审查结果和处理意见的报告》。
+
+经查，马兴瑞丧失理想信念和政治立场，背弃党的宗旨和初心使命，严重违反政治纪律和政治规矩，履行全面从严治党主体责任不力，对身边工作人员严重违纪违法和涉嫌犯罪问题纵容失察失管，造成不良影响；严重违反组织纪律，在组织函询时不如实说明问题，在干部选拔任用工作中为他人谋取利益，本人及亲友违规为他人安排工作；严重违反廉洁纪律，违规收受礼品、礼金，帮助亲属低价购房，搞权色、钱色交易，纵容放任亲属利用其职务影响谋取巨额利益，大搞家族腐败；将公权力异化为谋取个人私利的工具，利用职务便利为他人在企业经营、工程承揽、职务提拔等方面谋取利益，本人或伙同亲属、特定关系人非法收受巨额财物。
+
+马兴瑞完全背离党性原则，严重违背党中央对高级干部提出的政治要求，其行为严重违反党的纪律，构成职务违法并涉嫌受贿犯罪，且在党的十八大后不收敛、不收手，性质极其严重，影响极其恶劣。依据《中国共产党纪律处分条例》《中华人民共和国监察法》《中华人民共和国公职人员政务处分法》等有关规定，经中央纪委常委会会议研究并报中央政治局会议审议，决定给予马兴瑞开除党籍处分，由国家监委给予其开除公职处分，终止其党的二十大代表资格，收缴其违纪违法所得，将其涉嫌犯罪问题移送检察机关依法审查起诉。给予其开除党籍的处分，待召开中央委员会全体会议时予以追认。<a href="https://x.com/cnpoliwatch/status/2076881114778546463" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2070582951905984762" target="_blank" rel="noopener">@cnpoliwatch</a>全国人民代表大会常务委员会公告
+
+〔十四届〕第十八号
+
+新疆维吾尔自治区人大常委会决定罢免马兴瑞的第十四届全国人民代表大会代表职务。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>11:12</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">【马兴瑞帮助亲属低价买房】这是批评还是表扬？他这个级别，肯出钱买，已经很有节操了。他如果想要，一堆人排队等着贴钱白送。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2076867379565642104" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>00:27</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="reply">回复</span></div>
+      
+      <div class="ptext seg">補充：
+申桂濤 中校
+劉創、耿敬寧 少校
+
+連結：
+https://tv.cctv.com/2026/07/13/VIDEZllBO2UzTQGhljXuNRyI260713.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.3<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2076705157329646019" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月13日 星期一</h2>
+  <ul class="posts">
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>22:03</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">7月27日挂牌上市<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2076668853740786013" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>17:44</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">抛开15/5开局之年亲自力捧AI产业的“战略意义”，总书记亲自出席WAIC，有以下三大涵义：
+
+1）把全球发展倡议和一带一路倡议的未竟事业，通过人工智能国际合作进一步激活；
+2）推动泰柬两国领导人访华期间和谈；
+3）考察沪上陈书记。
+
+至于股价，至于技术，至于中美，都是注脚了。
+本周的上海，是南直隶。<a href="https://x.com/hankinbeijing/status/2076603562533241343" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>16:54</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">今年的人工智能大会值得关注，
+往年这个会都是的总理出席，去年底做今年的宏观日历，我也以为还是按惯例由总理出席讲话，
+
+而今天则官宣由大领导亲自出席讲话，优先级提到最高，也体现最高层的FOMO，
+
+毕竟“AI一天，人间一年”，现在是中美争夺话语权、制高点的关键期，“人生能有几回博”，到了该放手一搏的时候<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2076591144319045997" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>16:14</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Told you :)<a href="https://x.com/hankinbeijing/status/2076580942588862772" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/hankinbeijing/status/2067088134077379043" target="_blank" rel="noopener">@hankinbeijing</a>今年的世界人工智能大会(waic)正式进入一个月倒计时。过去几年，waic都是李强总理去。而今日的预热发布会，出席来宾已经包括王毅、周海兵、苗得雨等。十五五开局之年，人工智能被推到史无前例的政策高度，合理推测，大会的主礼嘉宾级别极有可能比以往更高。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>13:53</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">李稻葵团队之前还测算了一个数据，就是中国直接或间接拖欠企业的账款规模，高达GDP的10%，约十几万亿人民币，规模惊人。
+
+也因此极力建议，要优先解决政府拖欠问题，这是盘活经济的“活水”。
+
+去年以来政策开始有些动作，说要“加快解决地方政府拖欠企业账款问题”，但动作甚微，去年说过的“硬措施”，也一直没有下文。
+
+今年定调说要“加紧”清欠，但半年过去了，依然没有“加紧”，看下半年会不会稍微重视些吧<a href="https://x.com/MacroMargin/status/2076545653656969644" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/ChinaMacroFacts/status/2076540632362021130" target="_blank" rel="noopener">@ChinaMacroFacts</a>李稻葵在上周的一个半公开的活动上发表演讲，提出两组数字，第一，当前广义失业率10.2%，长期失业人口2400万，第二，固定资产投资负增长，建国后只有1961年和1967年。
+
+尽管下面必须要补经济光明论，这个话说得依然非常非常重了，崇敬李稻葵教授的勇气与良知。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>13:16</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/caolei1/status/2076536187251016045" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月12日 星期日</h2>
+  <ul class="posts">
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>01:30</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">7月11日，中国科协完成换届，中国科协第十届全委会卸任，第十一届全委会上任。
+
+杨伟、罗琦、吴曼青卸任中国科协常委，金东寒卸任中国科协委员。
+
+此前，四人全部被移出院士名单。但是直到这次中国科协换届前，他们仍然在中国科协的常委、委员名单里面。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2075996259823796297" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2034346943669731783" target="_blank" rel="noopener">@cnpoliwatch</a>被移出院士名单只有两种情况，一种是逝世（逝世后，都会被移出院士名单，院士名单里只有在世的院士），另一种就是出事。
+
+至于具体为什么出事，严重程度如何，则没有办法只从移出院士名单这一个动作里面判断出来。
+
+过去几年成批“失踪”的军工央企管理人员，“官宣”落马的不多，其中包括航空工业集团原董事长谭瑞松。谭瑞松可以为这些失踪的军工老总出事的原因提供一个参考：
+
+经查，谭瑞松丧失理想信念，背弃初心使命，对抗组织审查，搞迷信活动；违反中央八项规定精神，接受可能影响公正执行公务的宴请；违反组织原则，在组织函询时不如实说明问题，在职工录用等方面为他人谋取利益；违规收受礼金，搞权色交易；道德败坏；毫无纪法底线，“靠军工吃军工”，侵吞巨额公共财物；将公权力异化为谋取个人私利的工具，大搞权钱交易，利用职务便利为他人在企业改制并购、承揽工程项目、职工录用等方面谋利，并非法收受巨额财物。
+
+当然，不是说所有“失踪”的军工老总都是因为上述原因而被免职。但是可以作为参考。</blockquote></div>
+      
+      <div class="ptext seg">这四人中，罗琦已经因“涉嫌违纪违法”被罢免第十四届全国人大代表职务。
+
+在卸任中国科协常委之后，杨伟、罗琦、吴曼青已经不再担任任何社会兼职，这三人已经彻底“失踪”了。
+https://x.com/cnpoliwatch/status/2045206328541343803<a href="https://x.com/cnpoliwatch/status/2075996262596227406" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2045206328541343803" target="_blank" rel="noopener">@cnpoliwatch</a>全国人大常委会2026年第二号公报中，也首次披露了周新民、罗琦、刘仓理三位军工系统全国人大代表，在2月初的全国人大常委会会议上被罢免全国人大代表职务的原因是“涉嫌违纪违法”。
+
+注意，这里写的是“涉嫌违纪违法”，上面九个解放军将领写的则是“涉嫌严重违纪违法”。
+https://x.com/cnpoliwatch/status/2019510905139237262</blockquote></div>
+      
+      <div class="ptext seg">金东寒是二十届中央候补委员。他缺席了去年的四中全会，但是没有在这次全会上被开除党籍。此次卸任中国科协委员之后，二十届中央候补委员是金东寒仅剩的一个职务。
+
+到五中全会，金东寒可能被开除党籍，但也有可能会像大多数疑似涉及军工行业腐败的人那样，继续长期失踪。
+https://x.com/cnpoliwatch/status/1981457528354722039<a href="https://x.com/cnpoliwatch/status/2075996265679045079" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/1981457528354722039" target="_blank" rel="noopener">@cnpoliwatch</a>四中全会应出席中央候补委员167人，实际出席147人，缺席20人。
+
+递补中央委员时被跳过的8人（3文职、5军队），全部缺席四中全会。
+
+167名中候补中，145人为文职，22人来自军队系统。
+
+145名文职中候补中，14人缺席，缺席率为10%。
+
+22名军队中候补中，6人缺席，缺席率为27%。</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月11日 星期六</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>19:59</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">这个段子版本不停迭代，从AI到机器人，再到航天，唯一不变的是瓶盖🤣<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2075912829635596430" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/SeraAureliaX/status/2075670504011423813" target="_blank" rel="noopener">@SeraAureliaX</a>🤣🤣🤣</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>16:39</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">朝鲜版苗华、张又侠。措辞都跟老大哥看齐。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2075862595542900848" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>13:58</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">二季度货币政策例会后，央行对汇率升值的抱有何种态度，也更加明显。
+去年以来也分析过很多次，认为央行乐见升值，不会逆势抑制，而是顺水推舟，只防止非理性升值即可<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2075822127132131549" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2074819559878795572" target="_blank" rel="noopener">@MacroMargin</a>中国央行二季度货币政策例会开了，比预期晚了一周 也算正常。
+
+这次例会边际变化较少，
+潘行长这是学习Warsh减少前瞻指引那套吗？
+
+1、形式判断部分，删去“稳中有进”，改为“向新向优”。
+这是承认二季度经济下行，已经不能再说“稳中有进”了，
+但“向新向优”，也继续肯定了大炼科技/产业跃迁的努力方向。
+
+2、形势判断出现重大变化，新增“结构分化”，终于看到了中美都在经历的，经济K型分化问题。
+特别关注这个判断，会不会上升到月底政治局会议。
+
+3、删去“综合运用多种工具”一说，这是Q3不准备落地降准降息吗，Q3降准本没有预期，更可能是Q4（我在年初的展望也说过）。降息有一点预期，但尚不多，这次例会没有增加落地可能性。
+
+4、强调“国内大循环”，这是延续上周中欧贸易谈判、国常会部署“进出口平衡”的新政策风向。
+
+对此，我在上期周报中展开分析过，接下来很快应该会出台相关政策文件，方向主要是“提进口”，而不是像二十年前那样“压出口”，当然力度也不会太大，因为这个问题的政策优先级，还不高。
+
+同时，人民币国际化将继续推进，顺势推动汇率缓慢升值，也有利于“做优国内国际双循环”、缓解中欧等贸易争端。
+
+今天潘行长在香港的讲话，也主要讲人民币国际化，赋予香港新的历史使命，做大离岸人民币市场，推动人民币国际化</blockquote></div>
+      
+      <div class="ptext seg">二季度货币政策例会后，央行对汇率升值的抱有何种态度，也更加明显。 去年以来也分析过很多次，认为央行乐见升值，不会逆势抑制，而是顺水推舟，只防止非理性升值即可<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2075822490065256639" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月10日 星期五</h2>
+  <ul class="posts">
+    
+    <li data-handle="Guoguang_Wu">
+      <div class="meta"><span>23:37</span> ·
+        <a class="who" href="https://x.com/Guoguang_Wu" target="_blank"
+           rel="noopener">@Guoguang_Wu</a> <span class="cn">吴国光</span></div>
+      
+      <div class="ptext seg">很好的概念👍值得深入研究<a href="https://x.com/guoguang_wu/status/2075605454298992765" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/ZSY1826299/status/2074274871086071873" target="_blank" rel="noopener">@ZSY1826299</a>@guoguang_wu 吴先生，“政治习性”这是我最近思考得出的一个概念。我没有什么政治学的理论知识。不过这个概念，似乎可以解释第一代移民难以正确理解西方政治理念的问题。依据这个概念和我对您有限的了解，认为您是当今华人转变或进步最大之人。请赐教。谢谢🙏
+https://x.com/ZSY1826299/status/2074270566719328462</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>19:55</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">胡耀邦秘书、原中宣部副部长李彦（右）逝世，享年97岁。李彦担任过共青团中央宣传部副部长、中国社科院党委宣传部部长、中宣部秘书长、中宣部副部长。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2075549457735995628" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>18:17</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">今日，央視發布“群众性练兵比武 锤炼打赢本领”軍事報導。
+
+報導顯示，武警黑龍江總隊 牡丹江支隊近日於其位於黑龍江省牡丹江市愛民區通鄉路81號之營區開展「雪城健將」軍事體育運動會。<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2075524852489011404" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">報導連結：
+https://tv.cctv.com/2026/07/10/VIDEsuha2slkyNQ6MfCg3lCc260710.shtml?spm=C52346.PFFUsJDNPMAY.Ecv1YmkHWv7j.29<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2075524856993690096" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">補充：
+連結：
+https://tv.cctv.com/2026/07/09/VIDE7uRijpHoBrxKCpyDFbCY260709.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.19<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2075542532478640625" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>13:36</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">👏“首次成功实施运载火箭一子级可控回收，标志着我国重复使用火箭技术取得重大突破”<a href="https://x.com/MacroMargin/status/2075454135982604602" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/fxtrader/status/2075451807250428063" target="_blank" rel="noopener">@fxtrader</a>长征十号乙运载火箭今日成功实现一子级可控回收。后续，长征十号乙运载火箭研制团队将持续优化火箭性能，加快重复使用火箭技术的迭代升级，预计将在今年年底前完成一子级火箭复用飞行。（央视）
+
+#行情 卫星ETF广发、卫星ETF易方达双双涨停。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>12:57</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">今天中午，长征十号乙运载火箭成功实施运载火箭一子级可控回收，为全球首次运载火箭网系回收。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2075444181032480800" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>11:12</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">云南文投集团董事长陶国相接受纪委调查。他是原云南省委副书记、求是杂志社总编辑王天玺的心腹。相由心生，陶董事长一看就是一副清正廉洁、忠诚干净的好相貌。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2075417812513009747" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月9日 星期四</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>17:32</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">今天中国科技股大涨，很大原因是因为昨天总书记的讲话，
+
+这篇讲话可以说是吹响了“大炼科技”的号角，很多话说得非常重，高层非常FOMO，害怕错失本轮科技/产业革命，（我在6月初的简报就判断“大炼科技”正式提速）。
+
+这轮科技/产业革命，让领导层看到了机会，一个中国等了百年甚至千年的，弯道/换道超车的机会，不成功便成仁。
+
+比如几个提法，非常FOMO，
+“形势催人，也逼人....必须抓住历史机遇”，
+
+“引导地方聚焦国家战略需求加大研发投入...
+引导企业增加研发投入，调动更多社会力量支持科技创新...”
+
+这让人想起毛时代的“调动一切积极因素”的提法，于是后面开启了大炼钢铁....
+
+上一轮“大炼”，是追赶第二次工业革命，当时吊车尾，
+这次是第四次工业革命，中国终于处在车头或前列，
+
+加上前人惨痛的失败教训，真希望这次结果会是好的，就看“十五五”这几年了，
+
+借用已故高善文先生的那句名言：
+“30岁以下的年轻人......如果国家这一次走错了路(炼失败了)，这辈子就可以洗洗睡了”<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2075151060482830691" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>11:18</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">石泰峰已兼任中国浦东干部学院院长、中国井冈山干部学院院长、中国延安干部学院院长。
+
+按惯例，这三个学院的院长由中央组织部部长兼任。前任院长是陈希。但是，直到陈希卸任了中央党校校长之后，才卸任了这三个学院的院长，即使他早就卸任中组部长了。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2075057017585033536" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月8日 星期三</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>22:45</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">川普又画K线了，
+看了下，之前做的川普压力指数，最近确实在“膨胀”的水平<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2074867520297893937" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/MacroMargin/status/2074867577185284351" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>19:35</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">中国央行二季度货币政策例会开了，比预期晚了一周 也算正常。
+
+这次例会边际变化较少，
+潘行长这是学习Warsh减少前瞻指引那套吗？
+
+1、形式判断部分，删去“稳中有进”，改为“向新向优”。
+这是承认二季度经济下行，已经不能再说“稳中有进”了，
+但“向新向优”，也继续肯定了大炼科技/产业跃迁的努力方向。
+
+2、形势判断出现重大变化，新增“结构分化”，终于看到了中美都在经历的，经济K型分化问题。
+特别关注这个判断，会不会上升到月底政治局会议。
+
+3、删去“综合运用多种工具”一说，这是Q3不准备落地降准降息吗，Q3降准本没有预期，更可能是Q4（我在年初的展望也说过）。降息有一点预期，但尚不多，这次例会没有增加落地可能性。
+
+4、强调“国内大循环”，这是延续上周中欧贸易谈判、国常会部署“进出口平衡”的新政策风向。
+
+对此，我在上期周报中展开分析过，接下来很快应该会出台相关政策文件，方向主要是“提进口”，而不是像二十年前那样“压出口”，当然力度也不会太大，因为这个问题的政策优先级，还不高。
+
+同时，人民币国际化将继续推进，顺势推动汇率缓慢升值，也有利于“做优国内国际双循环”、缓解中欧等贸易争端。
+
+今天潘行长在香港的讲话，也主要讲人民币国际化，赋予香港新的历史使命，做大离岸人民币市场，推动人民币国际化<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2074819559878795572" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>18:56</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">5日，央視發布““两优一先”风采录 信息支援部队某部：坚守“云端” 勇闯新域”軍事報導。
+
+報導中之單位為信息支援部隊某部（63656部隊）2營某連之紅山河機務站，位於西藏阿里地區日土縣松木希錯湖東北側。
+
+該營在7月2日中國共產黨成立105周年之際，被中央軍委表彰為全軍先進基層黨組織。
+
+車牌號：YX32<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2074809819580780864" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">報導連結：
+https://tv.cctv.com/2026/07/05/VIDEsaZxYSShL97tdP06Gz5v260705.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.15
+
+表彰全軍優秀共產黨員、優秀黨務工作者和先進基層黨組織 --新聞報道-中國共產黨新聞網：
+https://cpc.people.com.cn/BIG5/n1/2026/0703/c64387-40752598.html<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2074809826321007024" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>18:32</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">🧐<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2074803856383639626" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">報導連結：
+https://tv.cctv.com/2026/07/05/VIDEgjmnLRYJaZ8V5QpqLZY1260705.shtml?spm=C52346.PiumOrlYLNUM.E0VXtwLj8YU7.16<a href="https://x.com/JosephWen___/status/2074803859395117402" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>17:09</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">Lieutenant General Hsieh Jih-sheng, Deputy Chief of the General Staff for Intelligence of the @MoNDefense , confirmed that the launch took place on the waters &#34;south of Guangdong&#34; and the missile type was the JL-2.<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2074782869097164903" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/JosephWen___/status/2074766746570072087" target="_blank" rel="noopener">@JosephWen___</a>(图片/媒体帖)</blockquote></div>
+      
+      <div class="ptext seg">報導連結：
+https://www.setn.com/news/1869016<a href="https://x.com/JosephWen___/status/2074782871898976352" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">So it should be like this.<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2074793344379826554" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>17:00</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/JosephWen___/status/2074780545909944389" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>16:48</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/JosephWen___/status/2074777633922122024" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>13:30</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">沾上币圈就是麻烦。唉。<a href="https://x.com/hankinbeijing/status/2074727855771226538" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/zaobaosg/status/2074637556260446577" target="_blank" rel="noopener">@zaobaosg</a>有“华为天才少年”之称的李博杰公开批评中国人工智能公司深度求索（DeepSeek）面试流程，相关话题冲上微博热搜。 https://www.zaobao.com.sg/news/china/story20260707-9326742?utm_medium=Social&amp;utm_source=Twitter#Echobox=1783415127</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月7日 星期二</h2>
+  <ul class="posts">
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>21:57</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">军委副主席张升民，已经被发配全国政协的肖培，已经不再担任中纪委副书记。新任军委纪委书记张曙光、中纪委常委赵世勇，提前锁定2个中纪委副书记席位。【详细解读】https://youtu.be/lzv_8fEFaPg<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2074493058201383191" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>20:13</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">北大金融校友会会长高善文先生，一年前患上极为罕见淋巴瘤，今年6月份刚在北大人民医院做CAR-T治疗，不幸于今天下午离世。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2074466807935586593" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>19:09</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">高善文病逝。<span class="mbadge">带图</span><a href="https://x.com/caolei1/status/2074450756401336636" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>16:28</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">幻视电视剧《硅谷》。中国厂长姚先生组织职工幼儿园小孩儿唱歌给硅谷大佬Gavin Belson听，体现员工福利优越，反倒把对方弄生气了。可能美国人来看了之后，反而不想买了，因为美国人看上中国供应链的原因也是因为成本低廉。高福利很难做到成本低廉。<a href="https://x.com/hankinbeijing/status/2074410094905930012" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/LVTGW666/status/2074346068968698112" target="_blank" rel="noopener">@LVTGW666</a>洋人来了，公平和正义就有了，八小时工作制也有了，福利待遇也提升了</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>15:20</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">国企味儿呼地一下扑面而来了。<a href="https://x.com/hankinbeijing/status/2074393076089700600" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/Phoenixyin13/status/2074345126533468485" target="_blank" rel="noopener">@Phoenixyin13</a>DeepSeek在人才争夺战中有点飘了。
+
+2026年AI人才极度稀缺，尤其李博杰这种既有顶会论文、又有华为大厂工程经验的复合型人才，如果我是面试官，我会当宝贝对待。结果却搞成这样，这属于典型的流程不成熟外加面试官素质参差。
+
+在当前AI圈，顶尖的人才就那么点人。公司抢人很凶，但好公司的面试流程反而要更专业、更尊重人才，况且DeepSeek是国内顶尖的AI大厂。因为面试官的操作自砸招牌，实属不应该。
+
+注：李博杰2010年进入中国科学技术大学少年班学院攻读本科，2014年至2019年在中科大与微软亚洲研究院联合培养项目中完成博士学业。
+他的研究方向主要聚焦网络系统和可重构硬件，例如FPGA在数据中心的应用。他曾获得微软学者奖学金、ACM中国优秀博士学位论文奖和中国科学院院长奖学金等荣誉。
+2019年他作为华为首批天才少年入选者加入华为2012实验室中央软件研究所，先后担任计算机网络与协议实验室助理科学家和副首席专家。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>08:46</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">外界分析，中国核潜艇周一发射的，为最先进的潜射弹道导弹巨浪-3（JL-3）。这是时隔两年后，中国再度在太平洋试射洲际弹道导弹，海基核导弹+陆基核导弹相互呼应。巨浪-3可携核弹头射程1万2000公里。美军2021年曾警告，巨浪-3能使美国本土处于中国导弹射程范围内。去年的九三阅兵上，这款导弹首次公开。<a href="https://x.com/caolei1/status/2074293994469597545" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>04:40</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">李谦（1970.04）已任外交部党委委员、中央纪委国家监委驻外交部纪检监察组组长。此人曾担任国家安全部副部长。
+
+前任驻外交部纪检监察组组长张骥，已于今年1月卸任，时隔半年终于补位。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2074232122814915054" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">在外交部“主要官员”中，李谦排在外交部常务副部长（正部长级）马朝旭之后，外交部副部长华春莹前面。
+
+外交部“主要官员”按资历排名。华春莹于2024年5月晋升副部级，担任外交部副部长。李谦排在华春莹的前面，说明他最迟在2024年5月已经是副部级。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2074232125163790503" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月6日 星期一</h2>
+  <ul class="posts">
+    
+    <li data-handle="MaoViews">
+      <div class="meta"><span>23:57</span> ·
+        <a class="who" href="https://x.com/MaoViews" target="_blank"
+           rel="noopener">@MaoViews</a></div>
+      
+      <div class="ptext seg">中纪委组织部长赵世勇与刘学新等中纪委副书记坐在一起，排在许罗德等常委前面，意味他已经正部，明年一月中纪委副书记<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2074160862462697777" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>20:29</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">时隔四年，第五位“75后”省级党委常委终于产生。
+
+天津市副市长谢元（1975.06）任天津市委常委。
+
+“75后”省级党委常委名单：
+1. 伊力扎提·艾合买提江，2021.10任。
+2. 张红文（已失踪），2021.11任。
+3. 任维，2021.11任。
+4. 张晓强，2022.05任。
+5. 谢元，2026.07任。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2074108440163611004" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/1614813677177430018" target="_blank" rel="noopener">@cnpoliwatch</a>75后副部级：
+
+谢元（1975.6）任天津市副市长。</blockquote></div>
+      
+      <div class="ptext seg">上一位“75后”省级党委常委获任，已经是2022年5月的事情了。2022年5月，张晓强当选广东省委常委。
+
+四年时间，“75后”省级党委常委的行列，一人都没有增加，直至今日。
+https://x.com/cnpoliwatch/status/1529787545457807360<a href="https://x.com/cnpoliwatch/status/2074108442583667131" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/1529787545457807360" target="_blank" rel="noopener">@cnpoliwatch</a>广东汕尾市委书记 #张晓强 （1975.11）晋升广东省委常委。张晓强应该可以被看做“之江新军”的成员之一：他在2020年前一直在浙江工作，离开浙江前最后担任台州市长。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>20:00</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">新任驻港部队参谋长亮相：封凯元陆军少将，出席7月6日南宁舰编队欢送仪式。
+
+驻港部队司令员一职继续空缺。上一任驻港部队司令员彭京堂，已晋升中将。
+
+驻港部队为正军级单位，部队正职为正军级少将，部队副职为副军级少将。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2074101146273149121" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>15:06</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">1986年，中国国务院总理赵紫阳，与副总理李鹏、贵州省委书记胡锦涛。赵紫阳先后担任总理、总书记，李鹏后来担任总理，胡锦涛后来担任总书记。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2074027075066061110" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CaoLei1">
+      <div class="meta"><span>11:32</span> ·
+        <a class="who" href="https://x.com/CaoLei1" target="_blank"
+           rel="noopener">@CaoLei1</a> <span class="cn">曹山石</span></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/caolei1/status/2073973421495423065" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>10:34</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">未来两周需要关注的，
+重要宏观事件、数据及政策窗口<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2073958665997222328" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月5日 星期日</h2>
+  <ul class="posts">
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>10:25</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">【新任民政部部长李常官】堪称是2026年中国官场最大黑马。出身偏僻的广西，也没有显赫的资历，短短副部级3年，直升国务院部长。他曾经先后给金湘军、蓝天立当过副手。【详细解读】ttps://youtu.be/VmTE19qkwno<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2073594195693158508" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>10:08</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">中共二十一大倒计时，正部级高官博弈加速。胡锦涛儿子胡海峰何去何从？是江泽民儿子江绵恒模式？还是李鹏儿子李小鹏模式？【详细解读】https://youtu.be/VmTE19qkwno<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2073589690419368139" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="Guoguang_Wu">
+      <div class="meta"><span>03:00</span> ·
+        <a class="who" href="https://x.com/Guoguang_Wu" target="_blank"
+           rel="noopener">@Guoguang_Wu</a> <span class="cn">吴国光</span></div>
+      
+      <div class="ptext seg">@masterniu1984 不敢当😊但后半句我很重视：学会倾听是公共讨论（也是私人生活）中极为重要的，不然就难有交流，也无所谓学习。谨与朋友们共勉，并谢谢一向的支持与鼓励🙏<a href="https://x.com/guoguang_wu/status/2073481978469617714" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月4日 星期六</h2>
+  <ul class="posts">
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>06:19</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">据人力资源和社会保障部网站7月3日消息，国务院任免国家工作人员：
+
+任命程福波为国务院国有资产监督管理委员会主任。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073169792790319564" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2071934125523505346" target="_blank" rel="noopener">@cnpoliwatch</a>随着程福波任国务院国资委党委书记，“70后”正部级的数量，已经超过了五年前此时“65后”正部级的数量。
+
+截至现在，已经有8个“70后”正部级：李云泽、阿东、刘捷、卢东亮、韦韬、刘小涛、张成中、程福波。
+
+五年前的今天，有7个“65后”正部级：陆昊、秦宜智、慎海雄、贺军科、周祖翼、赵一德、陈刚。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>04:25</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">7月2日，刘国中会见白俄罗斯第一副总理，新任国务院副秘书长江文胜（左一）参加会见，可以说明江文胜是保障刘国中工作的国务院副秘书长。
+
+江文胜此前担任农业农村部副部长，而刘国中的分管领域包含农业农村工作。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073141017826443592" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2046252058659926437" target="_blank" rel="noopener">@cnpoliwatch</a>4月20日，刘国中会见世界气象组织秘书长，国务院副秘书长刘宇辉陪同会见。
+
+之前保障刘国中工作的国务院副秘书长是林涛，他已经空降地方，担任福建省委常委、厦门市委书记。在林涛之后，看上去（临时）保障刘国中工作的国务院副秘书长是刘宇辉。刘宇辉同时也保障国务委员谌贻琴工作。</blockquote></div>
+      
+      <div class="ptext seg">国务院副秘书长从国务院部委副职转岗的情况，经常被安排辅佐分管该部委的国务院领导。
+
+比如保障张国清工作的国务院副秘书长孙广宇就是从应急管理部副部长转岗到国务院办公厅，而张国清的分管领域包含应急管理工作。<a href="https://x.com/cnpoliwatch/status/2073141021265830031" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">陪同刘国中参加会见的还有刘忠。桌牌显示，刘忠已任国务院办公厅秘书五局局长。国务院办公厅秘书五局承担国务院副总理刘国中日常工作服务保障。
+
+公开信息显示，刘忠曾任国务院办公厅督查室巡视员、国务院办公厅离退休干部局局长。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073141023358767387" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>01:14</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">把张升民不再兼任中央军委纪委书记，由张曙光接任，当成张升民失去了权力，这种解读是错误的。
+
+张升民不再兼任中央军委纪委书记，直接原因是他在去年的二十届四中全会上，从中央军委委员晋升为中央军委副主席，接替了何卫东原来的分管政工的中央军委副主席职务。<a href="https://x.com/cnpoliwatch/status/2073093154350215363" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/YeLambert18670/status/2073069580424200608" target="_blank" rel="noopener">@YeLambert18670</a>@cnpoliwatch 中央军纪委巳有新主，张曙光主掌军纪委书记/监委主任，完全取代了张升民。新人巳至，旧人必陨。谣传必成领先的预言。整倒了几十个上将军，张升民难有善终。</blockquote></div>
+      
+      <div class="ptext seg">张升民现在继续担任中央军委副主席，张曙光作为中央军委纪委书记，在他晋升中央军委委员之前，继续向分管政工的中央军委副主席张升民汇报工作。
+
+现在看来，张升民仍然有可能到二十一大后，连任中央军委副主席（继续分管政工），并进入中央政治局。<a href="https://x.com/cnpoliwatch/status/2073093156749312035" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月3日 星期五</h2>
+  <ul class="posts">
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>23:00</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">外交部副部长苗得雨已兼任外交部机关党委书记，分管外交部机关党务工作。
+
+此前，外交部机关党委书记一职由孙卫东兼任，他已经卸任外交部副部长，任中央国安办常务副主任（正部长级）。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073059430803927490" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/1937042231028023307" target="_blank" rel="noopener">@cnpoliwatch</a>外交部副部长孙卫东已兼任外交部机关党委书记，分管外交部机关党务工作。此前，外交部机关党委书记一职由马朝旭兼任，他最晚在2020年就已兼任这一职务，2023年升任常务副部长后继续兼任这一职务至今。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>22:27</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">担任中央军委纪委书记后，张曙光预计还将担任两个中央军委纪委书记标配的兼职：
+
+中央纪委副书记
+解放军选举委员会委员
+
+最早在2027年1月的中央纪委全会上，张曙光就可能被增补为二十届中央纪委副书记。当然，也有可能，要等到二十一大后，张曙光才会担任二十一届中央纪委副书记。<a href="https://x.com/cnpoliwatch/status/2073051104921657636" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073030925185700266" target="_blank" rel="noopener">@cnpoliwatch</a>2026年7月晋升上将的张曙光和王刚，有两个共同点。
+
+首先，两人都曾在所在单位主持工作。
+
+陆军原政委陈辉去年10月列席了二十届四中全会，但缺席了12月的晋升上将军衔仪式。陆军纪委书记张曙光出席。这表明张曙光在此时已经被委任为陆军主持政治工作的中将领导，与陆军参谋长蔡志军共同主持陆军工作。</blockquote></div>
+      
+      <div class="ptext seg">也有可能出现的一种情况，是张升民在明年1月的中央纪委全会上不再兼任中纪委副书记职务，而张曙光不同步增补为中纪委副书记。
+
+张升民在晋升中央军委副主席后，没有在今年1月的中央纪委全会上卸任中央纪委副书记，是因为他那时还继续兼任中央军委纪委书记。现在卸任后，可以不再兼任中纪委副书记了。<a href="https://x.com/cnpoliwatch/status/2073051107631263892" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">解放军选举委员会委员，由全国人大常委会会议任命。未来某一次全国人大常委会会议上，解放军选举委员会将做出调整，增补张曙光为解放军选举委员会委员。
+
+2022年的解放军选举委员会，两位中央军委副主席分别担任主任、副主任，委员里面有中央军委委员、军委纪委书记张升民。
+https://x.com/cnpoliwatch/status/2004869278416466124<a href="https://x.com/cnpoliwatch/status/2073051109933854774" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2004869278416466124" target="_blank" rel="noopener">@cnpoliwatch</a>全国人民代表大会常务委员会批准任命的名单
+
+（2025年12月27日第十四届全国人民代表大会常务委员会第十九次会议通过）
+
+批准任命张升民为中国人民解放军选举委员会副主任。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>21:52</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">7月3日中纪委常委会，肖培缺席。这也印证了“中规中矩”之前的判断：肖培已经被免去中纪委副书记。肖培曾经担任王岐山的秘书。【详细解读】https://youtu.be/UjOwEJP-Ars?si=UsTCqLwnaRjBebmz<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2073042162086994355" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>21:49</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">2026年7月的晋升上将军衔仪式，张作胜中将亮相，排在国防大学政委夏志和海军中将前面。
+
+张作胜曾在军事航天部队任职。此次晋升中将，成为军事航天部队领导。
+
+2019年4月，张作胜时任西昌卫星发射中心副主任。
+
+2024年5月，嫦娥六号发射任务，张作胜担任嫦娥六号任务发射场区指挥部指挥长。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073041417098740050" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073035970681696643" target="_blank" rel="noopener">@cnpoliwatch</a>还有谁符合这两个条件？
+
+张曙光离开陆军、到中央军委纪委任职之后，接替他主持陆军政治工作的是郑堰坡中将。
+
+2026年7月的晋升上将军衔仪式，郑堰坡出席，坐在陆军参谋长（主持陆军军事工作）蔡志军右手边，这表明他已经主持陆军政治工作，接替张曙光。</blockquote></div>
+      
+      <div class="ptext seg">2026年7月1日，张作胜出席了庆祝中国共产党成立105周年大会，在顺序中已经排在中将之间，坐在军委科技委主任徐为进空军中将的后面。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073041420709990533" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>21:27</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">还有谁符合这两个条件？
+
+张曙光离开陆军、到中央军委纪委任职之后，接替他主持陆军政治工作的是郑堰坡中将。
+
+2026年7月的晋升上将军衔仪式，郑堰坡出席，坐在陆军参谋长（主持陆军军事工作）蔡志军右手边，这表明他已经主持陆军政治工作，接替张曙光。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073035970681696643" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073030925185700266" target="_blank" rel="noopener">@cnpoliwatch</a>2026年7月晋升上将的张曙光和王刚，有两个共同点。
+
+首先，两人都曾在所在单位主持工作。
+
+陆军原政委陈辉去年10月列席了二十届四中全会，但缺席了12月的晋升上将军衔仪式。陆军纪委书记张曙光出席。这表明张曙光在此时已经被委任为陆军主持政治工作的中将领导，与陆军参谋长蔡志军共同主持陆军工作。</blockquote></div>
+      
+      <div class="ptext seg">2024年，郑堰坡晋升中将。
+
+2024年7月，张晓强作为兰州市（西部战区陆军驻地）主官，慰问驻兰州部队，时任西部战区副政委兼西部战区陆军政委郑堰坡中将出席活动。
+
+到2026年年底的下一轮晋升上将，郑堰坡的资历将已经足够晋升上将。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073035973969973339" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">2026年1月的二十届中央纪委五次全会，郑堰坡出现在陆军机关分会场，这表明他已经从兰州进京，到陆军机关任职。
+
+郑堰坡作为陆军主持政治工作的中将领导，如果晋升上将，可能升任陆军政委。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073035977409401199" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>21:07</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">2026年7月晋升上将的张曙光和王刚，有两个共同点。
+
+首先，两人都曾在所在单位主持工作。
+
+陆军原政委陈辉去年10月列席了二十届四中全会，但缺席了12月的晋升上将军衔仪式。陆军纪委书记张曙光出席。这表明张曙光在此时已经被委任为陆军主持政治工作的中将领导，与陆军参谋长蔡志军共同主持陆军工作。<a href="https://x.com/cnpoliwatch/status/2073030925185700266" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073021498659426575" target="_blank" rel="noopener">@cnpoliwatch</a>陆军纪委书记张曙光，任中央军委纪委书记，并晋升上将。
+
+按惯例，中央军委纪委书记，由中央军委委员兼任。此番担任中央军委纪委书记后，张曙光已经锁定一个中央军委委员的名额。
+
+张曙光最早在今年年底的二十届五中全会上，会被增补为中央军委委员；也有可能到明年二十一大后，再成为中央军委委员。</blockquote></div>
+      
+      <div class="ptext seg">类似地，空军原司令员常丁求去年10月出席了四中全会，但缺席了12月的晋升上将军衔仪式。王刚出席，表明他已经被委任为空军主持军事工作的中将领导，与主持政治工作的空军纪委书记史洪干主持空军工作。
+
+在陈辉、常丁求“失踪”的背景下，张曙光和王刚承担了他们原本的职责。
+https://x.com/cnpoliwatch/status/2030253130336649334/<a href="https://x.com/cnpoliwatch/status/2073030928276865172" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2030253130336649334" target="_blank" rel="noopener">@cnpoliwatch</a>按惯例，一些国务院的领导、军队全国政协委员、军委机关和各军种的负责人会列席这次解放军和武警部队代表团全体会议。
+
+列席这次会议的现役中将：
+中央军委联合参谋部副参谋长祝传生；
+中央军委后勤保障部部长陈炽；
+中央军委训练管理部部长刘镝；
+中部战区副政委梁平；
+国防大学政委夏志和。
+
+以及四大军种和武警部队的中将：
+陆军：蔡志军、张曙光
+海军：张峥、胡瑜海
+空军：王刚、史洪干
+火箭军：雷凯、周晶炯
+武警部队：彭京堂、王洪斌</blockquote></div>
+      
+      <div class="ptext seg">第二个共同点，就是两人在现役中将中的资历（按晋升中将的时间算）非常深厚。张曙光在二十大前就已经晋升中将。而王刚至迟于2023年也已经晋升中将。
+
+按资历提拔，说明了晋升上将时的姿态相对保守，也就是没有进行破格提拔，没有将一些在2025年才晋升中将的将领提拔为上将。
+https://x.com/cnpoliwatch/status/2073025384451326319<a href="https://x.com/cnpoliwatch/status/2073030931732910433" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073025384451326319" target="_blank" rel="noopener">@cnpoliwatch</a>2022年1月，张曙光列席了十九届中央纪委六次全会，他的右手边依次是海军纪委书记刘训言中将、空军纪委书记余永洪中将。这一座次表明，张曙光已任陆军纪委书记。这是他在晋升中将军衔后的首次公开亮相。
+
+此前，2021年9月，陆军纪委书记余永洪中将转任空军纪委书记，陆军纪委书记一职产生空缺。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>20:45</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">2022年1月，张曙光列席了十九届中央纪委六次全会，他的右手边依次是海军纪委书记刘训言中将、空军纪委书记余永洪中将。这一座次表明，张曙光已任陆军纪委书记。这是他在晋升中将军衔后的首次公开亮相。
+
+此前，2021年9月，陆军纪委书记余永洪中将转任空军纪委书记，陆军纪委书记一职产生空缺。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073025384451326319" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073021498659426575" target="_blank" rel="noopener">@cnpoliwatch</a>陆军纪委书记张曙光，任中央军委纪委书记，并晋升上将。
+
+按惯例，中央军委纪委书记，由中央军委委员兼任。此番担任中央军委纪委书记后，张曙光已经锁定一个中央军委委员的名额。
+
+张曙光最早在今年年底的二十届五中全会上，会被增补为中央军委委员；也有可能到明年二十一大后，再成为中央军委委员。</blockquote></div>
+      
+      <div class="ptext seg">2022年11月8日，习近平视察中央军委联指中心。王刚此时在军委联指中心任职，当时他还是一名少将，在合影时站在最边上。
+
+2023年10月28日，何卫东会见越南国防部长，王刚在座，此时他已晋升中将，佩戴空军臂章，表明他已经回到空军任职。后来他的职务披露为空军参谋长。10月30日，出席香山论坛开幕会。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073025388125524075" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>20:30</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">陆军纪委书记张曙光，任中央军委纪委书记，并晋升上将。
+
+按惯例，中央军委纪委书记，由中央军委委员兼任。此番担任中央军委纪委书记后，张曙光已经锁定一个中央军委委员的名额。
+
+张曙光最早在今年年底的二十届五中全会上，会被增补为中央军委委员；也有可能到明年二十一大后，再成为中央军委委员。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073021498659426575" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073017159324700704" target="_blank" rel="noopener">@cnpoliwatch</a>上将补缺进度：6/26</blockquote></div>
+      
+      <div class="ptext seg">在中央军委只剩习和张升民的情况下，在年底的二十届五中全会上，很有可能会增补中央军委副主席或中央军委委员。
+
+在我看来，至少要增补一位中央军委副主席（负责军委军事工作），恢复到两位副主席的设置，中央军委才能恢复正常的运转。
+
+张曙光可能和这位新任军委副主席一起，增补为中央军委委员。<a href="https://x.com/cnpoliwatch/status/2073021502274908401" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">不过，也有可能张曙光要到明年年底的二十一届一中全会，才进入中央军委班子。
+
+如果五中全会就增补，董军是否有可能和张曙光一起，被增补为中央军委委员？
+
+可以肯定的是，如果出现张曙光被增补为中央军委委员，但是董军没有被增补的情况，说明董军应该就要自然退休了，不会进入二十一届军委班子。<a href="https://x.com/cnpoliwatch/status/2073021504283935162" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>20:13</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">上将补缺进度：6/26<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073017159324700704" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073010525970042977" target="_blank" rel="noopener">@cnpoliwatch</a>7月3日，中央军委举行晋升上将军衔仪式。 
+
+这次晋升上将军衔的军官是：
+中央军委纪律检查委员会书记兼中央军委监察委员会主任张曙光、
+空军司令员王刚。 
+
+军委机关各部门、军队驻京有关单位主要负责同志等参加晋衔仪式。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>20:03</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">中央纪委召开常委会议，中央纪委副书记刘金国、喻红秋、傅奎、孙新阳、刘学新、张福海出席，中央纪委副书记张升民、肖培缺席。
+
+其中，张升民自去年10月晋升中央军委副主席后，就不一定继续参加中央纪委领导层的会议了。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073014826025070873" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">在6月底闭幕的全国政协十四届常委会第十七次会议上，中纪委副书记肖培被增补为十四届全国政协委员、全国政协社会和法制委员会副主任。
+
+此次缺席中央纪委常委会会议，表明肖培在增补政协专委会职务后，已经退居二线。到2027年1月下次中央纪委全会，预计将卸任中央纪委副书记，这一职务产生一个空缺。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073014829124591878" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">肖培出生于1961年1月。尚未退居二线的中央纪委副书记喻红秋，出生于1960年10月。
+
+喻红秋是否有可能像肖培那样，在2027年1月的下次中央纪委全会之前，退居二线？<a href="https://x.com/cnpoliwatch/status/2073015310735548819" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>19:53</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">解放军晋升上将军衔仪式
+
+2023→2024→2025→2026<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073012311149756718" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2073010525970042977" target="_blank" rel="noopener">@cnpoliwatch</a>7月3日，中央军委举行晋升上将军衔仪式。 
+
+这次晋升上将军衔的军官是：
+中央军委纪律检查委员会书记兼中央军委监察委员会主任张曙光、
+空军司令员王刚。 
+
+军委机关各部门、军队驻京有关单位主要负责同志等参加晋衔仪式。</blockquote></div>
+      
+      <div class="ptext seg">2023→2024→2025→2026<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073012315117531193" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">2023→2024→2025→2026<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073012318313619885" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>19:46</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">7月3日，中央军委举行晋升上将军衔仪式。 
+
+这次晋升上将军衔的军官是：
+中央军委纪律检查委员会书记兼中央军委监察委员会主任张曙光、
+空军司令员王刚。 
+
+军委机关各部门、军队驻京有关单位主要负责同志等参加晋衔仪式。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2073010525970042977" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2072159209991368818" target="_blank" rel="noopener">@cnpoliwatch</a>7月1日，张曙光中将、王刚中将出席了庆祝中国共产党成立105周年大会。
+
+顺序是：董军上将、张曙光中将、韩胜延上将、王刚中将、祝传生中将、陈德民中将、（其他副战区级及以下将领）。
+
+张升民在主席台上</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>18:12</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">2026年7月3日，新任中央军委纪委张曙光、空军司令员王刚，晋升上将军衔。印证了“中规中矩”之前的判断。【详细解读】https://youtu.be/gTezHPxk9HA?si=LaMUhdK-GE7aF74G<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2072986738293940335" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MaoViews">
+      <div class="meta"><span>18:04</span> ·
+        <a class="who" href="https://x.com/MaoViews" target="_blank"
+           rel="noopener">@MaoViews</a><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">F4: 习近平向晋升上将军衔的中央军委纪律检查委员会书记兼中央军委监察委员会主任张曙光、空军司令员王刚颁发命令状，表示祝贺<span class="mbadge">带图</span><a href="https://x.com/Maoviews/status/2072984694489288746" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">(图片/媒体帖)<a href="https://x.com/Maoviews/status/2072990363082752466" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>00:03</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">湖北省委常委、统战部部长宁咏，进京担任中央金融工作委员会副书记。成为金融工委书记何立峰的助手。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2072712768290275425" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月2日 星期四</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>20:51</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="thr">推文串 · 2 条</span></div>
+      
+      <div class="ptext seg">至少6月以来的高频数据表明，劳动力市场仍符合往年的季节性(上半年强劲、下半年走弱)，本次非农大幅不及预期，也印证了这点，
+
+如果季节性魔咒仍在，后续劳动力市场还会继续走弱，这次非农可能只是刚开始，
+
+但还不足以扭转市场此前，对劳动力市场无忧（甚至担忧过热）的预期，如果2-3次不及预期，现在对加息的押注，可能反转为年底降息。
+
+此前我一直不认为今年会加息，对劳动力市场没那么乐观，也是一个重要理由<a href="https://x.com/MacroMargin/status/2072664418186649988" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2072661037250445462" target="_blank" rel="noopener">@MacroMargin</a>接近爆冷了算是，花旗得分+1</blockquote></div>
+      
+      <div class="ptext seg">至少6月以来的高频数据表明，劳动力市场仍符合往年的季节性(上半年强劲、下半年走弱)，本次非农大幅不及预期，也印证了这点，  
+
+如果季节性魔咒仍在，后续劳动力市场还会继续走弱，这次非农可能只是刚开始，  
+
+但还不足以扭转市场此前，对劳动力市场无忧（甚至担忧过热）的预期，如果2-3次不及预期，现在对加息的押注，可能反转为年底降息。  
+
+此前我一直不认为今年会加息，对劳动力市场没那么乐观，也是一个重要理由<a href="https://x.com/MacroMargin/status/2072665471061725314" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>20:37</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span><span class="reply">回复</span></div>
+      
+      <div class="ptext seg">接近爆冷了算是，花旗得分+1<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2072661037250445462" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>17:44</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">天津市委常委、宣传部部长沈蕾。与很多中共女干部，气质不太一样，带着一点点哀婉。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2072617513180184813" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>15:54</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">中国全国人大副委员长何维，将赴伊朗，出席7月3日举行的哈梅内伊的葬礼。何维（1955年生），是八大民主党派之一的“农工党”主席，同时担任中国红十字会会长。他还曾担任北京协和医学院副校长。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2072589831876788642" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>14:07</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">今晚非农数据比较重要，
+个人比较喜欢的两家机构的预测模型，一个花旗，一个彭博经济研究，正好分布在预测范围的两端，一个看爆冷，一个看爆热...
+
+此前Hassett说，本次非农可能“强劲”，
+如果真的爆热，完全有理由怀疑 白宫提前看了数据，数据独立性也被进一步侵蚀<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2072562892134809962" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>11:45</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">昨晚Warsh是非正式讲话，是FOMC首秀后的首次讲话，
+对于他的政策立场，也有给到更多信息暗示，就是他至少并不想急于加息，面对鹰派压力，先能拖则拖。
+这和此前我推断联储官员立场的判断一致，
+依然不认为今年联储会加息<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2072527048661438792" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2067481806090453102" target="_blank" rel="noopener">@MacroMargin</a>珍惜现在还能分析每个联储官员立场的时候吧，以后估计只能靠瞎猜了。
+
+从这个票比来看，
+支持加息：不动/降息的人数比，是9:9平票，
+但如果只看今年有投票权的话，票比就变成了4 : 8，
+意味着，支持不加息的人数，远多于支持加息的人数，
+而且，话语权更高的理事、主席、副主席，都分布在不加息/降息的鸽派阵营。
+
+即使这些鹰派真的坚持今年必须加息（排除类似去年12月那样“假支持”加息的情况），
+也意味着，最多只有4张反对票，完全可以通过一次会议。
+
+所以下半年的数据，必须进一步给鹰派递刀子，
+否则鹰派很难说服鸽派加息，尤其是话语权相对较低的，要去说服话语权相对更高的，况且对方人数是己方的两倍。</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>7月1日 星期三</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>20:15</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">这两天公布的PMI，其中价格分项已明显回落，
+加之M1也已见顶回落，且下半年料继续回落，
+因此年内的PPI也差不多见顶了<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2072293010210267297" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>16:21</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">【江文胜，任国务院副秘书长】他此前是农业农村部副部长，曾经担任原农业部长韩长赋的秘书。江文胜担任国务院副秘书长之后，将协助副总理刘国中，协调三农方面的工作。原国务院副秘书长林涛，之前空降福建省委常委、厦门市委书记。<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2072234011695714542" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="FollowCnRules">
+      <div class="meta"><span>14:55</span> ·
+        <a class="who" href="https://x.com/FollowCnRules" target="_blank"
+           rel="noopener">@FollowCnRules</a> <span class="cn">中规中矩</span></div>
+      
+      <div class="ptext seg">中共七一大会现场，退休正部级老干部区域：胡锦涛秘书陈世炬（1963年生）、原人事部长张柏林（1942）、统战部常务副部长朱维群（1947）、国侨办主任裘援平（1953）、国家机关工委常务副书记杨衍银（1947）、党校常务副校长李景田（1948）、党史文献研究院院长冷溶（1953）。陈世炬早早被发配沦为老同志<span class="mbadge">带图</span><a href="https://x.com/FollowCnRules/status/2072212371159081052" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>11:30</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">十年前的今天，庆祝中国共产党成立95周年大会。
+
+时任中央办公厅常务副主任（正部长级）丁薛祥、中央国安办常务副主任（正部长级）蔡奇、中央组织部常务副部长（正部长级）陈希、中央宣传部常务副部长（正部长级）黄坤明、中央财办主任刘鹤出席。
+
+一年后，这些人全部进入十九届中央政治局。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2072160878275776947" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2072157854904025517" target="_blank" rel="noopener">@cnpoliwatch</a>7月1日，孙卫东出席了庆祝中国共产党成立105周年大会，排在刘海星、訚柏后面，邵新宇前面。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>11:23</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">7月1日，张曙光中将、王刚中将出席了庆祝中国共产党成立105周年大会。
+
+顺序是：董军上将、张曙光中将、韩胜延上将、王刚中将、祝传生中将、陈德民中将、（其他副战区级及以下将领）。
+
+张升民在主席台上<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2072159209991368818" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2071724040763453789" target="_blank" rel="noopener">@cnpoliwatch</a>张曙光中将、王刚中将，已晋升正战区级，不日将晋升上将：
+
+6月29日，庆祝中国共产党成立105周年音乐会举行。
+
+出席活动的解放军将领为首的是：董军海军上将、张曙光陆军中将、韩胜延空军上将、王刚空军中将。
+
+这一座次表明，张曙光与王刚已晋升正战区级，两人很快将晋升上将。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="CNPoliWatch">
+      <div class="meta"><span>11:18</span> ·
+        <a class="who" href="https://x.com/CNPoliWatch" target="_blank"
+           rel="noopener">@CNPoliWatch</a> <span class="cn">中国人事观察</span></div>
+      
+      <div class="ptext seg">7月1日，孙卫东出席了庆祝中国共产党成立105周年大会，排在刘海星、訚柏后面，邵新宇前面。<span class="mbadge">带图</span><a href="https://x.com/cnpoliwatch/status/2072157854904025517" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/cnpoliwatch/status/2071800631791149497" target="_blank" rel="noopener">@cnpoliwatch</a>孙卫东已任中央国安办常务副主任（正部长级）：
+
+6月29日，庆祝中国共产党成立105周年音乐会举行。孙卫东出席大会，座次排在中央政研室主任唐方裕之后、中央网信办主任庄荣文之前。
+
+这一座次表明，孙卫东已任中央国安办常务副主任（正部长级）。
+https://x.com/cnpoliwatch/status/2049952568080556229</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>10:39</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Can&#39;t write better than this. Good take.<a href="https://x.com/hankinbeijing/status/2072148177176948869" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/teortaxesTex/status/2072038240027131963" target="_blank" rel="noopener">@teortaxesTex</a>never thought I&#39;d see natsec cope about a Meituan product.
+&#34;Bah! Big deal! we have better clusters!&#34;
+Yes big deal. The whole export control policy, through all its escalations starting with restrictions which resulted in H800 at least, was premised not just on ensuring their quantitative FLOP/HBM lag, but on keeping domestic compute categorically less suitable for major pretraining jobs, primarily due to memory bandwidth limitations. No, they were not supposed to be able to do this, and certainly Meituan was not supposed to.
+What we&#39;ve learned concretely: 
+- Chyna* can train a 0.75T 40AB (28T tokens) MoE comparable in utility to Opus 4.6-4.7 (and in some ways 4.8). This will be well exceeded next month. The training was completed by Feb 2026 (GLM-5), same time as Mythos-Preview. 
+- Chyna can also train an 1.6T 48AB (35T tokens) MoE on 25K Ascend 910C. This is about equal to V4 and a 1.5 larger job than GLM-5, with the obvious bandwidth/HBM complications coming from total scale. This was completed by late April.
+- Chyna (the whole ecosystem, every major lab) has gotten remarkably good at multi-teacher on-policy distillation which makes it almost trivial to parallelize downstream capability hill-climbing between individually slow clusters. They also have architectures and software exquisitely optimized for this scenario (V4).
+- Thanks to the Sophgo incident, Chyna has been able to manufacture maybe 750K-1M of these Ascends (given that 950DTs are seemingly entering/have entered high volume production, I don&#39;t think rationing stockpiled HBM2E has been relevant for a while, and the CSIS estimate gave them until Summer&#39;2026 to use up the dies anyway), installing them in some hundreds of CloudMatrix 384 pods (I know about at least 300 being sold). There&#39;s a lot of other hardware of similar tier (Cambricon, Baidu Kunlunxin, Alibaba T-Head…) that I&#39;ll ignore.
+- One CM384 pod was going for $8.2M a year ago. Meituan&#39;s cluster has about 65, worth $533M or so. Let&#39;s say $700M for assorted expenses. Meituan AI capex for 2026 is iirc $2.2B, but of course Meituan is not a hyperscaler (despite having a decent R&amp;D team), it&#39;s a minnow. Total private Chinese 2026E AI capex is estimated as ≈$100B.
+(*Here and throughout &#34;Chyna&#34; is an ironic placeholder for any individual Mainland entity, which is the normal hawk epistemology)
+
+…The point of the rant: on this obsolete hardware, with these pitiful volumes, we could see an OOM larger-scale pretrain than what we&#39;ve seen so far. It would mostly be a matter of political will and organization. If China really operated like in AI-2027 and got AGI-pilled, we&#39;d see Meituan Ascend-relevant software already commandeered, hardware pooled, Kimi-DeepSeek-Xiaomi-Alibaba-GLM data aggregated, a good efficient design (likely just a bigger V4/K3 with more tokens) chosen, and in 3 months a pretrained model that&#39;s most of the way to Mythos. This is trivially doable without any new factors, new production, new ideas. All these, however, exist. 
+
+In 3 weeks we&#39;ll learn a little more about the state of domestic compute. I estimate that one 950DT SuperPOD with a unified-bus-based scale-UP domain spanning 8192 ASICs is about as capable as Meituan&#39;s whole cluster; and will require significantly less annoying engineering to be made useful. 10-20 SuperPods would suffice for a &#34;lean Mythos&#34;. I predict that we&#39;ll see more than 10-20 by end of year.
+
+Yes, it&#39;s easy to say in retrospect that &#34;of course chips are supposed to be usable for training haha&#34;. Perhaps the export control paradigm had always been somewhat confused on this point. But in practice, it did work exactly like this: Chinese chips were only good (really, still not good) for inference, Chinese software stack was demonstrably unequipped for large scale training, and the hawk establishment could rest easy assuming that catch-up in general capabilities is solely dependent on export controls and holes in those, such as smuggling and overseas access, so ultimately up to American discretion. Over the last few months, I see the rhetoric shifting: it&#39;s an issue of total compute amount, it&#39;s an issue of how widely they can deploy and diffuse… Sorry, I can only see that as cope. It was a binary: can they train a &#34;GPT-4&#34;, then &#34;GPT-5&#34;, then &#34;Mythos&#34; at all in the near term, or can&#39;t they, and what can &#34;we&#34; do to make it so that they can&#39;t. Now we know that &#34;we&#34; can&#39;t do much: even obsolete domestic hardware can train at near-frontier scale. If AI is a strategic arms race, broad deployment and diffusion will take a backseat, a frontier model with relevant cyberattack/defense capabilities will be trained, and your measures will have mostly amounted to transient economic sabotage bringing the efficiency of Chinese economy down towards American level.
+
+So, I&#39;d appreciate it if hawks reflected more rigorously on what Meituan LongCat 2.0 means.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="HankInBeijing">
+      <div class="meta"><span>10:38</span> ·
+        <a class="who" href="https://x.com/HankInBeijing" target="_blank"
+           rel="noopener">@HankInBeijing</a></div>
+      
+      <div class="ptext seg">Supposedly (at least alleged by Meituan) that this model was completely and entirely trained with China-made computes.<a href="https://x.com/hankinbeijing/status/2072147818991739045" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/Meituan_LongCat/status/2071783587205308721" target="_blank" rel="noopener">@Meituan_LongCat</a>Introducing LongCat-2.0 🐱
+1.6T parameters · MoE with ~48B active · 1M context
+The full model behind Owl Alpha on @OpenRouter — now available.
+
+Built for agentic coding from the ground up:
+◆ LongCat Sparse Attention (LSA) — scales efficiently for 1M-context tokens
+◆ Zero-Compute Experts — dynamic activation 33B–56B per token, zero wasted compute
+◆ MOPD — three specialized expert groups (Agent / Reasoning / Interaction), gate-routed per task
+
+How it stacks up:
+→ Terminal-Bench 2.1: 70.8
+→ SWE-bench Pro: 59.5 (GPT-5.5: 58.6)
+→ SWE-bench Multilingual: 77.3
+→ FORTE: 73.2 · RWSearch: 78.8 · BrowseComp: 79.9
+
+📖 Tech Blog: https://longcat.chat/blog/longcat-2.0/
+Try it across different scenarios 🧵👇</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+
+<footer>
+  实验性栏目;只收原创帖,转推不计。内容为账号作者个人观点,不代表任何机构立场。
+</footer>
+
+<script>
+  (function () {
+    var active = "";   // "" = 全部
+    var chips = document.querySelectorAll("#chips .chip");
+    function apply() {
+      document.querySelectorAll("ul.posts li").forEach(function (li) {
+        li.style.display = (!active || li.dataset.handle === active) ? "" : "none";
+      });
+      document.querySelectorAll("section.day").forEach(function (sec) {
+        var any = Array.prototype.some.call(
+          sec.querySelectorAll("li"), function (li) { return li.style.display !== "none"; });
+        sec.style.display = any ? "" : "none";
+      });
+      chips.forEach(function (c) {
+        c.classList.toggle("on", c.dataset.handle === active);
+      });
+    }
+    chips.forEach(function (c) {
+      c.addEventListener("click", function () {
+        active = (active === c.dataset.handle) ? "" : c.dataset.handle;
+        apply();
+      });
+    });
+  })();
+</script>
+</body>
+</html>
