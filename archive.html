@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Tank Tracker — Archive</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --line: #21262d; --line-2: #30363d;
+    --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1; --accent: #4cc9f0;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scrollbar-gutter: stable; }
+  body { font-family: var(--sans); font-size: 14px; line-height: 1.55;
+         color: var(--ink); background: var(--bg); overflow-x: clip; }
+  /* container width matches the other pages so the nav/title never shift
+     between views; content blocks cap narrower for reading comfort */
+  main { max-width: 1080px; margin: 0 auto; padding: 36px 24px 80px; }
+  main h2, main ul { max-width: 860px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 27px; font-weight: 650; margin: 0 0 2px; }
+  .issue { font: 500 15px var(--mono); color: var(--soft); }
+  .topnav { position: sticky; top: 0; z-index: 30; display: flex;
+            align-items: center; gap: 22px; margin: 10px 0 8px;
+            height: 44px; font: 13.5px var(--mono); letter-spacing: .05em;
+            background: var(--bg);  /* solid under no-JS pinning; .stuck adds the glass */
+            view-transition-name: ttt-nav;
+            transition: background-color .25s ease, border-color .25s ease,
+                        font-size .2s ease; }
+  .topnav a { color: var(--accent); padding-bottom: 2px;
+              border-bottom: 1px solid transparent; }
+  .topnav a:hover { border-bottom-color: var(--accent); text-decoration: none; }
+  .topnav .here { color: var(--ink); border-bottom: 1px solid var(--line-2);
+                  padding-bottom: 2px; }
+  .topnav .brand { display: none; font: 700 11.5px var(--mono);
+                   letter-spacing: .22em; color: var(--accent);
+                   text-transform: uppercase; margin-right: auto;
+                   white-space: nowrap; }
+  .topnav.stuck { font-size: 14px;
+                  background: color-mix(in srgb, var(--bg) 90%, transparent);
+                  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                  border-bottom: 1px solid var(--line);
+                  margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+                  padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%); }
+  .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
+  @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
+  @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
+  h2 { font: 11px var(--mono); letter-spacing: .2em; text-transform: uppercase;
+       color: var(--muted); margin: 28px 0 8px; display: flex;
+       align-items: center; gap: 10px; }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  li { list-style: none; background: var(--panel); border: 1px solid var(--line);
+       border-radius: 8px; padding: 10px 14px; margin-bottom: 8px;
+       transition: border-color .12s; }
+  li:hover { border-color: var(--line-2); }
+  .m { font: 11px var(--mono); color: var(--muted); }
+  footer { margin-top: 48px; border-top: 1px solid var(--line); padding-top: 14px;
+           font: 11px var(--mono); color: var(--muted); display: flex; gap: 16px; }
+
+  /* motion */
+  @view-transition { navigation: auto; }
+  h1 { view-transition-name: ttt-title; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important;
+                             transition: none !important; }
+    /* the universal selector cannot reach the view-transition pseudo tree */
+    ::view-transition-group(*), ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Think Tank Tracker</h1>
+  <div class="issue">Digest Archive</div>
+  <div id="navSentinel"></div>
+  <nav class="topnav" id="topnav">
+    <span class="brand">Think Tank Tracker</span>
+    <a href="index.html">digest</a>
+    <span class="here">archive</span>
+    <a href="all-items.html">all items</a>
+    <a href="x-pulse-en.html">ChinaX</a>
+    <a href="x-pulse-zh.html">坊间</a>
+    <a href="about.html">about</a>
+  </nav>
+  
+  <h2>July 2026</h2>
+  <ul>
+    
+    <li>
+      <a href="digest-2026-07-25.html">Saturday, July 25</a>
+      <span class="m"> · 54 items</span>
+      <div class="m">Puzzles in the world economy</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-24.html">Friday, July 24</a>
+      <span class="m"> · 63 items</span>
+      <div class="m">America Still Has the Upper Hand Over China</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-23.html">Thursday, July 23</a>
+      <span class="m"> · 50 items</span>
+      <div class="m">Conflict-Driven Chokepoint Disruptions</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-22.html">Wednesday, July 22</a>
+      <span class="m"> · 78 items</span>
+      <div class="m">When China Gets Its Own Mythos</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-21.html">Tuesday, July 21</a>
+      <span class="m"> · 59 items</span>
+      <div class="m">Will China replace America on the world stage?</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-20.html">Monday, July 20</a>
+      <span class="m"> · 10 items</span>
+      <div class="m">Why Chinese claims of sovereignty over the Batanes cannot be ignored</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-19.html">Sunday, July 19</a>
+      <span class="m"> · 4 items</span>
+      <div class="m">Recession &amp; Growth Trackers</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-18.html">Saturday, July 18</a>
+      <span class="m"> · 102 items</span>
+      <div class="m">Trump’s New Tariffs: What to Know</div>
+    </li>
+    
+    <li>
+      <a href="digest-2026-07-17.html">Friday, July 17</a>
+      <span class="m"> · 437 items</span>
+      <div class="m">Entity List Additions Cool to Their Slowest Pace Since 2008</div>
+    </li>
+    
+  </ul>
+  
+  <footer>
+    <a href="all-items.html">all items</a>
+    <a href="x-pulse-en.html">ChinaX</a>
+    <a href="x-pulse-zh.html">坊间</a>
+    <a href="about.html">about</a>
+    <span>generated 2026-07-25 17:59</span>
+  </footer>
+</main>
+<script>
+(function () {
+  var nav = document.getElementById("topnav");
+  var sentinel = document.getElementById("navSentinel");
+  if (nav && sentinel && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      nav.classList.toggle("stuck", !entries[0].isIntersecting);
+    }).observe(sentinel);
+  }
+})();
+</script>
+</body>
+</html>
