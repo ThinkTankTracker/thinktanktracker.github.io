@@ -29,6 +29,9 @@
   a:hover { text-decoration: underline; }
   .hidden { display: none !important; }
   h1 { font-size: 27px; font-weight: 650; margin: 0 0 2px; }
+  /* the title is the way home — styled as a title, not a link */
+  h1 a { color: inherit; }
+  h1 a:hover { color: var(--accent); text-decoration: none; }
   .issue { font: 500 15px var(--mono); color: var(--soft); }
   .date { font: 12px var(--mono); color: var(--muted); margin: 8px 0 22px; }
 
@@ -51,7 +54,7 @@
   .topnav .brand { display: none; font: 700 11.5px var(--mono);
                    letter-spacing: .22em; color: var(--accent);
                    text-transform: uppercase; margin-right: auto;
-                   white-space: nowrap; }
+                   white-space: nowrap; padding-bottom: 0; border-bottom: none; }
   .topnav.stuck { font-size: 14px;
                   background: color-mix(in srgb, var(--bg) 90%, transparent);
                   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -158,11 +161,11 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Think Tank Tracker</h1>
+  <h1><a href="index.html">Think Tank Tracker</a></h1>
   <div class="issue">All Items</div>
   <div id="navSentinel"></div>
   <nav class="topnav" id="topnav">
-    <span class="brand">Think Tank Tracker</span>
+    <a class="brand" href="index.html">Think Tank Tracker</a>
     <a href="index.html">digest</a>
     <a href="archive.html">archive</a>
     <span class="here">all items</span>
