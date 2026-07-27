@@ -6,11 +6,19 @@
 <title>Think Tank Tracker — All Items</title>
 <style>
   :root {
+    color-scheme: dark;
     --bg: #0d1117; --panel: #161b22; --line: #21262d; --line-2: #30363d;
     --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1;
     --accent: #4cc9f0; --star: #f0b72f;
     --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
     --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  /* light scheme: follows the OS until the toggle stores a choice */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f6f8fa; --panel: #ffffff; --line: #d8dee4; --line-2: #afb8c1;
+    --ink: #1f2328; --soft: #424a53; --muted: #656d76;
+    --accent: #077799; --star: #9a6700;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scrollbar-gutter: stable; }
@@ -53,6 +61,15 @@
   .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
   @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
   @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
+  /* theme toggle: rightmost nav item; label = the scheme it switches TO */
+  .themetoggle { margin-left: auto; font: inherit; letter-spacing: inherit;
+                 color: var(--muted); background: none; border: 0;
+                 cursor: pointer; padding: 2px 0; }
+  .themetoggle:hover { color: var(--accent); }
+  .themetoggle::before { content: "◐ "; }
+  .themetoggle::after { content: "light"; }
+  :root[data-theme="light"] .themetoggle::after { content: "dark"; }
+  @media (max-width: 700px) { .themetoggle::after { display: none; } }
   #facet-topic.folded .facet-row.minor:not(.on) { display: none; }
   .facet-more { font: 11px var(--mono); color: var(--muted); cursor: pointer;
                 padding: 5px 8px; }
@@ -119,6 +136,25 @@
     ::view-transition-new(*) { animation: none !important; }
   }
 </style>
+<script>
+  /* pre-paint: a stored choice wins; otherwise follow the OS scheme, live */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia && matchMedia("(prefers-color-scheme: light)");
+    function stored() {
+      try { var t = localStorage.getItem("ttt-theme"); } catch (e) { return null; }
+      return t === "light" || t === "dark" ? t : null;
+    }
+    function apply() {
+      var t = stored() || (mq && mq.matches ? "light" : "dark");
+      if (t === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+    }
+    apply();
+    if (mq && mq.addEventListener)
+      mq.addEventListener("change", function () { if (!stored()) apply(); });
+  })();
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -133,8 +169,10 @@
     <a href="x-pulse-en.html">ChinaX</a>
     <a href="x-pulse-zh.html">坊间</a>
     <a href="about.html">about</a>
+    <button type="button" class="themetoggle" id="themeToggle"
+            aria-label="switch color theme"></button>
   </nav>
-  <div class="date">861 tracked · generated 2026-07-26</div>
+  <div class="date">861 tracked · generated 2026-07-27</div>
 
   <div class="layout">
     <aside class="facets">
@@ -5681,6 +5719,17 @@
       nav.classList.toggle("stuck", !entries[0].isIntersecting);
     }).observe(sentinel);
   }
+
+  // theme toggle: an explicit choice, stored, overriding the OS scheme
+  var themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) themeBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var toLight = root.getAttribute("data-theme") !== "light";
+    if (toLight) root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    try { localStorage.setItem("ttt-theme", toLight ? "light" : "dark"); }
+    catch (e) {}
+  });
 })();
 </script>
 </body>

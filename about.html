@@ -6,11 +6,19 @@
 <title>Think Tank Tracker — About</title>
 <style>
   :root {
+    color-scheme: dark;
     --bg: #0d1117; --panel: #161b22; --line: #21262d; --line-2: #30363d;
     --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1;
     --accent: #4cc9f0; --ok: #3fb950; --warn: #f0b72f;
     --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
     --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  /* light scheme: follows the OS until the toggle stores a choice */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f6f8fa; --panel: #ffffff; --line: #d8dee4; --line-2: #afb8c1;
+    --ink: #1f2328; --soft: #424a53; --muted: #656d76;
+    --accent: #077799; --ok: #1a7f37; --warn: #9a6700;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scrollbar-gutter: stable; }
@@ -49,6 +57,15 @@
   .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
   @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
   @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
+  /* theme toggle: rightmost nav item; label = the scheme it switches TO */
+  .themetoggle { margin-left: auto; font: inherit; letter-spacing: inherit;
+                 color: var(--muted); background: none; border: 0;
+                 cursor: pointer; padding: 2px 0; }
+  .themetoggle:hover { color: var(--accent); }
+  .themetoggle::before { content: "◐ "; }
+  .themetoggle::after { content: "light"; }
+  :root[data-theme="light"] .themetoggle::after { content: "dark"; }
+  @media (max-width: 700px) { .themetoggle::after { display: none; } }
   .intro { color: var(--soft); max-width: 640px; margin-bottom: 8px; }
   .intro + .intro { margin-bottom: 0; }
   h2 { font: 11px var(--mono); letter-spacing: .2em; text-transform: uppercase;
@@ -103,6 +120,25 @@
     ::view-transition-new(*) { animation: none !important; }
   }
 </style>
+<script>
+  /* pre-paint: a stored choice wins; otherwise follow the OS scheme, live */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia && matchMedia("(prefers-color-scheme: light)");
+    function stored() {
+      try { var t = localStorage.getItem("ttt-theme"); } catch (e) { return null; }
+      return t === "light" || t === "dark" ? t : null;
+    }
+    function apply() {
+      var t = stored() || (mq && mq.matches ? "light" : "dark");
+      if (t === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+    }
+    apply();
+    if (mq && mq.addEventListener)
+      mq.addEventListener("change", function () { if (!stored()) apply(); });
+  })();
+</script>
 </head>
 <body>
 <main>
@@ -117,6 +153,8 @@
     <a href="x-pulse-en.html">ChinaX</a>
     <a href="x-pulse-zh.html">坊间</a>
     <span class="here">about</span>
+    <button type="button" class="themetoggle" id="themeToggle"
+            aria-label="switch color theme"></button>
   </nav>
   <p class="intro">Think Tank Tracker follows new publications from the research
   institutions below and consolidates them into a regularly updated digest.
@@ -620,7 +658,7 @@
     <a href="all-items.html">all items</a>
     <a href="x-pulse-en.html">ChinaX</a>
     <a href="x-pulse-zh.html">坊间</a>
-    <span>generated 2026-07-26</span>
+    <span>generated 2026-07-27</span>
   </footer>
 </main>
 <script>
@@ -632,6 +670,17 @@
       nav.classList.toggle("stuck", !entries[0].isIntersecting);
     }).observe(sentinel);
   }
+
+  // theme toggle: an explicit choice, stored, overriding the OS scheme
+  var themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) themeBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var toLight = root.getAttribute("data-theme") !== "light";
+    if (toLight) root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    try { localStorage.setItem("ttt-theme", toLight ? "light" : "dark"); }
+    catch (e) {}
+  });
 })();
 </script>
 </body>

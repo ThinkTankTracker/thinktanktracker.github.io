@@ -6,12 +6,25 @@
 <title>Think Tank Tracker — Sunday, July 26, 2026</title>
 <style>
   :root {
+    color-scheme: dark;
     --bg: #0d1117; --panel: #161b22;
     --line: #21262d; --line-2: #30363d;
     --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1;
     --accent: #4cc9f0; --accent-dim: #1f6f8b; --star: #f0b72f;
+    --shadow: 0 6px 18px rgba(0,0,0,.35);
     --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
     --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  /* light scheme: same ink hierarchy on a paper-gray canvas; the cyan and
+     gold darken to hold AA contrast. Opt-in via the nav toggle (persisted),
+     dark stays the default. */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f6f8fa; --panel: #ffffff;
+    --line: #d8dee4; --line-2: #afb8c1;
+    --ink: #1f2328; --soft: #424a53; --muted: #656d76;
+    --accent: #077799; --accent-dim: #9ecfe0; --star: #9a6700;
+    --shadow: 0 6px 18px rgba(31,35,40,.12);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scrollbar-gutter: stable; }
@@ -41,7 +54,7 @@
                    background: var(--panel); border: 1px solid var(--line-2);
                    border-radius: 6px; padding: 4px; display: flex;
                    flex-direction: column; min-width: 118px;
-                   box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+                   box-shadow: var(--shadow); }
   .scope-options button { font: inherit; letter-spacing: inherit; text-transform: inherit;
                           color: var(--muted); background: none; border: 0;
                           text-align: left; padding: 6px 8px; cursor: pointer;
@@ -84,6 +97,15 @@
   .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
   @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
   @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
+  /* theme toggle: rightmost nav item; label = the scheme it switches TO */
+  .themetoggle { margin-left: auto; font: inherit; letter-spacing: inherit;
+                 color: var(--muted); background: none; border: 0;
+                 cursor: pointer; padding: 2px 0; }
+  .themetoggle:hover { color: var(--accent); }
+  .themetoggle::before { content: "◐ "; }
+  .themetoggle::after { content: "light"; }
+  :root[data-theme="light"] .themetoggle::after { content: "dark"; }
+  @media (max-width: 700px) { .themetoggle::after { display: none; } }
   .facet { margin-bottom: 24px; }
   .facet-h { font: 10px var(--mono); letter-spacing: .18em; color: var(--muted);
              text-transform: uppercase; display: flex;
@@ -232,6 +254,25 @@
     html { scroll-behavior: auto; }
   }
 </style>
+<script>
+  /* pre-paint: a stored choice wins; otherwise follow the OS scheme, live */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia && matchMedia("(prefers-color-scheme: light)");
+    function stored() {
+      try { var t = localStorage.getItem("ttt-theme"); } catch (e) { return null; }
+      return t === "light" || t === "dark" ? t : null;
+    }
+    function apply() {
+      var t = stored() || (mq && mq.matches ? "light" : "dark");
+      if (t === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+    }
+    apply();
+    if (mq && mq.addEventListener)
+      mq.addEventListener("change", function () { if (!stored()) apply(); });
+  })();
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -250,6 +291,8 @@
     <a href="x-pulse-en.html">ChinaX</a>
     <a href="x-pulse-zh.html">坊间</a>
     <a href="about.html">about</a>
+    <button type="button" class="themetoggle" id="themeToggle"
+            aria-label="switch color theme"></button>
   </nav>
   <div class="mastmeta">
     <div class="stats">
@@ -6306,6 +6349,17 @@
       nav.classList.toggle("stuck", !entries[0].isIntersecting);
     }).observe(sentinel);
   }
+
+  // theme toggle: an explicit choice, stored, overriding the OS scheme
+  var themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) themeBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var toLight = root.getAttribute("data-theme") !== "light";
+    if (toLight) root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    try { localStorage.setItem("ttt-theme", toLight ? "light" : "dark"); }
+    catch (e) {}
+  });
 })();
 </script>
 </body>

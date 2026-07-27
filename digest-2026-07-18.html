@@ -231,7 +231,38 @@
     ::view-transition-new(*) { animation: none !important; }
     html { scroll-behavior: auto; }
   }
+  /* retrofit: light scheme, follows the choice stored by the live pages */
+  :root { color-scheme: dark; }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f6f8fa; --panel: #ffffff;
+    --line: #d8dee4; --line-2: #afb8c1;
+    --ink: #1f2328; --soft: #424a53; --muted: #656d76;
+    --accent: #077799; --accent-dim: #9ecfe0; --star: #9a6700;
+  }
+  :root[data-theme="light"] .scope-options {
+    box-shadow: 0 6px 18px rgba(31,35,40,.12); }
 </style>
+<script>
+  /* pre-paint: a stored choice wins; otherwise follow the OS scheme, live */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia && matchMedia("(prefers-color-scheme: light)");
+    function stored() {
+      try { var t = localStorage.getItem("ttt-theme"); } catch (e) { return null; }
+      return t === "light" || t === "dark" ? t : null;
+    }
+    function apply() {
+      var t = stored() || (mq && mq.matches ? "light" : "dark");
+      if (t === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+    }
+    apply();
+    if (mq && mq.addEventListener)
+      mq.addEventListener("change", function () { if (!stored()) apply(); });
+  })();
+</script>
+
 </head>
 <body>
 <div class="wrap">
