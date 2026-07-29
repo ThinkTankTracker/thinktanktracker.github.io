@@ -68,6 +68,18 @@
   .stat .v.hi { color: var(--star); }
   .stat .k { font: 10px var(--mono); letter-spacing: .14em; text-transform: uppercase;
              color: var(--muted); margin-top: 2px; }
+  /* search: entry point only — submits to the all-items page, which filters */
+  .search { margin-left: auto; }
+  .search input { font: 12px var(--mono); color: var(--ink);
+                  background: var(--panel); border: 1px solid var(--line-2);
+                  border-radius: 6px; padding: 7px 10px; width: 180px;
+                  transition: border-color .15s ease, width .15s ease; }
+  .search input::placeholder { color: var(--muted); }
+  .search input:focus { outline: none; border-color: var(--accent); width: 230px; }
+  @media (max-width: 700px) {
+    .search { margin-left: 0; flex: 1 1 100%; }
+    .search input, .search input:focus { width: 100%; }
+  }
 
   /* layout: facet sidebar + content */
   .layout { display: grid; grid-template-columns: 272px minmax(0, 1fr); gap: 34px; }
@@ -310,6 +322,10 @@
       <div class="stat"><div class="v" id="scopeItems">980</div><div class="k">new items</div></div>
       <div class="stat"><div class="v" id="scopeSources">23</div><div class="k">sources</div></div>
       <div class="stat"><div class="v hi" id="scopeTopreads">200</div><div class="k">top reads</div></div>
+      <form class="search" action="all-items.html" method="get">
+        <input type="search" name="q" placeholder="search all items"
+               aria-label="search all items" autocomplete="off">
+      </form>
     </div>
   </div>
   <script>
@@ -331,6 +347,15 @@
       });
       document.addEventListener("click", function (e) {
         if (fold.hasAttribute("open") && !fold.contains(e.target)) fold.removeAttribute("open");
+      });
+      // Belt over native implicit submission: some environments deliver a
+      // synthetic Enter that skips it.
+      var searchForm = document.querySelector("form.search");
+      if (searchForm) searchForm.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.keyCode === 13) {
+          e.preventDefault();
+          searchForm.submit();
+        }
       });
     })();
   </script>
