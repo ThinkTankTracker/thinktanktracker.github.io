@@ -69,16 +69,24 @@
   .stat .k { font: 10px var(--mono); letter-spacing: .14em; text-transform: uppercase;
              color: var(--muted); margin-top: 2px; }
   /* search: entry point only — submits to the all-items page, which filters */
-  .search { margin-left: auto; }
+  .search { margin-left: auto; display: flex; }
   .search input { font: 12px var(--mono); color: var(--ink);
                   background: var(--panel); border: 1px solid var(--line-2);
-                  border-radius: 6px; padding: 7px 10px; width: 180px;
+                  border-right: 0; border-radius: 6px 0 0 6px;
+                  padding: 7px 10px; width: 180px;
                   transition: border-color .15s ease, width .15s ease; }
   .search input::placeholder { color: var(--muted); }
-  .search input:focus { outline: none; border-color: var(--accent); width: 230px; }
+  .search input:focus { outline: none; width: 230px; }
+  .search button { font: 13px var(--mono); color: var(--muted);
+                   background: var(--panel); border: 1px solid var(--line-2);
+                   border-radius: 0 6px 6px 0; padding: 0 10px;
+                   cursor: pointer; transition: border-color .15s ease; }
+  .search button:hover { color: var(--accent); }
+  .search:focus-within input, .search:focus-within button {
+    border-color: var(--accent); }
   @media (max-width: 700px) {
     .search { margin-left: 0; flex: 1 1 100%; }
-    .search input, .search input:focus { width: 100%; }
+    .search input, .search input:focus { width: 100%; flex: 1; }
   }
 
   /* layout: facet sidebar + content */
@@ -325,6 +333,7 @@
       <form class="search" action="all-items.html" method="get">
         <input type="search" name="q" placeholder="search all items"
                aria-label="search all items" autocomplete="off">
+        <button type="submit" aria-label="search">→</button>
       </form>
     </div>
   </div>
