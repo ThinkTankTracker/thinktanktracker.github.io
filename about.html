@@ -11,8 +11,14 @@
     --bg: #0d1117; --panel: #161b22; --line: #21262d; --line-2: #30363d;
     --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1;
     --accent: #4cc9f0; --ok: #3fb950; --warn: #f0b72f;
-    --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
-    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* CJK families trail the latin ones in BOTH stacks: they only catch
+       glyphs the latin fonts miss (same contract as the digest page) */
+    --cjk: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei",
+           "Noto Sans CJK SC", "Noto Sans SC";
+    --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New",
+            var(--cjk), monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+            var(--cjk), sans-serif;
   }
   /* light scheme: follows the OS until the toggle stores a choice */
   :root[data-theme="light"] {
@@ -25,6 +31,12 @@
   html { scrollbar-gutter: stable; }
   body { font-family: var(--sans); font-size: 14px; line-height: 1.55;
          color: var(--ink); background: var(--bg); overflow-x: clip; }
+  /* language mode: dual .t-en/.t-zh nodes, root data-lang picks one; English
+     is the no-JS fallback (same contract as the digest page) */
+  :root:not([data-lang="zh"]) .t-zh { display: none; }
+  :root[data-lang="zh"] .t-en { display: none; }
+  :root[data-lang="zh"] h2 { font-size: 12px; }
+  :root[data-lang="zh"] .badge { font-size: 10.5px; }
   /* container width matches the other pages so the nav/title never shift
      between views; content blocks cap narrower for reading comfort */
   main { max-width: 1080px; margin: 0 auto; padding: 36px 24px 80px; }
@@ -61,14 +73,23 @@
   .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
   @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
   @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
-  /* theme toggle: rightmost nav item; label = the scheme it switches TO */
-  .themetoggle { margin-left: auto; font: inherit; letter-spacing: inherit;
+  /* language + theme toggles: rightmost nav items (same idiom as the digest
+     page — both language labels shown, current one in ink) */
+  .langtoggle, .themetoggle { font: inherit; letter-spacing: inherit;
                  color: var(--muted); background: none; border: 0;
                  cursor: pointer; padding: 2px 0; }
+  .langtoggle { margin-left: auto; }
+  .langtoggle .lt-sep { color: var(--line-2); margin: 0 4px; }
+  :root:not([data-lang="zh"]) .langtoggle .lt-en,
+  :root[data-lang="zh"] .langtoggle .lt-zh { color: var(--ink); }
+  :root:not([data-lang="zh"]) .langtoggle:hover .lt-zh,
+  :root[data-lang="zh"] .langtoggle:hover .lt-en { color: var(--accent); }
   .themetoggle:hover { color: var(--accent); }
   .themetoggle::before { content: "◐ "; }
   .themetoggle::after { content: "light"; }
   :root[data-theme="light"] .themetoggle::after { content: "dark"; }
+  :root[data-lang="zh"] .themetoggle::after { content: "浅色"; }
+  :root[data-lang="zh"][data-theme="light"] .themetoggle::after { content: "深色"; }
   @media (max-width: 700px) { .themetoggle::after { display: none; } }
   .intro { color: var(--soft); max-width: 640px; margin-bottom: 8px; }
   .intro + .intro { margin-bottom: 0; }
@@ -142,330 +163,347 @@
     if (mq && mq.addEventListener)
       mq.addEventListener("change", function () { if (!stored()) apply(); });
   })();
+  /* pre-paint, language: ?lang= wins for the visit (shareable, never stored);
+     otherwise the stored choice; default English */
+  (function () {
+    var root = document.documentElement;
+    var lang = null;
+    try { lang = new URLSearchParams(location.search).get("lang"); } catch (e) {}
+    if (lang !== "zh" && lang !== "en") {
+      try { lang = localStorage.getItem("ttt-lang"); } catch (e) { lang = null; }
+    }
+    if (lang === "zh") { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
+  })();
 </script>
 </head>
 <body>
+
+
 <main>
   <h1><a href="index.html">Think Tank Tracker</a></h1>
-  <div class="issue">About</div>
+  <div class="issue"><span class="t-en">About</span><span class="t-zh">关于</span></div>
   <div id="navSentinel"></div>
   <nav class="topnav" id="topnav">
     <a class="brand" href="index.html">Think Tank Tracker</a>
-    <a href="index.html">digest</a>
-    <a href="archive.html">archive</a>
-    <a href="all-items.html">all items</a>
+    <a href="index.html"><span class="t-en">digest</span><span class="t-zh">日报</span></a>
+    <a href="archive.html"><span class="t-en">archive</span><span class="t-zh">往期</span></a>
+    <a href="all-items.html"><span class="t-en">all items</span><span class="t-zh">全部条目</span></a>
     <a href="x-pulse-en.html">ChinaX</a>
     <a href="x-pulse-zh.html">坊间</a>
-    <span class="here">about</span>
+    <span class="here"><span class="t-en">about</span><span class="t-zh">关于</span></span>
+    <button type="button" class="langtoggle" id="langToggle"
+            aria-label="switch language / 切换语言"><span class="lt-zh">中文</span><span class="lt-sep">/</span><span class="lt-en">EN</span></button>
     <button type="button" class="themetoggle" id="themeToggle"
             aria-label="switch color theme"></button>
   </nav>
-  <p class="intro">Think Tank Tracker follows new publications from the research
-  institutions below and consolidates them into a regularly updated digest.
-  Every item links to the original publication and carries a short summary,
-  topic tags, and a relevance flag oriented toward China, macroeconomics, and
-  international trade.</p>
-  <p class="intro">Institutions whose sites don't permit automated readers
-  appear as unavailable.</p>
+  <p class="intro"><span class="t-en">Think Tank Tracker follows new publications from the research institutions below
+    and consolidates them into a regularly updated digest. Every item links to
+    the original publication and carries a short summary, topic tags, and a
+    relevance flag oriented toward China, macroeconomics, and international
+    trade.</span><span class="t-zh">Think Tank Tracker 跟踪下列研究机构的新发布，并汇编为持续更新的日报。每一条都链接到
+    原文，附简短摘要、主题标签，以及面向中国、宏观经济与国际贸易的相关性标记。</span></p>
+  <p class="intro"><span class="t-en">Institutions whose sites don&#39;t permit automated readers appear as
+    unavailable.</span><span class="t-zh">网站不允许自动化读取的机构标记为「不可用」。</span></p>
 
   
-  <h2>Economics &amp; Policy</h2>
+  <h2><span class="t-en">Economics &amp; Policy</span><span class="t-zh">经济与政策</span></h2>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.brookings.edu" target="_blank" rel="noopener">Brookings</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">77 tracked</span>
+      <span class="n"><span class="t-en">77 tracked</span><span class="t-zh">收录 77 条</span></span>
     </div>
-    <div class="note">The largest US policy research institution; economic studies, foreign policy, and governance.</div>
+    <div class="note"><span class="t-en">The largest US policy research institution; economic studies, foreign policy, and governance.</span><span class="t-zh">美国规模最大的政策研究机构；经济研究、外交政策与治理。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.piie.com" target="_blank" rel="noopener">PIIE</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">64 tracked</span>
+      <span class="n"><span class="t-en">64 tracked</span><span class="t-zh">收录 64 条</span></span>
     </div>
-    <div class="note">Nonpartisan research institute devoted to international economic policy — trade, macroeconomics, and globalization.</div>
+    <div class="note"><span class="t-en">Nonpartisan research institute devoted to international economic policy — trade, macroeconomics, and globalization.</span><span class="t-zh">专注国际经济政策的无党派研究机构——贸易、宏观经济与全球化。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.aei.org" target="_blank" rel="noopener">AEI</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">53 tracked</span>
+      <span class="n"><span class="t-en">53 tracked</span><span class="t-zh">收录 53 条</span></span>
     </div>
-    <div class="note">Right-of-center Washington institute covering economics, foreign policy, and technology policy.</div>
+    <div class="note"><span class="t-en">Right-of-center Washington institute covering economics, foreign policy, and technology policy.</span><span class="t-zh">华盛顿右倾研究所，覆盖经济、外交与科技政策。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.heritage.org" target="_blank" rel="noopener">Heritage</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">49 tracked</span>
+      <span class="n"><span class="t-en">49 tracked</span><span class="t-zh">收录 49 条</span></span>
     </div>
-    <div class="note">Washington&#39;s flagship conservative policy institute, with a direct pipeline into the current administration&#39;s agenda.</div>
+    <div class="note"><span class="t-en">Washington&#39;s flagship conservative policy institute, with a direct pipeline into the current administration&#39;s agenda.</span><span class="t-zh">华盛顿旗舰保守派政策研究所，与本届政府议程联系紧密。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.bruegel.org" target="_blank" rel="noopener">Bruegel</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">10 tracked</span>
+      <span class="n"><span class="t-en">10 tracked</span><span class="t-zh">收录 10 条</span></span>
     </div>
-    <div class="note">Brussels-based European economics think tank — EU macro, trade, energy, and industrial policy.</div>
+    <div class="note"><span class="t-en">Brussels-based European economics think tank — EU macro, trade, energy, and industrial policy.</span><span class="t-zh">总部设于布鲁塞尔的欧洲经济智库——欧盟宏观、贸易、能源与产业政策。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.urban.org" target="_blank" rel="noopener">Urban Institute</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">82 tracked</span>
+      <span class="n"><span class="t-en">82 tracked</span><span class="t-zh">收录 82 条</span></span>
     </div>
-    <div class="note">Nonpartisan institute on US economic and social policy — fiscal, tax, housing, and social insurance; co-founder of the Tax Policy Center.</div>
+    <div class="note"><span class="t-en">Nonpartisan institute on US economic and social policy — fiscal, tax, housing, and social insurance; co-founder of the Tax Policy Center.</span><span class="t-zh">无党派研究所，聚焦美国经济与社会政策——财政、税收、住房与社会保险；税收政策中心联合创办方。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://taxfoundation.org" target="_blank" rel="noopener">Tax Foundation</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">32 tracked</span>
+      <span class="n"><span class="t-en">32 tracked</span><span class="t-zh">收录 32 条</span></span>
     </div>
-    <div class="note">Specialist tax-policy research and modeling, US federal, state, and international.</div>
+    <div class="note"><span class="t-en">Specialist tax-policy research and modeling, US federal, state, and international.</span><span class="t-zh">专业税收政策研究与建模，覆盖美国联邦、州与国际税制。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.americanprogress.org" target="_blank" rel="noopener">Center for American Progress</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">32 tracked</span>
+      <span class="n"><span class="t-en">32 tracked</span><span class="t-zh">收录 32 条</span></span>
     </div>
-    <div class="note">Center-left Washington think tank spanning US economic and domestic policy, with active trade, tariff, and economic-statecraft coverage.</div>
+    <div class="note"><span class="t-en">Center-left Washington think tank spanning US economic and domestic policy, with active trade, tariff, and economic-statecraft coverage.</span><span class="t-zh">中左翼华盛顿智库，覆盖美国经济与国内政策，贸易、关税与经济治国方略研究活跃。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.cato.org" target="_blank" rel="noopener">Cato</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">109 tracked</span>
+      <span class="n"><span class="t-en">109 tracked</span><span class="t-zh">收录 109 条</span></span>
     </div>
-    <div class="note">Libertarian public-policy institute — trade, monetary policy, and regulation.</div>
+    <div class="note"><span class="t-en">Libertarian public-policy institute — trade, monetary policy, and regulation.</span><span class="t-zh">自由意志主义公共政策研究所——贸易、货币政策与监管。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.cgdev.org" target="_blank" rel="noopener">CGD</a></span>
-      <span class="badge warn">unavailable</span>
+      <span class="badge warn"><span class="t-en">unavailable</span><span class="t-zh">不可用</span></span>
       <span class="fill"></span>
-      <span class="n">0 tracked</span>
+      <span class="n"><span class="t-en">0 tracked</span><span class="t-zh">收录 0 条</span></span>
     </div>
-    <div class="note">Washington institute on development economics — aid effectiveness, debt, and development finance.</div>
+    <div class="note"><span class="t-en">Washington institute on development economics — aid effectiveness, debt, and development finance.</span><span class="t-zh">华盛顿发展经济学研究所——援助效果、债务与发展融资。</span></div>
   </div>
   
   
-  <h2>Foreign Policy &amp; Security</h2>
+  <h2><span class="t-en">Foreign Policy &amp; Security</span><span class="t-zh">外交与安全</span></h2>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.csis.org" target="_blank" rel="noopener">CSIS</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">631 tracked</span>
+      <span class="n"><span class="t-en">631 tracked</span><span class="t-zh">收录 631 条</span></span>
     </div>
-    <div class="note">Bipartisan strategy and international-affairs research, with strong China and trade-security programs.</div>
+    <div class="note"><span class="t-en">Bipartisan strategy and international-affairs research, with strong China and trade-security programs.</span><span class="t-zh">两党背景的战略与国际问题研究机构，中国与贸易安全项目实力突出。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.cfr.org" target="_blank" rel="noopener">CFR</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">111 tracked</span>
+      <span class="n"><span class="t-en">111 tracked</span><span class="t-zh">收录 111 条</span></span>
     </div>
-    <div class="note">Council on Foreign Relations — US foreign policy institution and publisher of Foreign Affairs.</div>
+    <div class="note"><span class="t-en">Council on Foreign Relations — US foreign policy institution and publisher of Foreign Affairs.</span><span class="t-zh">美国外交关系委员会——美国外交政策重镇，《外交事务》出版方。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://carnegieendowment.org" target="_blank" rel="noopener">Carnegie</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">57 tracked</span>
+      <span class="n"><span class="t-en">57 tracked</span><span class="t-zh">收录 57 条</span></span>
     </div>
-    <div class="note">Global think tank network on international peace, geoeconomics, and regional studies.</div>
+    <div class="note"><span class="t-en">Global think tank network on international peace, geoeconomics, and regional studies.</span><span class="t-zh">全球性智库网络，聚焦国际和平、地缘经济与区域研究。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.atlanticcouncil.org" target="_blank" rel="noopener">Atlantic Council</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">143 tracked</span>
+      <span class="n"><span class="t-en">143 tracked</span><span class="t-zh">收录 143 条</span></span>
     </div>
-    <div class="note">Foreign-policy institute with an active economic-statecraft and geoeconomics practice.</div>
+    <div class="note"><span class="t-en">Foreign-policy institute with an active economic-statecraft and geoeconomics practice.</span><span class="t-zh">外交政策研究所，经济治国方略与地缘经济业务活跃。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.rand.org" target="_blank" rel="noopener">RAND</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">37 tracked</span>
+      <span class="n"><span class="t-en">37 tracked</span><span class="t-zh">收录 37 条</span></span>
     </div>
-    <div class="note">Large-scale research organization best known for defense and public-policy analysis.</div>
+    <div class="note"><span class="t-en">Large-scale research organization best known for defense and public-policy analysis.</span><span class="t-zh">大型研究机构，以国防与公共政策分析著称。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.hudson.org" target="_blank" rel="noopener">Hudson</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">70 tracked</span>
+      <span class="n"><span class="t-en">70 tracked</span><span class="t-zh">收录 70 条</span></span>
     </div>
-    <div class="note">Conservative-leaning strategy institute; China, trade, and defense.</div>
+    <div class="note"><span class="t-en">Conservative-leaning strategy institute; China, trade, and defense.</span><span class="t-zh">保守倾向的战略研究所；中国、贸易与国防。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://cset.georgetown.edu" target="_blank" rel="noopener">CSET</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">22 tracked</span>
+      <span class="n"><span class="t-en">22 tracked</span><span class="t-zh">收录 22 条</span></span>
     </div>
-    <div class="note">Georgetown&#39;s center on AI, semiconductors, and China technology policy; translates Chinese policy documents.</div>
+    <div class="note"><span class="t-en">Georgetown&#39;s center on AI, semiconductors, and China technology policy; translates Chinese policy documents.</span><span class="t-zh">乔治城大学的 AI、半导体与中国科技政策研究中心；翻译中国政策文件。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.lowyinstitute.org" target="_blank" rel="noopener">Lowy Institute</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">166 tracked</span>
+      <span class="n"><span class="t-en">166 tracked</span><span class="t-zh">收录 166 条</span></span>
     </div>
-    <div class="note">Australia&#39;s leading international-policy think tank; Asia-Pacific and China focus, home of The Interpreter.</div>
+    <div class="note"><span class="t-en">Australia&#39;s leading international-policy think tank; Asia-Pacific and China focus, home of The Interpreter.</span><span class="t-zh">澳大利亚最重要的国际政策智库；亚太与中国焦点，The Interpreter 主办方。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.foreignaffairs.com" target="_blank" rel="noopener">Foreign Affairs</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">42 tracked</span>
+      <span class="n"><span class="t-en">42 tracked</span><span class="t-zh">收录 42 条</span></span>
     </div>
-    <div class="note">CFR&#39;s magazine of international affairs — long-form essays and foreign-policy debate.</div>
+    <div class="note"><span class="t-en">CFR&#39;s magazine of international affairs — long-form essays and foreign-policy debate.</span><span class="t-zh">CFR 旗下国际事务杂志——长文论述与外交政策论辩。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://foreignpolicy.com" target="_blank" rel="noopener">Foreign Policy</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">103 tracked</span>
+      <span class="n"><span class="t-en">103 tracked</span><span class="t-zh">收录 103 条</span></span>
     </div>
-    <div class="note">Global-affairs news magazine; high-cadence coverage of geopolitics and geoeconomics.</div>
+    <div class="note"><span class="t-en">Global-affairs news magazine; high-cadence coverage of geopolitics and geoeconomics.</span><span class="t-zh">全球事务新闻杂志；高频覆盖地缘政治与地缘经济。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.chathamhouse.org" target="_blank" rel="noopener">Chatham House</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">35 tracked</span>
+      <span class="n"><span class="t-en">35 tracked</span><span class="t-zh">收录 35 条</span></span>
     </div>
-    <div class="note">The UK&#39;s premier international-affairs institute (the Royal Institute of International Affairs).</div>
+    <div class="note"><span class="t-en">The UK&#39;s premier international-affairs institute (the Royal Institute of International Affairs).</span><span class="t-zh">英国首屈一指的国际事务研究所（皇家国际事务研究所）。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.iiss.org" target="_blank" rel="noopener">IISS</a></span>
-      <span class="badge warn">unavailable</span>
+      <span class="badge warn"><span class="t-en">unavailable</span><span class="t-zh">不可用</span></span>
       <span class="fill"></span>
-      <span class="n">0 tracked</span>
+      <span class="n"><span class="t-en">0 tracked</span><span class="t-zh">收录 0 条</span></span>
     </div>
-    <div class="note">London-based institute for defence and security studies; publisher of The Military Balance.</div>
+    <div class="note"><span class="t-en">London-based institute for defence and security studies; publisher of The Military Balance.</span><span class="t-zh">伦敦国防与安全研究机构；《军力平衡》出版方。</span></div>
   </div>
   
   
-  <h2>China Focus</h2>
+  <h2><span class="t-en">China Focus</span><span class="t-zh">中国焦点</span></h2>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://asiasociety.org/policy-institute" target="_blank" rel="noopener">Asia Society Policy Institute</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">107 tracked</span>
+      <span class="n"><span class="t-en">107 tracked</span><span class="t-zh">收录 107 条</span></span>
     </div>
-    <div class="note">Asia-focused policy institute; home of the Center for China Analysis.</div>
+    <div class="note"><span class="t-en">Asia-focused policy institute; home of the Center for China Analysis.</span><span class="t-zh">聚焦亚洲的政策研究所；中国分析中心所在地。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://merics.org" target="_blank" rel="noopener">MERICS</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">27 tracked</span>
+      <span class="n"><span class="t-en">27 tracked</span><span class="t-zh">收录 27 条</span></span>
     </div>
-    <div class="note">Berlin-based institute wholly dedicated to contemporary China research — Europe&#39;s leading China think tank.</div>
+    <div class="note"><span class="t-en">Berlin-based institute wholly dedicated to contemporary China research — Europe&#39;s leading China think tank.</span><span class="t-zh">柏林的当代中国研究专门机构——欧洲最重要的中国智库。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://rhg.com" target="_blank" rel="noopener">Rhodium Group</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">11 tracked</span>
+      <span class="n"><span class="t-en">11 tracked</span><span class="t-zh">收录 11 条</span></span>
     </div>
-    <div class="note">Independent research provider on China&#39;s economy and US-China economic relations.</div>
+    <div class="note"><span class="t-en">Independent research provider on China&#39;s economy and US-China economic relations.</span><span class="t-zh">独立研究机构，专注中国经济与美中经济关系。</span></div>
   </div>
   
   <div class="src">
     <div class="row1">
       <span class="name"><a href="https://www.conference-board.org/asia/china" target="_blank" rel="noopener">Conference Board China Center</a></span>
-      <span class="badge ok">active</span>
+      <span class="badge ok"><span class="t-en">active</span><span class="t-zh">活跃</span></span>
       <span class="fill"></span>
-      <span class="n">58 tracked</span>
+      <span class="n"><span class="t-en">58 tracked</span><span class="t-zh">收录 58 条</span></span>
     </div>
-    <div class="note">Business-facing research on China&#39;s economy for a corporate-executive audience.</div>
+    <div class="note"><span class="t-en">Business-facing research on China&#39;s economy for a corporate-executive audience.</span><span class="t-zh">面向企业高管的中国经济研究。</span></div>
   </div>
   
   
 
   
   <details class="rankfold">
-    <summary><h2>Coverage vs. the UPenn think tank ranking</h2></summary>
-    <p class="note">The reference is the final (2020) edition of the University of Pennsylvania TTCSP Global Go To Think Tank Index — the program ended in 2021, so this remains the canonical ranking. Brookings sits outside the numbered table as the index&#39;s &#34;Center of Excellence.&#34;
-</p>
+    <summary><h2><span class="t-en">Coverage vs. the UPenn think tank ranking</span><span class="t-zh">覆盖面对照：宾大全球智库排名</span></h2></summary>
+    <p class="note"><span class="t-en">The reference is the final (2020) edition of the University of Pennsylvania TTCSP Global Go To Think Tank Index — the program ended in 2021, so this remains the canonical ranking. Brookings sits outside the numbered table as the index&#39;s &#34;Center of Excellence.&#34;
+</span><span class="t-zh">参照系为宾夕法尼亚大学 TTCSP《全球智库指数》最终版（2020年）——该项目已于 2021年结束，此排名因此成为定版。布鲁金斯学会未列入编号名单，以该指数的 「卓越中心」身份单列。
+</span></p>
     
     <div class="rank-group">
-      <div class="rank-h">Top Think Tanks Worldwide (US and non-US), 2020</div>
+      <div class="rank-h"><span class="t-en">Top Think Tanks Worldwide (US and non-US), 2020</span><span class="t-zh">2020年全球顶级智库（美国及非美国）</span></div>
       
       <div class="rank-row covered">
         <span class="rk">★</span>
         <span class="rname">Brookings Institution (US)</span>
-        <span class="mark">✓ tracked</span>
-        <span class="rnote">ranked apart as Center of Excellence</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
+        <span class="rnote"><span class="t-en">ranked apart as Center of Excellence</span><span class="t-zh">以「卓越中心」单列</span></span>
       </div>
       
       <div class="rank-row covered">
         <span class="rk">1</span>
         <span class="rname">Carnegie Endowment for International Peace (US)</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">2</span>
         <span class="rname">Bruegel (Belgium)</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -479,7 +517,7 @@
       <div class="rank-row covered">
         <span class="rk">4</span>
         <span class="rname">Center for Strategic and International Studies (US)</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -493,7 +531,7 @@
       <div class="rank-row covered">
         <span class="rk">6</span>
         <span class="rname">Chatham House (UK)</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -501,20 +539,20 @@
         <span class="rk">7</span>
         <span class="rname">International Institute for Strategic Studies (UK)</span>
         <span class="mark">—</span>
-        <span class="rnote">selected, but the site doesn&#39;t permit automated readers</span>
+        <span class="rnote"><span class="t-en">selected, but the site doesn&#39;t permit automated readers</span><span class="t-zh">已入选，但其网站不允许自动化读取</span></span>
       </div>
       
       <div class="rank-row covered">
         <span class="rk">8</span>
         <span class="rname">Heritage Foundation (US)</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">9</span>
         <span class="rname">Peterson Institute for International Economics (US)</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -522,53 +560,53 @@
         <span class="rk">10</span>
         <span class="rname">Woodrow Wilson International Center for Scholars (US)</span>
         <span class="mark">—</span>
-        <span class="rnote">effectively closed, 2025</span>
+        <span class="rnote"><span class="t-en">effectively closed, 2025</span><span class="t-zh">2025年实际停摆</span></span>
       </div>
       
     </div>
     
     <div class="rank-group">
-      <div class="rank-h">Top Think Tanks in the United States, 2020</div>
+      <div class="rank-h"><span class="t-en">Top Think Tanks in the United States, 2020</span><span class="t-zh">2020年美国顶级智库</span></div>
       
       <div class="rank-row covered">
         <span class="rk">★</span>
         <span class="rname">Brookings Institution</span>
-        <span class="mark">✓ tracked</span>
-        <span class="rnote">ranked apart as Center of Excellence</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
+        <span class="rnote"><span class="t-en">ranked apart as Center of Excellence</span><span class="t-zh">以「卓越中心」单列</span></span>
       </div>
       
       <div class="rank-row covered">
         <span class="rk">1</span>
         <span class="rname">Center for Strategic and International Studies</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">2</span>
         <span class="rname">Carnegie Endowment for International Peace</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">3</span>
         <span class="rname">Heritage Foundation</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">4</span>
         <span class="rname">Peterson Institute for International Economics</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">5</span>
         <span class="rname">Urban Institute</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -576,41 +614,41 @@
         <span class="rk">6</span>
         <span class="rname">Woodrow Wilson International Center for Scholars</span>
         <span class="mark">—</span>
-        <span class="rnote">effectively closed, 2025</span>
+        <span class="rnote"><span class="t-en">effectively closed, 2025</span><span class="t-zh">2025年实际停摆</span></span>
       </div>
       
       <div class="rank-row covered">
         <span class="rk">7</span>
         <span class="rname">Center for American Progress</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">8</span>
         <span class="rname">Atlantic Council</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">9</span>
         <span class="rname">RAND Corporation</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">10</span>
         <span class="rname">Hudson Institute</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
       <div class="rank-row covered">
         <span class="rk">11</span>
         <span class="rname">Council on Foreign Relations</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -624,7 +662,7 @@
       <div class="rank-row covered">
         <span class="rk">13</span>
         <span class="rname">Cato Institute</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
@@ -632,37 +670,38 @@
         <span class="rk">14</span>
         <span class="rname">Center for a New American Security</span>
         <span class="mark">—</span>
-        <span class="rnote">see note below</span>
+        <span class="rnote"><span class="t-en">see note below</span><span class="t-zh">见下方说明</span></span>
       </div>
       
       <div class="rank-row covered">
         <span class="rk">15</span>
         <span class="rname">American Enterprise Institute</span>
-        <span class="mark">✓ tracked</span>
+        <span class="mark"><span class="t-en">✓ tracked</span><span class="t-zh">✓ 已收录</span></span>
         
       </div>
       
     </div>
     
-    <p class="note">Also weighed but not tracked: CNAS (closely tied to Democratic administrations; the tracked list favors sources with signal for current policy direction) and the Australian Strategic Policy Institute (security focus; Lowy Institute selected for the region instead).
-</p>
+    <p class="note"><span class="t-en">Also weighed but not tracked: CNAS (closely tied to Democratic administrations; the tracked list favors sources with signal for current policy direction) and the Australian Strategic Policy Institute (security focus; Lowy Institute selected for the region instead).
+</span><span class="t-zh">亦曾权衡但未纳入追踪：CNAS（与民主党政府关系密切；追踪名单偏向对当前政策 方向有信号价值的来源）与澳大利亚战略政策研究所（安全焦点；该区域已选 Lowy 研究所）。
+</span></p>
   </details>
   
 
-  <h2>Contact</h2>
+  <h2><span class="t-en">Contact</span><span class="t-zh">联系</span></h2>
   <div class="src">
     <div class="row1">
       <span class="name"><a href="mailto:aerqje@gmail.com">aerqje@gmail.com</a></span>
     </div>
-    <div class="note">Questions, corrections, and removal requests all welcome.</div>
+    <div class="note"><span class="t-en">Questions, corrections, and removal requests all welcome.</span><span class="t-zh">欢迎来信提问、指正或要求移除内容。</span></div>
   </div>
 
   <footer>
-    <a href="archive.html">archive</a>
-    <a href="all-items.html">all items</a>
+    <a href="archive.html"><span class="t-en">archive</span><span class="t-zh">往期</span></a>
+    <a href="all-items.html"><span class="t-en">all items</span><span class="t-zh">全部条目</span></a>
     <a href="x-pulse-en.html">ChinaX</a>
     <a href="x-pulse-zh.html">坊间</a>
-    <span>generated 2026-07-30</span>
+    <span><span class="t-en">generated 2026-07-30</span><span class="t-zh">生成于 2026-07-30</span></span>
   </footer>
 </main>
 <script>
@@ -684,6 +723,25 @@
     else root.removeAttribute("data-theme");
     try { localStorage.setItem("ttt-theme", toLight ? "light" : "dark"); }
     catch (e) {}
+  });
+
+  // language toggle: same contract as the theme toggle (chrome swaps via
+  // CSS; only document.title needs JS)
+  var TITLE_EN = "Think Tank Tracker \u2014 About";
+  var TITLE_ZH = "Think Tank Tracker \u2014 \u5173\u4e8e";
+  function applyLangAttrs() {
+    var zh = document.documentElement.getAttribute("data-lang") === "zh";
+    document.title = zh ? TITLE_ZH : TITLE_EN;
+  }
+  applyLangAttrs();
+  var langBtn = document.getElementById("langToggle");
+  if (langBtn) langBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var toZh = root.getAttribute("data-lang") !== "zh";
+    if (toZh) { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
+    else { root.removeAttribute("data-lang"); root.lang = "en"; }
+    try { localStorage.setItem("ttt-lang", toZh ? "zh" : "en"); } catch (e) {}
+    applyLangAttrs();
   });
 })();
 </script>
