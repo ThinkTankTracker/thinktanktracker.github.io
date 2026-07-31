@@ -91,6 +91,9 @@
   .stat .v.hi { color: var(--star); }
   .stat .k { font: 10px var(--mono); letter-spacing: .14em; text-transform: uppercase;
              color: var(--muted); margin-top: 2px; }
+  /* linked stats stay quiet: no underline, the label inks up on hover */
+  a.stat:hover { text-decoration: none; }
+  a.stat:hover .k { color: var(--accent); }
   /* search: entry point only — submits to the all-items page, which filters */
   .search { margin-left: auto; display: flex; }
   .search input { font: 12px var(--mono); color: var(--ink);
@@ -301,6 +304,18 @@
     .facets { grid-template-columns: 1fr; }
   }
 
+  /* back to top: appears once the masthead is well out of view */
+  .totop { position: fixed; right: 18px; bottom: 18px; z-index: 25;
+           width: 36px; height: 36px; font: 15px var(--mono);
+           color: var(--muted); background: var(--panel);
+           border: 1px solid var(--line-2); border-radius: 6px;
+           cursor: pointer; box-shadow: var(--shadow);
+           opacity: 0; visibility: hidden; transform: translateY(6px);
+           transition: opacity .18s ease, transform .18s ease, visibility .18s,
+                       color .15s ease, border-color .15s ease; }
+  .totop.show { opacity: 1; visibility: visible; transform: none; }
+  .totop:hover { color: var(--accent); border-color: var(--accent); }
+
   /* motion: cross-page fades, filter breathing, fold fade-ins */
   @view-transition { navigation: auto; }
   h1 { view-transition-name: ttt-title; }
@@ -399,9 +414,12 @@
           <button type="button" data-scope="total"><span class="t-en">total</span><span class="t-zh">累计</span></button>
         </div>
       </details>
-      <div class="stat"><div class="v" id="scopeItems">1075</div><div class="k"><span class="t-en">new items</span><span class="t-zh">新增条目</span></div></div>
-      <div class="stat"><div class="v" id="scopeSources">23</div><div class="k"><span class="t-en">sources</span><span class="t-zh">来源</span></div></div>
-      <div class="stat"><div class="v hi" id="scopeTopreads">217</div><div class="k"><span class="t-en">top reads</span><span class="t-zh">精选</span></div></div>
+      
+      <a class="stat" href="all-items.html"><div class="v" id="scopeItems">1075</div><div class="k"><span class="t-en">new items</span><span class="t-zh">新增条目</span></div></a>
+      <a class="stat" href="about.html"><div class="v" id="scopeSources">23</div><div class="k"><span class="t-en">sources</span><span class="t-zh">来源</span></div></a>
+      
+      <a class="stat" href="#sec-top"><div class="v hi" id="scopeTopreads">217</div><div class="k"><span class="t-en">top reads</span><span class="t-zh">精选</span></div></a>
+      
       <form class="search" action="all-items.html" method="get">
         <input type="search" name="q" placeholder="search all items"
                aria-label="search all items" autocomplete="off"
@@ -8090,6 +8108,8 @@
   </div>
 </div>
 
+<button type="button" class="totop" id="toTop" aria-label="back to top / 返回顶部">↑</button>
+
 <script>
 (function () {
   var state = { source: "", topic: "" };
@@ -8232,7 +8252,7 @@
     void el.offsetWidth;                 // restart the animation
     el.classList.add("arrived");
   }
-  document.querySelectorAll(".jump-row").forEach(function (j) {
+  document.querySelectorAll(".jump-row, a.stat[href^='#']").forEach(function (j) {
     j.addEventListener("click", function () {
       var sec = document.querySelector(j.getAttribute("href"));
       if (sec) flashArrival(sec);
@@ -8298,6 +8318,25 @@
     try { localStorage.setItem("ttt-lang", toZh ? "zh" : "en"); } catch (e) {}
     applyLangAttrs();
   });
+
+  // back to top: rides in once the reader is a screen down; the click is
+  // the only smooth scroll on the site, so it defers to reduced motion
+  var topBtn = document.getElementById("toTop");
+  if (topBtn) {
+    var topTick = false;
+    var syncTop = function () {
+      topBtn.classList.toggle("show", window.scrollY > 600);
+      topTick = false;
+    };
+    addEventListener("scroll", function () {
+      if (!topTick) { topTick = true; requestAnimationFrame(syncTop); }
+    }, { passive: true });
+    syncTop();
+    topBtn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior:
+        matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+  }
 })();
 </script>
 </body>

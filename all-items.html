@@ -153,6 +153,18 @@
     .facets { grid-template-columns: 1fr; }
   }
 
+  /* back to top: appears once the masthead is well out of view */
+  .totop { position: fixed; right: 18px; bottom: 18px; z-index: 25;
+           width: 36px; height: 36px; font: 15px var(--mono);
+           color: var(--muted); background: var(--panel);
+           border: 1px solid var(--line-2); border-radius: 6px;
+           cursor: pointer; box-shadow: var(--shadow);
+           opacity: 0; visibility: hidden; transform: translateY(6px);
+           transition: opacity .18s ease, transform .18s ease, visibility .18s,
+                       color .15s ease, border-color .15s ease; }
+  .totop.show { opacity: 1; visibility: visible; transform: none; }
+  .totop:hover { color: var(--accent); border-color: var(--accent); }
+
   /* motion */
   @view-transition { navigation: auto; }
   h1 { view-transition-name: ttt-title; }
@@ -7422,6 +7434,8 @@
   </div>
 </div>
 
+<button type="button" class="totop" id="toTop" aria-label="back to top / 返回顶部">↑</button>
+
 <script>
 (function () {
   var state = { source: "", topic: "", q: "" };
@@ -7585,6 +7599,25 @@
     try { localStorage.setItem("ttt-lang", toZh ? "zh" : "en"); } catch (e) {}
     applyLangAttrs();
   });
+
+  // back to top: rides in once the reader is a screen down; the click is
+  // the only smooth scroll on the site, so it defers to reduced motion
+  var topBtn = document.getElementById("toTop");
+  if (topBtn) {
+    var topTick = false;
+    var syncTop = function () {
+      topBtn.classList.toggle("show", window.scrollY > 600);
+      topTick = false;
+    };
+    addEventListener("scroll", function () {
+      if (!topTick) { topTick = true; requestAnimationFrame(syncTop); }
+    }, { passive: true });
+    syncTop();
+    topBtn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior:
+        matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    });
+  }
 })();
 </script>
 </body>
