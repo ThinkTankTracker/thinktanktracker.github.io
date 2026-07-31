@@ -138,6 +138,9 @@
   /* rows hang-indent into a 16px gutter: the leading ▸ lives there, so
      title wraps and the opened summary stay aligned on the text edge */
   li { list-style: none; padding: 6px 4px 6px 16px; border-bottom: 1px solid var(--line); }
+  /* quiet row tint on real hover only — reinforces the whole-row hit zone;
+     touch is excluded so tapped rows don't keep a stuck highlight */
+  @media (hover: hover) { li:hover { background: var(--panel); } }
   li a { color: var(--soft); }
   li a:hover { color: var(--accent); }
   .m { font: 11px var(--mono); color: var(--muted); }
