@@ -335,14 +335,21 @@
     if (mq && mq.addEventListener)
       mq.addEventListener("change", function () { if (!stored()) apply(); });
   })();
-  /* pre-paint, language: ?lang= wins for the visit (shareable, never stored);
-     otherwise the stored choice; default English */
+  /* pre-paint, language: ?lang= wins for the visit and sticks for the TAB
+     (sessionStorage) so a shared-link reader keeps their language across
+     internal navigation — without ever touching the durable preference,
+     which only the toggle writes. Priority: param > stored > visit. */
   (function () {
     var root = document.documentElement;
     var lang = null;
     try { lang = new URLSearchParams(location.search).get("lang"); } catch (e) {}
-    if (lang !== "zh" && lang !== "en") {
+    if (lang === "zh" || lang === "en") {
+      try { sessionStorage.setItem("ttt-lang-visit", lang); } catch (e) {}
+    } else {
       try { lang = localStorage.getItem("ttt-lang"); } catch (e) { lang = null; }
+      if (lang !== "zh" && lang !== "en") {
+        try { lang = sessionStorage.getItem("ttt-lang-visit"); } catch (e) { lang = null; }
+      }
     }
     if (lang === "zh") { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
   })();
