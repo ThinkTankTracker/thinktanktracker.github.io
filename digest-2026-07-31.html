@@ -350,6 +350,16 @@
       if (lang !== "zh" && lang !== "en") {
         try { lang = sessionStorage.getItem("ttt-lang-visit"); } catch (e) { lang = null; }
       }
+      if (lang !== "zh" && lang !== "en") {
+        /* first visit: follow the browser language, as the theme follows the
+           OS scheme — first decisive entry wins (zh* -> Chinese, en* -> stop
+           at the English default; other languages defer to later entries) */
+        var prefs = navigator.languages || [navigator.language || ""];
+        for (var i = 0; i < prefs.length; i++) {
+          if (/^zh/i.test(prefs[i])) { lang = "zh"; break; }
+          if (/^en/i.test(prefs[i])) { break; }
+        }
+      }
     }
     if (lang === "zh") { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
   })();
