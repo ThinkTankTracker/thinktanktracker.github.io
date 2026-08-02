@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>坊间 · 键政圈 · 2026-08 (experimental)</title>
+<style>
+  /* Informal identity, distinct from the digest's navy: this page is
+     individual chatter, not institutional research. Explicit color-scheme +
+     background: without them, forced-dark browsers repaint the page into
+     dark-on-dark unreadability (observed live). */
+  :root { color-scheme: light dark;
+          --accent: #0f766e; --muted: #6b7280; --rule: #e5e7eb;
+          --bg: #ffffff; --fg: #111827; --chip-bg: #ffffff;
+          --seg-rule: #99f6e4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --accent: #2dd4bf; --muted: #94a3b8; --rule: #334155;
+            --bg: #0f172a; --fg: #e2e8f0; --chip-bg: #1e293b;
+            --seg-rule: #134e4a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 760px; padding: 2rem 1.25rem 4rem;
+         font-family: -apple-system, "Segoe UI", "PingFang SC",
+         "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+         background: var(--bg); color: var(--fg); line-height: 1.6; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: .75rem;
+           margin-bottom: 1rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; color: var(--accent); }
+  .exp { display: inline-block; vertical-align: middle; margin-left: .5rem;
+         font-size: .68rem; font-weight: 600; letter-spacing: .05em;
+         color: #92400e; background: #fef3c7; border: 1px solid #fcd34d;
+         border-radius: 3px; padding: .05rem .4rem; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: .85rem; margin: 0; }
+  .crumbs { display: flex; justify-content: space-between; align-items: baseline;
+            gap: 1rem; font-size: .9rem; margin: 0 0 .7rem; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+  .chips { margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+  .chip { font-size: .78rem; border: 1px solid var(--rule); border-radius: 999px;
+          padding: .1rem .6rem; cursor: pointer; background: var(--chip-bg);
+          color: var(--fg); user-select: none; }
+  .chip .n { color: var(--muted); margin-left: .25rem; }
+  .chip.on { background: var(--accent); border-color: var(--accent);
+             color: var(--bg); }
+  .chip.on .n { color: var(--bg); opacity: .7; }
+  .chip.zero { opacity: .45; }
+  h2 { font-size: .95rem; margin: 1.8rem 0 .2rem; color: var(--accent);
+       border-bottom: 1px solid var(--rule); padding-bottom: .2rem; }
+  ul.posts { list-style: none; margin: 0; padding: 0; }
+  ul.posts li { border-top: 1px solid #f3f4f6; padding: .5rem 0; }
+  ul.posts li:first-child { border-top: 0; }
+  .meta { font-size: .78rem; color: var(--muted); }
+  .who { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .cn { color: var(--muted); font-weight: 400; }
+  .reply, .mbadge { font-size: .72rem; border: 1px solid var(--rule); border-radius: 3px;
+           padding: 0 .25rem; margin-left: .3rem; }
+  .ptext { margin: .1rem 0 0; white-space: pre-wrap; word-break: break-word; }
+  .ptext a { color: var(--accent); font-size: .8rem; text-decoration: none;
+             margin-left: .4rem; white-space: nowrap; }
+  blockquote.qt { border-left: 2px solid var(--rule); margin: .3rem 0 .1rem;
+                  padding: .05rem .6rem; color: var(--muted); font-size: .9em;
+                  white-space: pre-wrap; word-break: break-word; }
+  blockquote.qt a { color: var(--accent); font-size: .85em;
+                    text-decoration: none; margin-right: .45rem; }
+  .thr { font-size: .72rem; color: var(--bg); background: var(--accent);
+         border-radius: 3px; padding: 0 .3rem; margin-left: .3rem; }
+  .seg + .seg { border-left: 2px solid var(--seg-rule); margin-top: .35rem;
+                padding-left: .6rem; }
+  footer { margin-top: 3rem; border-top: 1px solid var(--rule);
+           padding-top: .75rem; color: var(--muted); font-size: .78rem; }
+</style>
+</head>
+<body>
+<header>
+  <nav class="crumbs">
+    <span><a href="index.html">← Think Tank Tracker</a> ·
+      <a href="x-pulse-zh.html">近况</a></span>
+    <span><a href="x-pulse-en.html">⇄ ChinaX</a></span>
+  </nav>
+  <h1>坊间 · 键政圈 · 2026-08<span class="exp">experimental</span></h1>
+  <p class="sub">中文键政圈的个人发言与坊间议论——吃瓜、读帖、看风向;轻松、即时、未经编辑。</p>
+  <p class="sub">6 条帖子 · 1 组推文串 ·
+    名单出自 Asia Society <a href="https://asiasociety.org/policy-institute/china-watching-chinese" target="_blank" rel="noopener" style="color:inherit">China Watching in the Chinese Language</a>
+ · 更新于 2026-08-03(北京时间)</p>
+  <div class="chips" id="chips">
+    <span class="chip on" data-handle="">全部<span class="n">6</span></span>
+    
+    <span class="chip zero" data-handle="CaoLei1">曹山石<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="CinnabarOcean">云青天<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="CNPoliWatch">中国人事观察<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="FollowCnRules">中规中矩<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="Guoguang_Wu">吴国光<span class="n">1</span></span>
+    
+    <span class="chip zero" data-handle="HankInBeijing">HankInBeijing<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="JosephWen___">Joseph.W 約瑟<span class="n">3</span></span>
+    
+    <span class="chip" data-handle="MacroMargin">宏观边际<span class="n">2</span></span>
+    
+    <span class="chip zero" data-handle="MaoViews">MaoViews<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="ZhongXinXi1">鍾馨溪<span class="n">0</span></span>
+    
+  </div>
+</header>
+
+
+<section class="day">
+  <h2>8月2日 星期日</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>13:25</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">又TACO了？
+看了下TACO指数，巧的是，刚好触及前高水平，
+此前也是这个水平触发的TACO（暂停打击，随后达成脆弱的停火协议）<span class="mbadge">带图</span><a href="https://x.com/MacroMargin/status/2083786117883814087" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/fxtrader/status/2083739911430287810" target="_blank" rel="noopener">@fxtrader</a>特朗普宣布，收到伊朗等国家的请求，取消此次对伊朗的打击，前提是迅速达成协议。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="JosephWen___">
+      <div class="meta"><span>12:36</span> ·
+        <a class="who" href="https://x.com/JosephWen___" target="_blank"
+           rel="noopener">@JosephWen___</a> <span class="cn">Joseph.W 約瑟</span><span class="thr">推文串 · 3 条</span></div>
+      
+      <div class="ptext seg">昨日，央視發布“[我们的节日]庆祝中国人民解放军建军99周年特别报道 远箱火“精准点穴”如何炼成？”軍事報導。
+
+報導顯示，71集團軍炮兵旅（73101部隊）遠火營曾於「數年前」接裝PHL-191，地理定位顯示，該接裝地點位於福建福州福清鏡洋鎮長征村。
+
+該營區目前正在重新整建，原為第二訓練基地（31620部隊）使用，央視亦在今年3月16日報導72集團軍火箭炮兵第1旅（31622部隊）1營2連PHL-191遠火該營區新建之簡易跑道遂行訓練，此為第二度報導遠火於該地出現。
+
+故有合理理由推測該營區可能全部，或部分設施撥交予東南沿海之遠火部隊使用。<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2083774010748285043" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">相關地理定位細節：
+
+Special thanks to @isekaimint help.<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2083774015404212368" target="_blank" rel="noopener">原帖 ↗</a></div>
+      
+      <div class="ptext seg">報導連結：
+https://tv.cctv.com/2026/08/01/VIDEP8XU91HqeabbR6jGIIyj260801.shtml?spm=C55953877151.PZoCQI3fz1JO.0.0
+
+央視在今年3月16日報導72集團軍火箭炮兵第1旅（31622部隊）1營2連PHL-191遠火該營區新建之簡易跑道遂行訓練：
+https://x.com/JosephWen___/status/2034099057724104888?s=20
+
+關於71集團軍炮兵旅過往相關貼文：
+1.
+https://x.com/JosephWen___/status/2057295102444486962?s=20
+2. https://x.com/JosephWen___/status/1994805717103215017?s=20 
+3.
+https://x.com/JosephWen___/status/1924877292289065460
+4. https://x.com/JosephWen___/status/1917932444675952896
+5. https://x.com/JosephWen___/status/1826499353319452964
+6. https://x.com/JosephWen___/status/1800912171729322411
+7. https://x.com/JosephWen___/status/1800559617258426875
+8. https://x.com/JosephWen___/status/1763101518541271349?s=20
+9. https://x.com/JosephWen___/status/1762856252189909246?s=20
+10. https://x.com/JosephWen___/status/1758130908148932637?s=20
+11. https://x.com/JosephWen___/status/1748209583989149824?s=20
+12. https://x.com/JosephWen___/status/1717200030770311296?s=20
+13. https://twitter.com/JosephWen___/status/1691853473644687452?s=20<span class="mbadge">带图</span><a href="https://x.com/JosephWen___/status/2083774020215017664" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/JosephWen___/status/1924877292289065460" target="_blank" rel="noopener">@JosephWen___</a>昨晚，央視發佈“学条令 守规矩 正秩序 记者探访陆军某旅学习贯彻新条令的生动实践”軍事報導。
+
+報導中之單位為71集團軍炮兵旅（73101部隊）5營，報導攝於該旅小壩山營區（江蘇省徐州市雲龍區銅山路250號）。
+
+該旅：魯文浩 少校</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="Guoguang_Wu">
+      <div class="meta"><span>02:09</span> ·
+        <a class="who" href="https://x.com/Guoguang_Wu" target="_blank"
+           rel="noopener">@Guoguang_Wu</a> <span class="cn">吴国光</span></div>
+      
+      <div class="ptext seg">供参考。“跳楼身亡”这一疫情似乎也在中共官场商场流行很长时间了，不知实际爆发到什么程度。如果陈毅在世，每天早上又要问“今天又有多少空降兵”了吧？<a href="https://x.com/guoguang_wu/status/2083616188454862915" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/buxiangdangguan/status/2083574906508526019" target="_blank" rel="noopener">@buxiangdangguan</a>卓尔控股有限公司董事长闫志跳楼身亡</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2>8月1日 星期六</h2>
+  <ul class="posts">
+    
+    <li data-handle="MacroMargin">
+      <div class="meta"><span>14:26</span> ·
+        <a class="who" href="https://x.com/MacroMargin" target="_blank"
+           rel="noopener">@MacroMargin</a> <span class="cn">宏观边际</span></div>
+      
+      <div class="ptext seg">8月了，
+央行的这个调查数据还没出呢...<a href="https://x.com/MacroMargin/status/2083439114289021312" target="_blank" rel="noopener">原帖 ↗</a>
+        <blockquote class="qt"><a href="https://x.com/MacroMargin/status/2077314438370357385" target="_blank" rel="noopener">@MacroMargin</a>今天因为是半年度数据发布高峰期，央行也发了最新金融数据，
+
+不过，我比较喜欢的另一个数据，即央行一季度的调查数据，到到现在还没发。
+
+往年都比较及时，去年一季度的调查拖到7月底才发，看来今年又要等到7月底😮‍💨</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+
+<footer>
+  实验性栏目;只收原创帖,转推不计。内容为账号作者个人观点,不代表任何机构立场。
+</footer>
+
+<script>
+  (function () {
+    var active = "";   // "" = 全部
+    var chips = document.querySelectorAll("#chips .chip");
+    function apply() {
+      document.querySelectorAll("ul.posts li").forEach(function (li) {
+        li.style.display = (!active || li.dataset.handle === active) ? "" : "none";
+      });
+      document.querySelectorAll("section.day").forEach(function (sec) {
+        var any = Array.prototype.some.call(
+          sec.querySelectorAll("li"), function (li) { return li.style.display !== "none"; });
+        sec.style.display = any ? "" : "none";
+      });
+      chips.forEach(function (c) {
+        c.classList.toggle("on", c.dataset.handle === active);
+      });
+    }
+    chips.forEach(function (c) {
+      c.addEventListener("click", function () {
+        active = (active === c.dataset.handle) ? "" : c.dataset.handle;
+        apply();
+      });
+    });
+  })();
+</script>
+</body>
+</html>
