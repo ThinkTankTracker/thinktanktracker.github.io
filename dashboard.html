@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Tank Tracker — dashboard</title>
+<meta name="description" content="Publication analytics for the Think Tank Tracker — output trends, themes, and most active sources across the tracked institutions.">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0d1117; --panel: #161b22;
+    --line: #21262d; --line-2: #30363d;
+    --ink: #e6edf3; --soft: #b7bfc7; --muted: #9198a1;
+    --accent: #4cc9f0; --accent-dim: #1f6f8b; --star: #f0b72f;
+    --shadow: 0 6px 18px rgba(0,0,0,.35);
+    --cjk: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei",
+           "Noto Sans CJK SC", "Noto Sans SC";
+    --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New",
+            var(--cjk), monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+            var(--cjk), sans-serif;
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f6f8fa; --panel: #ffffff;
+    --line: #d8dee4; --line-2: #afb8c1;
+    --ink: #1f2328; --soft: #424a53; --muted: #656d76;
+    --accent: #077799; --accent-dim: #9ecfe0; --star: #9a6700;
+    --shadow: 0 6px 18px rgba(31,35,40,.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scrollbar-gutter: stable; }
+  body { font-family: var(--sans); font-size: 15px; line-height: 1.55;
+         color: var(--ink); background: var(--bg); overflow-x: clip; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 36px 24px 80px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  :root:not([data-lang="zh"]) .t-zh { display: none; }
+  :root[data-lang="zh"] .t-en { display: none; }
+  :root[data-lang="zh"] .stat .k, :root[data-lang="zh"] .panel-sub,
+  :root[data-lang="zh"] .panel-note, :root[data-lang="zh"] .cell-h .name,
+  :root[data-lang="zh"] .disclose { font-size: 12px; }
+
+  h1 { font-size: 27px; font-weight: 650; letter-spacing: -.01em; margin: 0 0 2px; }
+  h1 a { color: inherit; }
+  h1 a:hover { color: var(--accent); text-decoration: none; }
+  .issue { font: 500 15px var(--mono); color: var(--soft); }
+
+  .topnav { position: sticky; top: 0; z-index: 30; display: flex;
+            align-items: center; gap: 22px; margin: 10px 0 0;
+            height: 44px; font: 13.5px var(--mono); letter-spacing: .05em;
+            background: var(--bg);
+            transition: background-color .25s ease, border-color .25s ease,
+                        font-size .2s ease; }
+  .topnav a { color: var(--accent); padding-bottom: 2px;
+              border-bottom: 1px solid transparent; }
+  .topnav a:hover { border-bottom-color: var(--accent); text-decoration: none; }
+  .topnav .here { color: var(--ink); border-bottom: 1px solid var(--line-2);
+                  padding-bottom: 2px; }
+  .topnav .brand { display: none; font: 700 11.5px var(--mono);
+                   letter-spacing: .22em; color: var(--accent);
+                   text-transform: uppercase; margin-right: auto;
+                   white-space: nowrap; padding-bottom: 0; border-bottom: none; }
+  .topnav.stuck { font-size: 14px;
+                  background: color-mix(in srgb, var(--bg) 90%, transparent);
+                  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                  border-bottom: 1px solid var(--line);
+                  margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+                  padding-left: calc(50vw - 50%); padding-right: calc(50vw - 50%); }
+  .topnav.stuck .brand { display: inline; animation: brandin .28s ease; }
+  @media (max-width: 560px) { .topnav.stuck .brand { display: none; } }
+  @keyframes brandin { from { opacity: 0; transform: translateY(5px); } }
+  .langtoggle, .themetoggle { font: inherit; letter-spacing: inherit;
+                 color: var(--muted); background: none; border: 0;
+                 cursor: pointer; padding: 2px 0; }
+  .langtoggle { margin-left: auto; }
+  .langtoggle .lt-sep { color: var(--line-2); margin: 0 4px; }
+  :root:not([data-lang="zh"]) .langtoggle .lt-en,
+  :root[data-lang="zh"] .langtoggle .lt-zh { color: var(--ink); }
+  :root:not([data-lang="zh"]) .langtoggle:hover .lt-zh,
+  :root[data-lang="zh"] .langtoggle:hover .lt-en { color: var(--accent); }
+  .themetoggle:hover { color: var(--accent); }
+  .themetoggle::before { content: "◐ "; }
+  .themetoggle::after { content: "light"; }
+  :root[data-theme="light"] .themetoggle::after { content: "dark"; }
+  :root[data-lang="zh"] .themetoggle::after { content: "浅色"; }
+  :root[data-lang="zh"][data-theme="light"] .themetoggle::after { content: "深色"; }
+  @media (max-width: 700px) { .themetoggle::after { display: none; } }
+
+  /* masthead strip: KPI tiles + disclosure */
+  .mastmeta { border-bottom: 1px solid var(--line-2); padding-bottom: 18px;
+              margin-bottom: 26px; }
+  .stats { display: flex; align-items: flex-start; gap: 30px; flex-wrap: wrap;
+           margin-top: 18px; }
+  .stat .v { font: 600 22px var(--mono); color: var(--ink); }
+  .stat .v.hi { color: var(--star); }
+  .stat .k { font: 10px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+             color: var(--muted); margin-top: 2px; }
+  a.stat:hover { text-decoration: none; }
+  a.stat:hover .k { color: var(--accent); }
+  .stat .meter { width: 64px; height: 3px; margin-top: 6px; border-radius: 2px;
+                 background: color-mix(in srgb, var(--star) 22%, transparent); }
+  .stat .meter span { display: block; height: 100%; border-radius: 2px;
+                      background: var(--star); }
+  .disclose { font: 11px var(--mono); color: var(--muted); margin-top: 14px; }
+
+  /* panels */
+  .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px;
+            margin-bottom: 14px; }
+  .grid-h { display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+            margin-bottom: 14px; }
+  .panel { background: var(--panel); border: 1px solid var(--line);
+           border-radius: 8px; padding: 14px 16px 12px; min-width: 0; }
+  .panel-h { font: 700 13px var(--mono); letter-spacing: .12em;
+             text-transform: uppercase; color: var(--ink);
+             padding-left: 9px; border-left: 3px solid var(--accent);
+             display: flex; align-items: baseline; gap: 10px; }
+  .panel-h .cnt { color: var(--muted); letter-spacing: 0; font-size: 11px;
+                  font-weight: 500; }
+  .panel-sub { font: 11px var(--mono); color: var(--muted);
+               margin: 4px 0 12px 12px; }
+  .panel-note { font: 10px var(--mono); color: var(--muted); margin-top: 8px; }
+  .panel svg { display: block; width: 100%; height: auto; }
+
+  /* svg marks: CSS vars keep every mark theme-correct in both schemes */
+  .col { fill: var(--accent); }
+  .col.prov { opacity: .45; }
+  .gl { stroke: var(--line); stroke-width: 1; }
+  .refline { stroke: var(--line-2); stroke-width: 1; }
+  .ax { font: 9px var(--mono); fill: var(--muted); }
+  .vlab { font: 600 10px var(--mono); fill: var(--soft); }
+  .ln { stroke: var(--accent); stroke-width: 2; fill: none;
+        stroke-linejoin: round; stroke-linecap: round; }
+  .ar { fill: var(--accent); opacity: .1; }
+  .dot { fill: var(--accent); stroke: var(--panel); stroke-width: 2; }
+  .hit { fill: transparent; outline: none; }
+  .hit:focus-visible { stroke: var(--accent-dim); stroke-width: 1; }
+
+  /* theme small multiples */
+  .cells { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 18px; }
+  .cell { min-width: 0; }
+  .cell-h { display: flex; justify-content: space-between; align-items: baseline;
+            font: 11px var(--mono); margin-bottom: 2px; }
+  .cell-h .name { letter-spacing: .1em; text-transform: uppercase;
+                  color: var(--soft); white-space: nowrap; overflow: hidden;
+                  text-overflow: ellipsis; }
+  .cell-h .n { color: var(--muted); }
+
+  /* china panel */
+  .china-recent { display: flex; gap: 26px; margin-top: 10px; }
+
+  /* source / tag bar rows (the site's facet-row idiom) */
+  .brow { position: relative; display: flex; align-items: baseline; gap: 8px;
+          padding: 4px 8px; border-radius: 4px; font: 12px var(--mono);
+          color: var(--soft); overflow: hidden; }
+  .brow .fill { position: absolute; left: 0; top: 0; bottom: 0;
+                background: color-mix(in srgb, var(--accent) 8%, transparent);
+                border-radius: 4px; pointer-events: none; }
+  .brow .name { position: relative; flex: 1; white-space: nowrap;
+                overflow: hidden; text-overflow: ellipsis; }
+  .brow .n { position: relative; color: var(--muted); }
+  .brow .star { position: relative; font-size: 10.5px; color: var(--muted); }
+  .brow .star .s { color: var(--star); }
+  a.brow { color: var(--soft); }
+  a.brow:hover { color: var(--accent); background: var(--panel);
+                 text-decoration: none; }
+  .rowfoot { font: 11px var(--mono); color: var(--muted); margin: 8px 8px 0; }
+  .rowfoot a { letter-spacing: .02em; }
+
+  /* tooltip layer (shared) */
+  .tip { position: fixed; z-index: 40; background: var(--panel);
+         border: 1px solid var(--line-2); border-radius: 6px;
+         padding: 5px 9px; font: 11px var(--mono); color: var(--ink);
+         box-shadow: var(--shadow); pointer-events: none; opacity: 0;
+         transition: opacity .1s ease; white-space: nowrap; }
+  .tip.show { opacity: 1; }
+
+  footer { margin-top: 42px; border-top: 1px solid var(--line); padding-top: 14px;
+           font: 11px var(--mono); color: var(--muted); display: flex; gap: 16px;
+           flex-wrap: wrap; }
+  footer .geninfo { margin-left: auto; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-h { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .cells { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @view-transition { navigation: auto; }
+  h1 { view-transition-name: ttt-title; }
+  .topnav { view-transition-name: ttt-nav; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important;
+                             transition: none !important; }
+    ::view-transition-group(*), ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+<script>
+  /* pre-paint: a stored choice wins; otherwise follow the OS scheme, live */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia && matchMedia("(prefers-color-scheme: light)");
+    function stored() {
+      try { var t = localStorage.getItem("ttt-theme"); } catch (e) { return null; }
+      return t === "light" || t === "dark" ? t : null;
+    }
+    function apply() {
+      var t = stored() || (mq && mq.matches ? "light" : "dark");
+      if (t === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+    }
+    apply();
+    if (mq && mq.addEventListener)
+      mq.addEventListener("change", function () { if (!stored()) apply(); });
+  })();
+  /* pre-paint, language: param > stored > visit > browser language */
+  (function () {
+    var root = document.documentElement;
+    var lang = null;
+    try { lang = new URLSearchParams(location.search).get("lang"); } catch (e) {}
+    if (lang === "zh" || lang === "en") {
+      try { sessionStorage.setItem("ttt-lang-visit", lang); } catch (e) {}
+    } else {
+      try { lang = localStorage.getItem("ttt-lang"); } catch (e) { lang = null; }
+      if (lang !== "zh" && lang !== "en") {
+        try { lang = sessionStorage.getItem("ttt-lang-visit"); } catch (e) { lang = null; }
+      }
+      if (lang !== "zh" && lang !== "en") {
+        var prefs = navigator.languages || [navigator.language || ""];
+        for (var i = 0; i < prefs.length; i++) {
+          if (/^zh/i.test(prefs[i])) { lang = "zh"; break; }
+          if (/^en/i.test(prefs[i])) { break; }
+        }
+      }
+    }
+    if (lang === "zh") { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
+  })();
+</script>
+</head>
+<body>
+
+
+<div class="wrap">
+
+  <header class="masthead">
+    <h1><a href="index.html">Think Tank Tracker</a></h1>
+    <div class="issue"><span class="t-en">dashboard · data through 2026-08-11</span><span class="t-zh">统计面板 · 数据截至 2026-08-11</span></div>
+  </header>
+  <div id="navSentinel"></div>
+  <nav class="topnav" id="topnav">
+    <a class="brand" href="index.html">Think Tank Tracker</a>
+    <a href="index.html"><span class="t-en">digest</span><span class="t-zh">日报</span></a>
+    <a href="archive.html"><span class="t-en">archive</span><span class="t-zh">往期</span></a>
+    <a href="all-items.html"><span class="t-en">all items</span><span class="t-zh">全部条目</span></a>
+    <span class="here"><span class="t-en">dashboard</span><span class="t-zh">统计</span></span>
+    <a href="x-pulse-en.html">ChinaX</a>
+    <a href="x-pulse-zh.html">坊间</a>
+    <a href="about.html"><span class="t-en">about</span><span class="t-zh">关于</span></a>
+    <button type="button" class="langtoggle" id="langToggle"
+            aria-label="switch language / 切换语言"><span class="lt-en">EN</span><span class="lt-sep">/</span><span class="lt-zh">中文</span></button>
+    <button type="button" class="themetoggle" id="themeToggle"
+            aria-label="switch color theme"></button>
+  </nav>
+
+  <div class="mastmeta">
+    <div class="stats">
+      <a class="stat" href="all-items.html"><div class="v">1,638</div><div class="k"><span class="t-en">items tracked</span><span class="t-zh">累计收录</span></div></a>
+      <div class="stat"><div class="v">1,280</div><div class="k"><span class="t-en">last 30 days</span><span class="t-zh">近30天</span></div></div>
+      <a class="stat" href="about.html"><div class="v">25</div><div class="k"><span class="t-en">sources</span><span class="t-zh">来源</span></div></a>
+      <div class="stat"><div class="v hi">359</div><div class="k"><span class="t-en">top reads · 22%</span><span class="t-zh">精选 · 22%</span></div>
+        <div class="meter"><span style="width: 22%"></span></div>
+      </div>
+    </div>
+    <div class="disclose"><span class="t-en">All figures count items tracked on this site — press mentions excluded.</span><span class="t-zh">所有统计以本站收录条目为准（不含媒体报道）。</span></div>
+  </div>
+
+  <section class="grid-2">
+    <div class="panel">
+      <h2 class="panel-h"><span class="t-en">daily output</span><span class="t-zh">每日产出</span></h2>
+      <div class="panel-sub"><span class="t-en">items per day, by publication date · last 30 days</span><span class="t-zh">每日条目数，按发布日期 · 近30天</span></div>
+      <svg viewBox="0 0 640 190" role="img"
+           aria-label="Daily items published over the last 30 days">
+        
+        <line class="gl" x1="34" x2="634" y1="164.0" y2="164.0"/>
+        <text class="ax" x="28" y="167.0" text-anchor="end">0</text>
+        
+        <line class="gl" x1="34" x2="634" y1="88.0" y2="88.0"/>
+        <text class="ax" x="28" y="91.0" text-anchor="end">50</text>
+        
+        <line class="gl" x1="34" x2="634" y1="12.0" y2="12.0"/>
+        <text class="ax" x="28" y="15.0" text-anchor="end">100</text>
+        
+        <path class="col" d="M37.0,164.0 V122.9 Q37.0,119.9 40.0,119.9 H48.0 Q51.0,119.9 51.0,122.9 V164.0 Z"/><path class="col" d="M57.0,164.0 V77.3 Q57.0,74.3 60.0,74.3 H68.0 Q71.0,74.3 71.0,77.3 V164.0 Z"/><path class="col" d="M77.0,164.0 V62.1 Q77.0,59.1 80.0,59.1 H88.0 Q91.0,59.1 91.0,62.1 V164.0 Z"/><path class="col" d="M97.0,164.0 V75.8 Q97.0,72.8 100.0,72.8 H108.0 Q111.0,72.8 111.0,75.8 V164.0 Z"/><path class="col" d="M117.0,164.0 V72.8 Q117.0,69.8 120.0,69.8 H128.0 Q131.0,69.8 131.0,72.8 V164.0 Z"/><path class="col" d="M137.0,164.0 V164.0 Q137.0,162.5 138.5,162.5 H149.5 Q151.0,162.5 151.0,164.0 V164.0 Z"/><path class="col" d="M157.0,164.0 V159.4 Q157.0,156.4 160.0,156.4 H168.0 Q171.0,156.4 171.0,159.4 V164.0 Z"/><path class="col" d="M177.0,164.0 V72.8 Q177.0,69.8 180.0,69.8 H188.0 Q191.0,69.8 191.0,72.8 V164.0 Z"/><path class="col" d="M197.0,164.0 V57.6 Q197.0,54.6 200.0,54.6 H208.0 Q211.0,54.6 211.0,57.6 V164.0 Z"/><path class="col" d="M217.0,164.0 V78.8 Q217.0,75.8 220.0,75.8 H228.0 Q231.0,75.8 231.0,78.8 V164.0 Z"/><path class="col" d="M237.0,164.0 V31.7 Q237.0,28.7 240.0,28.7 H248.0 Q251.0,28.7 251.0,31.7 V164.0 Z"/><path class="col" d="M257.0,164.0 V94.0 Q257.0,91.0 260.0,91.0 H268.0 Q271.0,91.0 271.0,94.0 V164.0 Z"/><path class="col" d="M297.0,164.0 V157.9 Q297.0,154.9 300.0,154.9 H308.0 Q311.0,154.9 311.0,157.9 V164.0 Z"/><path class="col" d="M317.0,164.0 V65.2 Q317.0,62.2 320.0,62.2 H328.0 Q331.0,62.2 331.0,65.2 V164.0 Z"/><path class="col" d="M337.0,164.0 V74.3 Q337.0,71.3 340.0,71.3 H348.0 Q351.0,71.3 351.0,74.3 V164.0 Z"/><path class="col" d="M357.0,164.0 V77.3 Q357.0,74.3 360.0,74.3 H368.0 Q371.0,74.3 371.0,77.3 V164.0 Z"/><path class="col" d="M377.0,164.0 V40.8 Q377.0,37.8 380.0,37.8 H388.0 Q391.0,37.8 391.0,40.8 V164.0 Z"/><path class="col" d="M397.0,164.0 V83.4 Q397.0,80.4 400.0,80.4 H408.0 Q411.0,80.4 411.0,83.4 V164.0 Z"/><path class="col" d="M437.0,164.0 V157.9 Q437.0,154.9 440.0,154.9 H448.0 Q451.0,154.9 451.0,157.9 V164.0 Z"/><path class="col" d="M457.0,164.0 V68.2 Q457.0,65.2 460.0,65.2 H468.0 Q471.0,65.2 471.0,68.2 V164.0 Z"/><path class="col" d="M477.0,164.0 V78.8 Q477.0,75.8 480.0,75.8 H488.0 Q491.0,75.8 491.0,78.8 V164.0 Z"/><path class="col" d="M497.0,164.0 V91.0 Q497.0,88.0 500.0,88.0 H508.0 Q511.0,88.0 511.0,91.0 V164.0 Z"/><path class="col" d="M517.0,164.0 V83.4 Q517.0,80.4 520.0,80.4 H528.0 Q531.0,80.4 531.0,83.4 V164.0 Z"/><path class="col" d="M537.0,164.0 V104.7 Q537.0,101.7 540.0,101.7 H548.0 Q551.0,101.7 551.0,104.7 V164.0 Z"/><path class="col" d="M557.0,164.0 V164.0 Q557.0,162.5 558.5,162.5 H569.5 Q571.0,162.5 571.0,164.0 V164.0 Z"/><path class="col" d="M577.0,164.0 V159.4 Q577.0,156.4 580.0,156.4 H588.0 Q591.0,156.4 591.0,159.4 V164.0 Z"/><path class="col prov" d="M597.0,164.0 V95.6 Q597.0,92.6 600.0,92.6 H608.0 Q611.0,92.6 611.0,95.6 V164.0 Z"/><path class="col prov" d="M617.0,164.0 V156.4 Q617.0,153.4 620.0,153.4 H628.0 Q631.0,153.4 631.0,156.4 V164.0 Z"/>
+        <text class="ax" x="44.0" y="182" text-anchor="middle">07-13</text><text class="ax" x="184.0" y="182" text-anchor="middle">07-20</text><text class="ax" x="324.0" y="182" text-anchor="middle">07-27</text><text class="ax" x="464.0" y="182" text-anchor="middle">08-03</text><text class="ax" x="604.0" y="182" text-anchor="middle">08-10</text>
+        <text class="vlab" x="244.0" y="23.7" text-anchor="middle">89</text>
+        <rect class="hit" tabindex="0" x="34.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 13 — 29 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月13日 — 29 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="54.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 14 — 59 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月14日 — 59 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="74.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 15 — 69 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月15日 — 69 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="94.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 16 — 60 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月16日 — 60 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="114.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 17 — 62 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月17日 — 62 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="134.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 18 — 1 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月18日 — 1 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="154.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 19 — 5 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月19日 — 5 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="174.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 20 — 62 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月20日 — 62 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="194.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 21 — 72 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月21日 — 72 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="214.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 22 — 58 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月22日 — 58 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="234.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 23 — 89 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月23日 — 89 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="254.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 24 — 48 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月24日 — 48 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="274.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 25 — 0 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月25日 — 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="294.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 26 — 6 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月26日 — 6 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="314.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 27 — 67 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月27日 — 67 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="334.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 28 — 61 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月28日 — 61 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="354.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 29 — 59 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月29日 — 59 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="374.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 30 — 83 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月30日 — 83 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="394.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Jul 31 — 55 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月31日 — 55 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="414.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 1 — 0 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月1日 — 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="434.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 2 — 6 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月2日 — 6 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="454.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 3 — 65 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月3日 — 65 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="474.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 4 — 58 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月4日 — 58 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="494.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 5 — 50 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月5日 — 50 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="514.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 6 — 55 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月6日 — 55 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="534.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 7 — 41 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月7日 — 41 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="554.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 8 — 1 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月8日 — 1 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="574.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 9 — 5 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月9日 — 5 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="594.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 10 — 47 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月10日 — 47 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="614.0" y="12" width="20.0" height="152" data-tip="&lt;span class=&#34;t-en&#34;&gt;Aug 11 — 7 items&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月11日 — 7 条&lt;/span&gt;"/>
+      </svg>
+      <div class="panel-note"><span class="t-en">dimmed bars: the most recent days are still filling in</span><span class="t-zh">浅色柱：近几日数据仍在补录</span></div>
+    </div>
+    <div class="panel">
+      <h2 class="panel-h"><span class="t-en">china focus</span><span class="t-zh">中国专题</span></h2>
+      <div class="panel-sub"><span class="t-en">weekly share of items in the China theme</span><span class="t-zh">中国主题条目的每周占比</span></div>
+      <svg viewBox="0 0 340 170" role="img"
+           aria-label="Weekly share of China-theme items">
+        
+        <line class="gl" x1="30" x2="304" y1="150.0" y2="150.0"/>
+        <text class="ax" x="24" y="153.0" text-anchor="end">0%</text>
+        
+        <line class="gl" x1="30" x2="304" y1="84.7" y2="84.7"/>
+        <text class="ax" x="24" y="87.7" text-anchor="end">12%</text>
+        
+        <line class="gl" x1="30" x2="304" y1="14.0" y2="14.0"/>
+        <text class="ax" x="24" y="17.0" text-anchor="end">25%</text>
+        
+        <line class="refline" x1="30" x2="304" y1="57.5" y2="57.5"/>
+        <text class="ax" x="308" y="60.5"><span class="t-en">avg</span><span class="t-zh">均值</span></text>
+        <path class="ln" d="M30.0,150.0 L64.2,150.0 L98.5,84.7 L132.8,68.4 L167.0,79.3 L201.2,84.7 L235.5,46.6 L269.8,30.3 L304.0,46.6"/>
+        <circle class="dot" cx="304.0" cy="46.6" r="3.5"/>
+        <text class="vlab" x="311.0" y="49.6">19%</text>
+        <text class="ax" x="30" y="164">06-01</text>
+        <text class="ax" x="304" y="164" text-anchor="end">08-03</text>
+        <rect class="hit" tabindex="0" x="12.9" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jun 1 — 0% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;6月1日当周 — 中国主题 0%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="47.1" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jun 15 — 0% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;6月15日当周 — 中国主题 0%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="81.4" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jun 22 — 12% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;6月22日当周 — 中国主题 12%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="115.6" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jun 29 — 15% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;6月29日当周 — 中国主题 15%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="149.9" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jul 6 — 13% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月6日当周 — 中国主题 13%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="184.1" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jul 13 — 12% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月13日当周 — 中国主题 12%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="218.4" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jul 20 — 19% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月20日当周 — 中国主题 19%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="252.6" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Jul 27 — 22% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;7月27日当周 — 中国主题 22%&lt;/span&gt;"/><rect class="hit" tabindex="0" x="286.9" y="14" width="34.2" height="136" data-tip="&lt;span class=&#34;t-en&#34;&gt;wk of Aug 3 — 19% China&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;8月3日当周 — 中国主题 19%&lt;/span&gt;"/>
+      </svg>
+      <div class="china-recent">
+        <div class="stat"><div class="v">18%</div><div class="k"><span class="t-en">last 4 weeks</span><span class="t-zh">近4周占比</span></div></div>
+        <div class="stat"><div class="v">17%</div><div class="k"><span class="t-en">average</span><span class="t-zh">整体均值</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-bottom: 14px;">
+    <h2 class="panel-h"><span class="t-en">themes over time</span><span class="t-zh">主题走势</span><span class="cnt"><span class="t-en">9 complete weeks</span><span class="t-zh">近 9 个完整周</span></span></h2>
+    <div class="panel-sub"><span class="t-en">weekly items per theme · shared scale · ordered by total</span><span class="t-zh">各主题每周条目数 · 同一坐标 · 按累计量排序</span></div>
+    <div class="cells">
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="Other"><span class="t-en">Other</span><span class="t-zh">其他</span></span><span class="n">313</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="Other weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,48.0 L41.0,47.5 L59.5,34.9 L78.0,31.2 L96.5,15.4 L115.0,13.9 L133.5,19.1 L152.0,17.6 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,48.0 L41.0,47.5 L59.5,34.9 L78.0,31.2 L96.5,15.4 L115.0,13.9 L133.5,19.1 L152.0,17.6"/>
+          <circle class="dot" cx="152.0" cy="17.6" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jun 15: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 6月15日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jun 22: 1&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 6月22日当周: 1 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jun 29: 25&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 6月29日当周: 25 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jul 6: 32&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 7月6日当周: 32 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jul 13: 62&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 7月13日当周: 62 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jul 20: 65&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 7月20日当周: 65 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Jul 27: 55&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 7月27日当周: 55 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Other — wk of Aug 3: 58&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;其他 — 8月3日当周: 58 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="Geopolitics"><span class="t-en">Geopolitics</span><span class="t-zh">地缘政治</span></span><span class="n">304</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="Geopolitics weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,48.0 L41.0,45.4 L59.5,34.9 L78.0,32.8 L96.5,23.9 L115.0,12.8 L133.5,13.9 L152.0,17.6 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,48.0 L41.0,45.4 L59.5,34.9 L78.0,32.8 L96.5,23.9 L115.0,12.8 L133.5,13.9 L152.0,17.6"/>
+          <circle class="dot" cx="152.0" cy="17.6" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jun 15: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 6月15日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jun 22: 5&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 6月22日当周: 5 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jun 29: 25&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 6月29日当周: 25 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jul 6: 29&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 7月6日当周: 29 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jul 13: 46&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 7月13日当周: 46 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jul 20: 67&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 7月20日当周: 67 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Jul 27: 65&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 7月27日当周: 65 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Geopolitics — wk of Aug 3: 58&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;地缘政治 — 8月3日当周: 58 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="China"><span class="t-en">China</span><span class="t-zh">中国</span></span><span class="n">286</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="China weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,48.0 L41.0,46.9 L59.5,37.5 L78.0,34.9 L96.5,30.7 L115.0,13.9 L133.5,9.1 L152.0,20.2 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,48.0 L41.0,46.9 L59.5,37.5 L78.0,34.9 L96.5,30.7 L115.0,13.9 L133.5,9.1 L152.0,20.2"/>
+          <circle class="dot" cx="152.0" cy="20.2" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jun 15: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 6月15日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jun 22: 2&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 6月22日当周: 2 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jun 29: 20&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 6月29日当周: 20 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jul 6: 25&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 7月6日当周: 25 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jul 13: 33&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 7月13日当周: 33 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jul 20: 65&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 7月20日当周: 65 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Jul 27: 74&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 7月27日当周: 74 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;China — wk of Aug 3: 53&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;中国 — 8月3日当周: 53 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="Global Macro"><span class="t-en">Global Macro</span><span class="t-zh">全球宏观</span></span><span class="n">228</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="Global Macro weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,46.9 L41.0,48.0 L59.5,32.8 L78.0,24.4 L96.5,25.9 L115.0,31.7 L133.5,25.4 L152.0,34.9 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,46.9 L41.0,48.0 L59.5,32.8 L78.0,24.4 L96.5,25.9 L115.0,31.7 L133.5,25.4 L152.0,34.9"/>
+          <circle class="dot" cx="152.0" cy="34.9" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jun 15: 2&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 6月15日当周: 2 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jun 22: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 6月22日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jun 29: 29&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 6月29日当周: 29 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jul 6: 45&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 7月6日当周: 45 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jul 13: 42&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 7月13日当周: 42 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jul 20: 31&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 7月20日当周: 31 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Jul 27: 43&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 7月27日当周: 43 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Global Macro — wk of Aug 3: 25&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;全球宏观 — 8月3日当周: 25 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="Tech"><span class="t-en">Tech</span><span class="t-zh">科技</span></span><span class="n">182</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="Tech weekly trend">
+          <path class="ar" d="M4.0,47.5 L22.5,46.9 L41.0,45.4 L59.5,40.6 L78.0,36.5 L96.5,33.8 L115.0,27.0 L133.5,31.7 L152.0,29.6 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,47.5 L22.5,46.9 L41.0,45.4 L59.5,40.6 L78.0,36.5 L96.5,33.8 L115.0,27.0 L133.5,31.7 L152.0,29.6"/>
+          <circle class="dot" cx="152.0" cy="29.6" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jun 1: 1&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 6月1日当周: 1 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jun 15: 2&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 6月15日当周: 2 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jun 22: 5&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 6月22日当周: 5 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jun 29: 14&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 6月29日当周: 14 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jul 6: 22&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 7月6日当周: 22 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jul 13: 27&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 7月13日当周: 27 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jul 20: 40&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 7月20日当周: 40 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Jul 27: 31&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 7月27日当周: 31 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Tech — wk of Aug 3: 35&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;科技 — 8月3日当周: 35 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="Trade"><span class="t-en">Trade</span><span class="t-zh">贸易</span></span><span class="n">165</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="Trade weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,48.0 L41.0,47.5 L59.5,41.2 L78.0,37.5 L96.5,27.0 L115.0,31.2 L133.5,30.1 L152.0,35.9 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,48.0 L41.0,47.5 L59.5,41.2 L78.0,37.5 L96.5,27.0 L115.0,31.2 L133.5,30.1 L152.0,35.9"/>
+          <circle class="dot" cx="152.0" cy="35.9" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jun 15: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 6月15日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jun 22: 1&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 6月22日当周: 1 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jun 29: 13&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 6月29日当周: 13 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jul 6: 20&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 7月6日当周: 20 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jul 13: 40&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 7月13日当周: 40 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jul 20: 32&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 7月20日当周: 32 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Jul 27: 34&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 7月27日当周: 34 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Trade — wk of Aug 3: 23&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;贸易 — 8月3日当周: 23 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="US Macro"><span class="t-en">US Macro</span><span class="t-zh">美国宏观</span></span><span class="n">109</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="US Macro weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,48.0 L41.0,48.0 L59.5,43.3 L78.0,39.1 L96.5,34.9 L115.0,37.5 L133.5,38.0 L152.0,39.1 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,48.0 L41.0,48.0 L59.5,43.3 L78.0,39.1 L96.5,34.9 L115.0,37.5 L133.5,38.0 L152.0,39.1"/>
+          <circle class="dot" cx="152.0" cy="39.1" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jun 15: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 6月15日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jun 22: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 6月22日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jun 29: 9&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 6月29日当周: 9 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jul 6: 17&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 7月6日当周: 17 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jul 13: 25&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 7月13日当周: 25 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jul 20: 20&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 7月20日当周: 20 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Jul 27: 19&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 7月27日当周: 19 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;US Macro — wk of Aug 3: 17&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;美国宏观 — 8月3日当周: 17 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+      <div class="cell">
+        <div class="cell-h"><span class="name" title="Energy"><span class="t-en">Energy</span><span class="t-zh">能源</span></span><span class="n">51</span></div>
+        <svg viewBox="0 0 160 52" role="img" aria-label="Energy weekly trend">
+          <path class="ar" d="M4.0,48.0 L22.5,48.0 L41.0,46.4 L59.5,46.9 L78.0,45.4 L96.5,42.8 L115.0,40.1 L133.5,42.8 L152.0,44.9 L152.0,48.0 L4.0,48.0 Z"/>
+          <path class="ln" d="M4.0,48.0 L22.5,48.0 L41.0,46.4 L59.5,46.9 L78.0,45.4 L96.5,42.8 L115.0,40.1 L133.5,42.8 L152.0,44.9"/>
+          <circle class="dot" cx="152.0" cy="44.9" r="3"/>
+          <rect class="hit" tabindex="0" x="-5.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jun 1: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 6月1日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="13.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jun 15: 0&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 6月15日当周: 0 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="31.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jun 22: 3&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 6月22日当周: 3 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="50.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jun 29: 2&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 6月29日当周: 2 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="68.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jul 6: 5&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 7月6日当周: 5 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="87.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jul 13: 10&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 7月13日当周: 10 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="105.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jul 20: 15&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 7月20日当周: 15 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="124.2" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Jul 27: 10&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 7月27日当周: 10 条&lt;/span&gt;"/><rect class="hit" tabindex="0" x="142.8" y="0" width="18.5" height="52" data-tip="&lt;span class=&#34;t-en&#34;&gt;Energy — wk of Aug 3: 6&lt;/span&gt;&lt;span class=&#34;t-zh&#34;&gt;能源 — 8月3日当周: 6 条&lt;/span&gt;"/>
+        </svg>
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="grid-h">
+    <div class="panel">
+      <h2 class="panel-h"><span class="t-en">most active sources</span><span class="t-zh">最活跃来源</span><span class="cnt"><span class="t-en">top 10 · all time</span><span class="t-zh">前10 · 累计</span></span></h2>
+      <div class="panel-sub"><span class="t-en">items tracked per institution · ★ top reads</span><span class="t-zh">各机构收录条目数 · ★ 精选数</span></div>
+      
+      <div class="brow" title="Foreign Policy" data-name-zh="《外交政策》">
+        <span class="fill" style="width: 100%"></span>
+        <span class="name"><span class="t-en">Foreign Policy</span><span class="t-zh">《外交政策》</span></span>
+        <span class="star"><span class="s">★</span> 27</span>
+        <span class="n">167</span>
+      </div>
+      
+      <div class="brow" title="Cato Institute" data-name-zh="加图研究所">
+        <span class="fill" style="width: 98%"></span>
+        <span class="name"><span class="t-en">Cato Institute</span><span class="t-zh">加图研究所</span></span>
+        <span class="star"><span class="s">★</span> 19</span>
+        <span class="n">164</span>
+      </div>
+      
+      <div class="brow" title="Atlantic Council" data-name-zh="大西洋理事会">
+        <span class="fill" style="width: 92%"></span>
+        <span class="name"><span class="t-en">Atlantic Council</span><span class="t-zh">大西洋理事会</span></span>
+        <span class="star"><span class="s">★</span> 26</span>
+        <span class="n">153</span>
+      </div>
+      
+      <div class="brow" title="Lowy Institute" data-name-zh="洛伊研究所">
+        <span class="fill" style="width: 87%"></span>
+        <span class="name"><span class="t-en">Lowy Institute</span><span class="t-zh">洛伊研究所</span></span>
+        <span class="star"><span class="s">★</span> 41</span>
+        <span class="n">146</span>
+      </div>
+      
+      <div class="brow" title="CSIS" data-name-zh="战略与国际研究中心">
+        <span class="fill" style="width: 69%"></span>
+        <span class="name"><span class="t-en">CSIS</span><span class="t-zh">战略与国际研究中心</span></span>
+        <span class="star"><span class="s">★</span> 40</span>
+        <span class="n">115</span>
+      </div>
+      
+      <div class="brow" title="Brookings" data-name-zh="布鲁金斯学会">
+        <span class="fill" style="width: 64%"></span>
+        <span class="name"><span class="t-en">Brookings</span><span class="t-zh">布鲁金斯学会</span></span>
+        <span class="star"><span class="s">★</span> 18</span>
+        <span class="n">107</span>
+      </div>
+      
+      <div class="brow" title="Heritage Foundation" data-name-zh="传统基金会">
+        <span class="fill" style="width: 51%"></span>
+        <span class="name"><span class="t-en">Heritage Foundation</span><span class="t-zh">传统基金会</span></span>
+        <span class="star"><span class="s">★</span> 12</span>
+        <span class="n">85</span>
+      </div>
+      
+      <div class="brow" title="AEI" data-name-zh="美国企业研究所">
+        <span class="fill" style="width: 46%"></span>
+        <span class="name"><span class="t-en">AEI</span><span class="t-zh">美国企业研究所</span></span>
+        <span class="star"><span class="s">★</span> 6</span>
+        <span class="n">76</span>
+      </div>
+      
+      <div class="brow" title="Urban Institute" data-name-zh="城市研究所">
+        <span class="fill" style="width: 45%"></span>
+        <span class="name"><span class="t-en">Urban Institute</span><span class="t-zh">城市研究所</span></span>
+        
+        <span class="n">75</span>
+      </div>
+      
+      <div class="brow" title="RAND" data-name-zh="兰德公司">
+        <span class="fill" style="width: 42%"></span>
+        <span class="name"><span class="t-en">RAND</span><span class="t-zh">兰德公司</span></span>
+        <span class="star"><span class="s">★</span> 7</span>
+        <span class="n">70</span>
+      </div>
+      
+      <div class="rowfoot"><a href="about.html"><span class="t-en">all 25 sources →</span><span class="t-zh">全部 25 个来源 →</span></a></div>
+    </div>
+    <div class="panel">
+      <h2 class="panel-h"><span class="t-en">top topics</span><span class="t-zh">热门标签</span><span class="cnt"><span class="t-en">top 10 · all time</span><span class="t-zh">前10 · 累计</span></span></h2>
+      <div class="panel-sub"><span class="t-en">tag frequency across tracked items · click to browse</span><span class="t-zh">标签出现频次 · 点击浏览对应条目</span></div>
+      
+      <a class="brow" href="all-items.html?q=geopolitics">
+        <span class="fill" style="width: 100%"></span>
+        <span class="name">#geopolitics</span>
+        <span class="n">685</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=us-politics">
+        <span class="fill" style="width: 55%"></span>
+        <span class="name">#us-politics</span>
+        <span class="n">379</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=security">
+        <span class="fill" style="width: 48%"></span>
+        <span class="name">#security</span>
+        <span class="n">327</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=technology">
+        <span class="fill" style="width: 45%"></span>
+        <span class="name">#technology</span>
+        <span class="n">309</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=china">
+        <span class="fill" style="width: 42%"></span>
+        <span class="name">#china</span>
+        <span class="n">286</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=trade">
+        <span class="fill" style="width: 29%"></span>
+        <span class="name">#trade</span>
+        <span class="n">200</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=europe">
+        <span class="fill" style="width: 19%"></span>
+        <span class="name">#europe</span>
+        <span class="n">131</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=energy-climate">
+        <span class="fill" style="width: 18%"></span>
+        <span class="name">#energy-climate</span>
+        <span class="n">125</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=emerging-markets">
+        <span class="fill" style="width: 16%"></span>
+        <span class="name">#emerging-markets</span>
+        <span class="n">112</span>
+      </a>
+      
+      <a class="brow" href="all-items.html?q=fiscal">
+        <span class="fill" style="width: 13%"></span>
+        <span class="name">#fiscal</span>
+        <span class="n">91</span>
+      </a>
+      
+      <div class="rowfoot"><a href="all-items.html"><span class="t-en">browse all items →</span><span class="t-zh">浏览全部条目 →</span></a></div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="index.html"><span class="t-en">digest</span><span class="t-zh">日报</span></a>
+    <a href="archive.html"><span class="t-en">archive</span><span class="t-zh">往期</span></a>
+    <a href="all-items.html"><span class="t-en">all items</span><span class="t-zh">全部条目</span></a>
+    <a href="x-pulse-en.html">ChinaX</a>
+    <a href="x-pulse-zh.html">坊间</a>
+    <a href="about.html"><span class="t-en">about</span><span class="t-zh">关于</span></a>
+    <span class="geninfo"><span class="t-en">generated 2026-08-11</span><span class="t-zh">生成于 2026-08-11</span></span>
+  </footer>
+</div>
+
+<div class="tip" id="tip" aria-hidden="true"></div>
+
+<script>
+(function () {
+  // shared tooltip: hover and keyboard focus read the same data-tip, whose
+  // content is build-time dual-language markup (our own constants, no feed
+  // text), so innerHTML is safe here — same contract as the digest's labels
+  var tip = document.getElementById("tip");
+  function place(x, y) {
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(x + 14, innerWidth - w - 8) + "px";
+    tip.style.top = (y + 16 + h > innerHeight ? y - h - 10 : y + 16) + "px";
+  }
+  document.querySelectorAll("[data-tip]").forEach(function (el) {
+    el.addEventListener("mouseenter", function () {
+      tip.innerHTML = el.dataset.tip; tip.classList.add("show");
+    });
+    el.addEventListener("mousemove", function (e) { place(e.clientX, e.clientY); });
+    el.addEventListener("mouseleave", function () { tip.classList.remove("show"); });
+    el.addEventListener("focus", function () {
+      tip.innerHTML = el.dataset.tip; tip.classList.add("show");
+      var r = el.getBoundingClientRect(); place(r.left + r.width / 2, r.top + 4);
+    });
+    el.addEventListener("blur", function () { tip.classList.remove("show"); });
+  });
+
+  // condense the title nav into a pinned bar once it reaches the top
+  var nav = document.getElementById("topnav");
+  var sentinel = document.getElementById("navSentinel");
+  if (nav && sentinel && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      nav.classList.toggle("stuck", !entries[0].isIntersecting);
+    }).observe(sentinel);
+  }
+
+  // theme toggle: an explicit choice, stored, overriding the OS scheme
+  var themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) themeBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var toLight = root.getAttribute("data-theme") !== "light";
+    if (toLight) root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    try { localStorage.setItem("ttt-theme", toLight ? "light" : "dark"); }
+    catch (e) {}
+  });
+
+  // language toggle: chrome swaps via CSS; only attribute strings need JS
+  var TITLE_EN = "Think Tank Tracker \u2014 dashboard";
+  var TITLE_ZH = "Think Tank Tracker \u2014 \u7edf\u8ba1\u9762\u677f";
+  function applyLangAttrs() {
+    var zh = document.documentElement.getAttribute("data-lang") === "zh";
+    document.title = zh ? TITLE_ZH : TITLE_EN;
+    document.querySelectorAll("[data-name-zh]").forEach(function (el) {
+      if (!el.dataset.nameEn) el.dataset.nameEn = el.getAttribute("title") || "";
+      el.setAttribute("title", zh ? el.dataset.nameZh : el.dataset.nameEn);
+    });
+  }
+  applyLangAttrs();
+  var langBtn = document.getElementById("langToggle");
+  if (langBtn) langBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var toZh = root.getAttribute("data-lang") !== "zh";
+    if (toZh) { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
+    else { root.removeAttribute("data-lang"); root.lang = "en"; }
+    try { localStorage.setItem("ttt-lang", toZh ? "zh" : "en"); } catch (e) {}
+    applyLangAttrs();
+  });
+})();
+</script>
+</body>
+</html>
