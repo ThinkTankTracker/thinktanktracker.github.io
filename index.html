@@ -94,6 +94,13 @@
   /* linked stats stay quiet: no underline, the label inks up on hover */
   a.stat:hover { text-decoration: none; }
   a.stat:hover .k { color: var(--accent); }
+  /* masthead sparkline: 30-day output pulse, the visual doorway to the
+     dashboard page — quiet by default, full accent on hover */
+  .stat.spark svg { display: block; width: 120px; height: 26px; }
+  .spark .sp { fill: var(--accent); opacity: .7;
+               transition: opacity .15s ease; }
+  .spark .sp.prov { opacity: .3; }
+  a.spark:hover .sp { opacity: 1; }
   /* search: entry point only — submits to the all-items page, which filters */
   .search { margin-left: auto; display: flex; }
   .search input { font: 12px var(--mono); color: var(--ink);
@@ -421,6 +428,12 @@
       
       <a class="stat" href="#sec-top"><div class="v hi" id="scopeTopreads">75</div><div class="k"><span class="t-en">top reads</span><span class="t-zh">精选</span></div></a>
       
+      <a class="stat spark" href="dashboard.html"
+         title="daily items · last 30 days" data-title-zh="每日条目 · 近30天">
+        <svg viewBox="0 0 120 30" aria-hidden="true"><path class="sp" d="M0.0,28.0 V20.5 Q0.0,19.5 1.0,19.5 H2.0 Q3.0,19.5 3.0,20.5 V28.0 Z"/><path class="sp" d="M4.0,28.0 V11.8 Q4.0,10.8 5.0,10.8 H6.0 Q7.0,10.8 7.0,11.8 V28.0 Z"/><path class="sp" d="M8.0,28.0 V8.8 Q8.0,7.8 9.0,7.8 H10.0 Q11.0,7.8 11.0,8.8 V28.0 Z"/><path class="sp" d="M12.0,28.0 V11.5 Q12.0,10.5 13.0,10.5 H14.0 Q15.0,10.5 15.0,11.5 V28.0 Z"/><path class="sp" d="M16.0,28.0 V10.9 Q16.0,9.9 17.0,9.9 H18.0 Q19.0,9.9 19.0,10.9 V28.0 Z"/><path class="sp" d="M20.0,28.0 V28.0 Q20.0,27.7 20.3,27.7 H22.7 Q23.0,27.7 23.0,28.0 V28.0 Z"/><path class="sp" d="M24.0,28.0 V27.5 Q24.0,26.5 25.0,26.5 H26.0 Q27.0,26.5 27.0,27.5 V28.0 Z"/><path class="sp" d="M28.0,28.0 V10.9 Q28.0,9.9 29.0,9.9 H30.0 Q31.0,9.9 31.0,10.9 V28.0 Z"/><path class="sp" d="M32.0,28.0 V8.0 Q32.0,7.0 33.0,7.0 H34.0 Q35.0,7.0 35.0,8.0 V28.0 Z"/><path class="sp" d="M36.0,28.0 V12.1 Q36.0,11.1 37.0,11.1 H38.0 Q39.0,11.1 39.0,12.1 V28.0 Z"/><path class="sp" d="M40.0,28.0 V3.0 Q40.0,2.0 41.0,2.0 H42.0 Q43.0,2.0 43.0,3.0 V28.0 Z"/><path class="sp" d="M44.0,28.0 V15.0 Q44.0,14.0 45.0,14.0 H46.0 Q47.0,14.0 47.0,15.0 V28.0 Z"/><path class="sp" d="M52.0,28.0 V27.2 Q52.0,26.2 53.0,26.2 H54.0 Q55.0,26.2 55.0,27.2 V28.0 Z"/><path class="sp" d="M56.0,28.0 V9.4 Q56.0,8.4 57.0,8.4 H58.0 Q59.0,8.4 59.0,9.4 V28.0 Z"/><path class="sp" d="M60.0,28.0 V11.2 Q60.0,10.2 61.0,10.2 H62.0 Q63.0,10.2 63.0,11.2 V28.0 Z"/><path class="sp" d="M64.0,28.0 V11.8 Q64.0,10.8 65.0,10.8 H66.0 Q67.0,10.8 67.0,11.8 V28.0 Z"/><path class="sp" d="M68.0,28.0 V4.8 Q68.0,3.8 69.0,3.8 H70.0 Q71.0,3.8 71.0,4.8 V28.0 Z"/><path class="sp" d="M72.0,28.0 V12.9 Q72.0,11.9 73.0,11.9 H74.0 Q75.0,11.9 75.0,12.9 V28.0 Z"/><path class="sp" d="M80.0,28.0 V27.2 Q80.0,26.2 81.0,26.2 H82.0 Q83.0,26.2 83.0,27.2 V28.0 Z"/><path class="sp" d="M84.0,28.0 V10.0 Q84.0,9.0 85.0,9.0 H86.0 Q87.0,9.0 87.0,10.0 V28.0 Z"/><path class="sp" d="M88.0,28.0 V12.1 Q88.0,11.1 89.0,11.1 H90.0 Q91.0,11.1 91.0,12.1 V28.0 Z"/><path class="sp" d="M92.0,28.0 V14.4 Q92.0,13.4 93.0,13.4 H94.0 Q95.0,13.4 95.0,14.4 V28.0 Z"/><path class="sp" d="M96.0,28.0 V12.9 Q96.0,11.9 97.0,11.9 H98.0 Q99.0,11.9 99.0,12.9 V28.0 Z"/><path class="sp" d="M100.0,28.0 V17.0 Q100.0,16.0 101.0,16.0 H102.0 Q103.0,16.0 103.0,17.0 V28.0 Z"/><path class="sp" d="M104.0,28.0 V28.0 Q104.0,27.7 104.3,27.7 H106.7 Q107.0,27.7 107.0,28.0 V28.0 Z"/><path class="sp" d="M108.0,28.0 V27.5 Q108.0,26.5 109.0,26.5 H110.0 Q111.0,26.5 111.0,27.5 V28.0 Z"/><path class="sp prov" d="M112.0,28.0 V15.3 Q112.0,14.3 113.0,14.3 H114.0 Q115.0,14.3 115.0,15.3 V28.0 Z"/><path class="sp prov" d="M116.0,28.0 V27.0 Q116.0,26.0 117.0,26.0 H118.0 Q119.0,26.0 119.0,27.0 V28.0 Z"/>
+        </svg>
+        <div class="k"><span class="t-en">dashboard</span><span class="t-zh">统计面板</span></div>
+      </a>
       <form class="search" action="all-items.html" method="get">
         <input type="search" name="q" placeholder="search all items"
                aria-label="search all items" autocomplete="off"
