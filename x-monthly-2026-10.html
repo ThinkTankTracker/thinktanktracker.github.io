@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChinaX · 2026-10 (experimental)</title>
+<style>
+  /* Informal identity, distinct from the digest's navy: this page is
+     individual chatter, not institutional research.
+     Theme and language share the MAIN SITE's contract and storage keys
+     (ttt-theme / ttt-lang) — see x_pulse.html.j2 for the full note.
+     --accent2 marks the topic_break world (键政圈): teal/orange is a
+     colorblind-safe pair, so color alone can carry the split. */
+  :root { color-scheme: dark;
+          --accent: #2dd4bf; --muted: #94a3b8; --rule: #334155;
+          --bg: #0f172a; --fg: #e2e8f0; --chip-bg: #1e293b;
+          --seg-rule: #134e4a;
+          --accent2: #fb923c; --accent2-soft: #7c2d12; }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --accent: #0f766e; --muted: #6b7280; --rule: #e5e7eb;
+    --bg: #ffffff; --fg: #111827; --chip-bg: #ffffff;
+    --seg-rule: #99f6e4;
+    --accent2: #c2410c; --accent2-soft: #fed7aa; }
+  :root:not([data-lang="zh"]) .t-zh { display: none; }
+  :root[data-lang="zh"] .t-en { display: none; }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 760px; padding: 2rem 1.25rem 4rem;
+         font-family: -apple-system, "Segoe UI", "PingFang SC",
+         "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+         background: var(--bg); color: var(--fg); line-height: 1.6; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: .75rem;
+           margin-bottom: 1rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; color: var(--accent); }
+  .exp { display: inline-block; vertical-align: middle; margin-left: .5rem;
+         font-size: .68rem; font-weight: 600; letter-spacing: .05em;
+         color: #92400e; background: #fef3c7; border: 1px solid #fcd34d;
+         border-radius: 3px; padding: .05rem .4rem; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: .85rem; margin: 0; }
+  .crumbs { display: flex; justify-content: space-between; align-items: baseline;
+            gap: 1rem; font-size: .9rem; margin: 0 0 .7rem; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+  .langtoggle, .themetoggle { font: inherit; color: var(--muted);
+                 background: none; border: 0; cursor: pointer; padding: 0; }
+  .themetoggle { margin-left: .9rem; }
+  .langtoggle .lt-sep { color: var(--rule); margin: 0 4px; }
+  :root:not([data-lang="zh"]) .langtoggle .lt-en,
+  :root[data-lang="zh"] .langtoggle .lt-zh { color: var(--fg); }
+  :root:not([data-lang="zh"]) .langtoggle:hover .lt-zh,
+  :root[data-lang="zh"] .langtoggle:hover .lt-en { color: var(--accent); }
+  .themetoggle:hover { color: var(--accent); }
+  .themetoggle::before { content: "◐ "; }
+  .themetoggle::after { content: "light"; }
+  :root[data-theme="light"] .themetoggle::after { content: "dark"; }
+  :root[data-lang="zh"] .themetoggle::after { content: "浅色"; }
+  :root[data-lang="zh"][data-theme="light"] .themetoggle::after { content: "深色"; }
+  .chips { margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+  .chip { font-size: .78rem; border: 1px solid var(--rule); border-radius: 999px;
+          padding: .1rem .6rem; cursor: pointer; background: var(--chip-bg);
+          color: var(--fg); user-select: none; }
+  .chip .n { color: var(--muted); margin-left: .25rem; }
+  .chip.on { background: var(--accent); border-color: var(--accent);
+             color: var(--bg); }
+  .chip.on .n { color: var(--bg); opacity: .7; }
+  .chip.alt { border-color: var(--accent2-soft); }
+  .chip.alt.on { background: var(--accent2); border-color: var(--accent2);
+                 color: var(--bg); }
+  .chip.zero { opacity: .45; }
+  .tbrk { flex-basis: 100%; height: 0; }
+  h2 { font-size: .95rem; margin: 1.8rem 0 .2rem; color: var(--accent);
+       border-bottom: 1px solid var(--rule); padding-bottom: .2rem; }
+  ul.posts { list-style: none; margin: 0; padding: 0; }
+  ul.posts li { border-top: 1px solid #f3f4f6; padding: .5rem 0; }
+  ul.posts li:first-child { border-top: 0; }
+  .meta { font-size: .78rem; color: var(--muted); }
+  .who { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .who.alt { color: var(--accent2); }
+  .cn { color: var(--muted); font-weight: 400; }
+  .reply, .mbadge { font-size: .72rem; border: 1px solid var(--rule); border-radius: 3px;
+           padding: 0 .25rem; margin-left: .3rem; }
+  .ptext { margin: .1rem 0 0; white-space: pre-wrap; word-break: break-word; }
+  .ptext a { color: var(--accent); font-size: .8rem; text-decoration: none;
+             margin-left: .4rem; white-space: nowrap; }
+  blockquote.qt { border-left: 2px solid var(--rule); margin: .3rem 0 .1rem;
+                  padding: .05rem .6rem; color: var(--muted); font-size: .9em;
+                  white-space: pre-wrap; word-break: break-word; }
+  blockquote.qt a { color: var(--accent); font-size: .85em;
+                    text-decoration: none; margin-right: .45rem; }
+  .thr { font-size: .72rem; color: var(--bg); background: var(--accent);
+         border-radius: 3px; padding: 0 .3rem; margin-left: .3rem; }
+  .seg + .seg { border-left: 2px solid var(--seg-rule); margin-top: .35rem;
+                padding-left: .6rem; }
+  footer { margin-top: 3rem; border-top: 1px solid var(--rule);
+           padding-top: .75rem; color: var(--muted); font-size: .78rem; }
+</style>
+<script>
+  /* pre-paint theme + language: verbatim from the digest template — same
+     storage keys, so the site-wide choice is inherited here */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia && matchMedia("(prefers-color-scheme: light)");
+    function stored() {
+      try { var t = localStorage.getItem("ttt-theme"); } catch (e) { return null; }
+      return t === "light" || t === "dark" ? t : null;
+    }
+    function apply() {
+      var t = stored() || (mq && mq.matches ? "light" : "dark");
+      if (t === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+    }
+    apply();
+    if (mq && mq.addEventListener)
+      mq.addEventListener("change", function () { if (!stored()) apply(); });
+  })();
+  (function () {
+    var root = document.documentElement;
+    var lang = null;
+    try { lang = new URLSearchParams(location.search).get("lang"); } catch (e) {}
+    if (lang === "zh" || lang === "en") {
+      try { sessionStorage.setItem("ttt-lang-visit", lang); } catch (e) {}
+    } else {
+      try { lang = localStorage.getItem("ttt-lang"); } catch (e) { lang = null; }
+      if (lang !== "zh" && lang !== "en") {
+        try { lang = sessionStorage.getItem("ttt-lang-visit"); } catch (e) { lang = null; }
+      }
+      if (lang !== "zh" && lang !== "en") {
+        var prefs = navigator.languages || [navigator.language || ""];
+        for (var i = 0; i < prefs.length; i++) {
+          if (/^zh/i.test(prefs[i])) { lang = "zh"; break; }
+          if (/^en/i.test(prefs[i])) { break; }
+        }
+      }
+    }
+    if (lang === "zh") { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
+  })();
+</script>
+</head>
+<body>
+
+
+<header>
+  <nav class="crumbs">
+    <span><a href="index.html">← Think Tank Tracker</a> ·
+      <a href="x-pulse.html"><span class="t-en">Pulse</span><span class="t-zh">近况</span></a></span>
+    <span><button type="button" class="langtoggle" id="langToggle"
+      aria-label="switch language / 切换语言"><span class="lt-en">EN</span><span class="lt-sep">/</span><span class="lt-zh">中文</span></button><button
+      type="button" class="themetoggle" id="themeToggle" aria-label="switch color theme"></button></span>
+  </nav>
+  <h1><span class="t-en">ChinaX</span><span class="t-zh">坊间</span> · 2026-10<span class="exp">experimental</span></h1>
+  <p class="sub"><span class="t-en">First-hand posts from China watchers on X — economics, industry and politics in English, plus the Chinese-language 键政圈; immediate, unedited, in their own words.</span><span class="t-zh">X 上 China watcher 们的第一手发言——英文圈的经济、产业与政治,加上中文键政圈;即时、未经编辑。</span></p>
+  <p class="sub"><span class="t-en">63 posts · 9 threads</span><span class="t-zh">63 条帖子 · 9 组推文串</span> ·
+    <span class="t-en">hand-picked roster, grouped by topic</span><span class="t-zh">名单人工精选,按板块分组</span> · <span class="t-en">updated 2026-10-02 (Beijing time)</span><span class="t-zh">更新于 2026-10-02(北京时间)</span></p>
+  <div class="chips" id="chips">
+    <span class="chip on" data-handle=""><span class="t-en">All</span><span class="t-zh">全部</span><span class="n">63</span></span>
+    
+    <span class="chip zero" data-handle="michaelxpettis">Michael Pettis<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="Brad_Setser">Brad Setser<span class="n">17</span></span>
+    
+    <span class="chip zero" data-handle="gdp1985">Gerard DiPippo<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="ZongyuanZoeLiu">Zongyuan Zoe Liu 刘宗媛<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="Aligarciaherrer">Alicia García-Herrero<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="GlennLuk">Glenn Luk<span class="n">3</span></span>
+    
+    <span class="chip zero" data-handle="kyleichan">Kyle Chan<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="jordanschneider">Jordan Schneider<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="pstAsiatech">Paul Triolo<span class="n">19</span></span>
+    
+    <span class="chip zero" data-handle="danwwang">Dan Wang<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="kevinsxu">Kevin Xu<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="niubi">Bill Bishop 利明璋<span class="n">11</span></span>
+    
+    <span class="chip" data-handle="ZichenWanghere">Zichen Wang 王子辰<span class="n">1</span></span>
+    
+    <span class="chip" data-handle="vshih2">Victor Shih 史宗瀚<span class="n">1</span></span>
+    
+    <span class="chip zero" data-handle="theChinaDude">Manoj Kewalramani<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="fravel">M. Taylor Fravel<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="BonnieGlaser">Bonnie Glaser 葛来仪<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="ryanl_hass">Ryan Hass 何瑞恩<span class="n">1</span></span>
+    
+    <span class="chip zero" data-handle="RushDoshi">Rush Doshi 杜如松<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="Lingling_Wei">Lingling Wei 魏玲灵<span class="n">0</span></span>
+    
+    <span class="chip zero" data-handle="AsiaLens">Demetri Sevastopulo<span class="n">0</span></span>
+    
+    <span class="chip" data-handle="fbermingham">Finbarr Bermingham<span class="n">6</span></span>
+    
+    <span class="chip" data-handle="ewong">Edward Wong 黄安伟<span class="n">4</span></span>
+    
+    <span class="chip zero" data-handle="dakekang">Dake Kang 姜大翼<span class="n">0</span></span>
+    <span class="tbrk"></span>
+    <span class="chip zero alt" data-handle="CaoLei1">曹山石<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="CinnabarOcean">云青天<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="CNPoliWatch">中国人事观察<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="FollowCnRules">中规中矩<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="Guoguang_Wu">吴国光<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="HankInBeijing">HankInBeijing<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="JosephWen___">Joseph.W 約瑟<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="MacroMargin">宏观边际<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="MaoViews">MaoViews<span class="n">0</span></span>
+    
+    <span class="chip zero alt" data-handle="ZhongXinXi1">鍾馨溪<span class="n">0</span></span>
+    
+  </div>
+</header>
+
+
+<section class="day">
+  <h2><span class="t-en">Friday, October 2</span><span class="t-zh">10月2日 星期五</span></h2>
+  <ul class="posts">
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>06:52</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">SpaceX launches Google AI chips into orbit in push toward space-based data centers
+
+https://www.cnbc.com/2026/10/01/spacex-to-launch-google-ai-chips-to-orbit-with-planet-labs-satellites.html<a href="https://x.com/pstAsiatech/status/2105792877565481071" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>06:40</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">river road in potomac<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/niubi/status/2105789876486754386" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/Ned_Donovan/status/2105677784005677323" target="_blank" rel="noopener">@Ned_Donovan</a>Flying into Washington D.C., and trying to understand why the incredibly wealthy people living in mansions there don’t put anything other than lawn in their massive gardens.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>06:33</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">&#34;Ukraine said it had launched a ballistic missile at a Russian target for the first time in combat...industry executives say that it doesn’t have the financial power and capacity to churn out weapons in the numbers needed&#34; Taiwan could offer a lot of funding https://www.wsj.com/world/europe/ukraine-fires-hard-to-stop-ballistic-missile-for-first-time-d93138b4?st=HRB7Cq via @WSJ<a href="https://x.com/niubi/status/2105788305463730302" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>06:24</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">A Chinese financing company owned by several local government entities has funded the purchase of restricted Nvidia Blackwell chips, according to documents filed with Beijing regulators https://www.bloomberg.com/news/articles/2026-10-01/chinese-state-backed-firm-disclosed-nvidia-blackwell-chips-deal?utm_source=website&amp;utm_medium=share&amp;utm_campaign=twitter<a href="https://x.com/niubi/status/2105785996113539559" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>05:18</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">&#34;Traditional Chinese wisdom holds that “the sage attends to matters early,” emphasizing the ability to infer the whole from subtle signs and prevent trouble before it occurs. This is inherently consistent with a prevention-first approach to governance. There are no ready-made standard answers to the ethical questions of the digital-intelligence era, but the answers always remain in human hands. Only by remaining people-centered, putting prevention first, pursuing collaborative governance, and guiding AI to act for good can we ensure that digital and intelligent technologies truly become “intelligence for good” that enhances human well-being.
+
+中华传统智慧讲究“圣人早从事焉”，强调见微知著、防患未然，这与预防为先的治理思路内在相通。数智时代的伦理之问没有现成标准答案，但答案始终掌握在人类手中。坚持以人为本、预防为先、协同共治，引导人工智能向善而行，才能让数智技术真正成为增进人类福祉的“善智”。&#34;<a href="https://x.com/niubi/status/2105769264804184251" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/niubi/status/2105768952433660139" target="_blank" rel="noopener">@niubi</a>Also in the 9.30 issue of Study Times - When Technology Challenges Ethics, How Can Governance Keep Up? 当技术挑战伦理，治理如何跟上 https://sinocism.notion.site/When-Technology-Challenges-Ethics-How-Can-Governance-Keep-Up-3ec84ece41d781a8be47c855103cff6c</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>05:16</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">Also in the 9.30 issue of Study Times - When Technology Challenges Ethics, How Can Governance Keep Up? 当技术挑战伦理，治理如何跟上 https://sinocism.notion.site/When-Technology-Challenges-Ethics-How-Can-Governance-Keep-Up-3ec84ece41d781a8be47c855103cff6c<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/niubi/status/2105768952433660139" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>05:04</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">A lot of speculation about the future of open weight models from Chinese companies. Stay tuned for update to this piece which was one of first to tackle the issue, months ago...
+ https://pstaidecrypted.substack.com/p/understanding-where-china-is-on-controlling?r=arvru&amp;utm_medium=ios<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/pstAsiatech/status/2105765902704955454" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="ryanl_hass">
+      <div class="meta"><span>05:01</span> ·
+        <a class="who" href="https://x.com/ryanl_hass" target="_blank"
+           rel="noopener">@ryanl_hass</a> <span class="cn">Ryan Hass 何瑞恩</span></div>
+      
+      <div class="ptext seg">Thanks for the opportunity to add my name to the catalogue of guests on your Civic Forum podcast, @rorytruex. I greatly enjoyed our wide-ranging conversation on Xi&#39;s state visit, the role of state visits, the future of US-China relations, etc.<a href="https://x.com/ryanl_hass/status/2105765101923950855" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/rorytruex/status/2105361537670197427" target="_blank" rel="noopener">@rorytruex</a>For those looking for a clear-eyed, pragmatic assessment of the Trump-Xi visit and the U.S.-China relationship, here&#39;s a clip from my recent interview with @ryanl_hass. Full interview in replies or wherever you get your pods.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>04:52</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span><span class="thr"><span class="t-en">thread · 3 posts</span><span class="t-zh">推文串 · 3 条</span></span></div>
+      
+      <div class="ptext seg">Many policy makers in Europe (&amp; the IMF/ other international institutions) haven&#39;t internalized the disappearance of Europe&#39;s goods (customs) trade surplus ...
+
+1/<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105762710801510824" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">and Europe&#39;s income balance (ex Ireland) reflects its accumulated surpluses, while China&#39;s does not ...
+
+3/
+
+https://www.cfr.org/articles/china-not-europe-is-the-source-of-worlds-imbalances<a href="https://x.com/Brad_Setser/status/2105763679505723599" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">And the striking thing is that the rise in East Asia&#39;s surplus in no way over -- Korea/ Taiwan and chips will keep going up with the full September data, and China&#39;s headline surplus is being held down by ~ $300b (annualized) in gold imports!
+
+4/4<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105764251323576773" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>04:50</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">Hong Kong Journalist Arrested After Covering Gathering Linked to 2019 Protests https://www.nytimes.com/2026/10/01/world/asia/hong-kong-arrest-journalist-activist.html?smid=tw-share<a href="https://x.com/niubi/status/2105762224987857283" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>04:47</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">&#34;Some insist that &#34;humans are the creators of AI, so no matter how powerful it becomes, humans will certainly be able to control it,&#34; and advocate &#34;development first, let the bullets fly for a while.&#34; (让子弹飞一会儿, &#34;Let the Bullets Fly,&#34; a catchphrase from Jiang Wen&#39;s 2010 film of that name, meaning wait and see how things play out.) This pattern of pursuing rapid iteration, with &#34;capabilities sprinting while safety walks slowly,&#34; closely resembles the Soviet nuclear industry&#39;s model of &#34;emphasizing construction and neglecting safety&#34; before the Chernobyl accident. Others believe that &#34;simply giving AI a one-click shutdown will solve every problem.&#34; Little do they know that when the Chernobyl reactor went out of control, the operators pressed precisely the AZ-5 emergency shutdown button, but because of a design flaw in the control rods, in its first moments this &#34;brake&#34; instead became an &#34;accelerator,&#34; directly intensifying the explosion. The &#34;stop button&#34; that humans think they are holding may be exactly what accelerates the loss of control.
+
+有些观点坚持认为“人类是人工智能的创建者，再强大也肯定能够被人类控制”，并且提出“发展优先，让子弹飞一会儿”。这种追求快速迭代、“能力快跑、安全慢走”的格局，与切尔诺贝利事故发生前苏联核工业“重建设、轻安全”的模式高度相似。还有观点认为“只要为AI设置一键关停就可以解决所有问题”。殊不知，切尔诺贝利操作员在反应堆失控时按下的正是紧急停堆按钮AZ-5，却因控制棒设计缺陷，这一“刹车”在最初瞬间反而变成了“加油门”，直接加剧了爆炸。人类以为握在手里的“停止键”，可能恰恰是加速失控的关键。
+
+Therefore, if the world continues to dodge risks with technological optimism, shelve governance in favor of competition, and cover up problems through informational secrecy, then AI&#39;s &#34;Chernobyl moment&#34; may not be a question of &#34;whether it will happen&#34; but of &#34;when it will happen.&#34;
+
+因此，如果全球再继续以技术乐观主义回避风险、以竞争优先搁置治理、以信息封闭掩盖问题，那么AI的“切尔诺贝利时刻”或许不是“是否会发生”，而是“何时会发生”。&#34;<a href="https://x.com/niubi/status/2105761481685930210" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/niubi/status/2105760648609317173" target="_blank" rel="noopener">@niubi</a>Guarding Against the Risk of Frontier AI Technology Spinning Out of Control 防范前沿人工智能技术失控风险 - Zeng Yi 曾毅, Wu Yuzhang Chair Professor at the Gaoling School of Artificial Intelligence, Renmin University of China, and Dean of the Beijing Institute of AI Safety and Governance https://sinocism.notion.site/Guarding-Against-the-Risk-of-Frontier-AI-Technology-Spinning-Out-of-Control-Zeng-Yi-3ec84ece41d781ba8caee886703dbb21 Even as AI is greatly driving social progress, real safety concerns have emerged along with it: is the artificial intelligence we are pouring our efforts into building clean hydropower that benefits humanity, or another &#34;reactor&#34; harboring hidden risks? Its destructive power comes not from nuclear fission but from intelligence itself. When these &#34;seemingly intelligent&#34; information systems begin to make decisions on their own, act on their own, and even keep breaking through the boundaries humans have set, will we replay the tragedy of the Chernobyl engineers, who went on firmly believing the technology was still under control even as the crisis unfolded? It should be recognized that AI&#39;s so-called &#34;Chernobyl moment&#34; is a metaphor for risk warning, not a prediction that disaster has already occurred or is imminent. But the potential systemic loss-of-control risk it points to is no longer confined to science fiction.
+
+当前，AI在极大推动社会进步的同时，现实的安全隐忧也随之浮现：我们倾力构建的人工智能，究竟是造福人类的清洁水电，还是又一座潜藏风险的“反应堆”？它的破坏力并非来自核裂变，而是源于智能本身。当这“看似智能”的信息系统开始自主决策、自主行动，甚至不断自主冲破人类预设的边界，我们会不会重演切尔诺贝利工程师的悲剧——危机发生时却依旧笃信技术仍在掌控之中？应当看到，所谓AI的“切尔诺贝利时刻”，是风险警示的隐喻，并非预判灾难已经发生或即刻降临，但它所指向的可能出现的系统性失控风险，早已不再局限于科幻想象。</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>04:43</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">Guarding Against the Risk of Frontier AI Technology Spinning Out of Control 防范前沿人工智能技术失控风险 - Zeng Yi 曾毅, Wu Yuzhang Chair Professor at the Gaoling School of Artificial Intelligence, Renmin University of China, and Dean of the Beijing Institute of AI Safety and Governance https://sinocism.notion.site/Guarding-Against-the-Risk-of-Frontier-AI-Technology-Spinning-Out-of-Control-Zeng-Yi-3ec84ece41d781ba8caee886703dbb21 Even as AI is greatly driving social progress, real safety concerns have emerged along with it: is the artificial intelligence we are pouring our efforts into building clean hydropower that benefits humanity, or another &#34;reactor&#34; harboring hidden risks? Its destructive power comes not from nuclear fission but from intelligence itself. When these &#34;seemingly intelligent&#34; information systems begin to make decisions on their own, act on their own, and even keep breaking through the boundaries humans have set, will we replay the tragedy of the Chernobyl engineers, who went on firmly believing the technology was still under control even as the crisis unfolded? It should be recognized that AI&#39;s so-called &#34;Chernobyl moment&#34; is a metaphor for risk warning, not a prediction that disaster has already occurred or is imminent. But the potential systemic loss-of-control risk it points to is no longer confined to science fiction.
+
+当前，AI在极大推动社会进步的同时，现实的安全隐忧也随之浮现：我们倾力构建的人工智能，究竟是造福人类的清洁水电，还是又一座潜藏风险的“反应堆”？它的破坏力并非来自核裂变，而是源于智能本身。当这“看似智能”的信息系统开始自主决策、自主行动，甚至不断自主冲破人类预设的边界，我们会不会重演切尔诺贝利工程师的悲剧——危机发生时却依旧笃信技术仍在掌控之中？应当看到，所谓AI的“切尔诺贝利时刻”，是风险警示的隐喻，并非预判灾难已经发生或即刻降临，但它所指向的可能出现的系统性失控风险，早已不再局限于科幻想象。<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/niubi/status/2105760648609317173" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>04:29</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">Reality check...<a href="https://x.com/pstAsiatech/status/2105756984238887177" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/himsam181337/status/2105597766085046517" target="_blank" rel="noopener">@himsam181337</a>@yicaichina Mirroring the Nvidia stack is the announcement. The switch is a second lab running pretraining on Ascend without a rewrite. Inference already moved. Training has not.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="vshih2">
+      <div class="meta"><span>04:27</span> ·
+        <a class="who" href="https://x.com/vshih2" target="_blank"
+           rel="noopener">@vshih2</a> <span class="cn">Victor Shih 史宗瀚</span></div>
+      
+      <div class="ptext seg">It was great to have @mawangcun1 and Susan talk about the summit, moderated by Barry https://m.youtube.com/watch?v=7nH-FHuZ8t8&amp;t=6s&amp;pp=2AEGkAIB&amp;ra=m<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/vshih2/status/2105756585251516672" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>04:15</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span><span class="thr"><span class="t-en">thread · 5 posts</span><span class="t-zh">推文串 · 5 条</span></span></div>
+      
+      <div class="ptext seg">A couple of observations --
+
+One. the drop in euro area reserve holdings from 14-19 was a function of two things: China&#39;s big reserve fall in 15/16, and QE/ low rates, which pushed reserve managers out of the euro 
+
+1/<a href="https://x.com/Brad_Setser/status/2105753460650156238" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/EtraAlex/status/2105748260727967990" target="_blank" rel="noopener">@EtraAlex</a>One thing I have learned over the years is: the interesting stuff usually isn&#39;t what you can measure/observe, it&#39;s what you cannot.
+
+Note: The chart below is EZ level while table in qt below is France only</blockquote></div>
+      
+      <div class="ptext seg">Two. There actually have been strong central bank flows into the euro area over the last few years (even with the immobilization of Russia&#39;s assets).   Higher EA rates reduced the penalty for holding euros v dollars
+
+(and apparently there were large flows in q2 26)
+
+2/<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105754087853527481" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">My general sense is that the debate over the dollar and euro&#39;s relative global roles sometimes places too much emphasis on structural characteristics of the two currencies, &amp; too little on simple things (yield pickup on Treasuries v bunds ... )
+
+3/<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105755121321939040" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">Ignore the dollar v the euro for a moment and just focus on the growth of euro reserve holdings from 02 to 12/13 (massive ... this is the era when China adds a ton to its reserves and diversifies into the EUR) &amp; the stall in the last 10ys looks a bit like what happened to the dollar
+
+4/<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105755775234695580" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">And of course am a big fan of Alex&#39;s decomposition of inflows into the euro area government debt market ...
+
+5/5<a href="https://x.com/Brad_Setser/status/2105755924283445710" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="ewong">
+      <div class="meta"><span>04:00</span> ·
+        <a class="who" href="https://x.com/ewong" target="_blank"
+           rel="noopener">@ewong</a> <span class="cn">Edward Wong 黄安伟</span></div>
+      
+      <div class="ptext seg">But it was on this site that I first saw the @nytimes list of the top 100 TV series of this century. So there’s that<a href="https://x.com/ewong/status/2105749636044480808" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/mradamtaylor/status/2105664833328914886" target="_blank" rel="noopener">@mradamtaylor</a>As ever, Twitter/X remains the worse place imaginable to debate complicated, nuanced legal and moral situations</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="fbermingham">
+      <div class="meta"><span>03:27</span> ·
+        <a class="who" href="https://x.com/fbermingham" target="_blank"
+           rel="noopener">@fbermingham</a> <span class="cn">Finbarr Bermingham</span></div>
+      
+      <div class="ptext seg">CATL, the world’s largest electric vehicle battery maker, restarted operations at the largest factory of its kind in Europe in September after Hungarian authorities suspended production when local workers were exposed to high levels of nickel.
+
+https://www.autonews.com/manufacturing/an-catl-restarts-ev-battery-after-safety-halt-1001/<a href="https://x.com/fbermingham/status/2105741378328080425" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>02:44</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">Yuyuan Tantian | Picking the &#34;Low-Hanging Fruit&#34; of China-US AI Cooperation  https://sinocism.notion.site/Yuyuan-Tantian-Picking-the-Low-Hanging-Fruit-of-China-US-AI-Cooperation-3ec84ece41d781c7aa3ddf506921e710?pvs=149<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/niubi/status/2105730668500254827" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="ewong">
+      <div class="meta"><span>02:43</span> ·
+        <a class="who" href="https://x.com/ewong" target="_blank"
+           rel="noopener">@ewong</a> <span class="cn">Edward Wong 黄安伟</span></div>
+      
+      <div class="ptext seg">Nuclear non-proliferation hinges on this<a href="https://x.com/ewong/status/2105730223346233552" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/joshrogin/status/2105095513121206748" target="_blank" rel="noopener">@joshrogin</a>Kim Jong Un broke off his friendship with Rodman after the last visit where Rodman allegedly got super drunk and allegedly defacated on the hotel room floor. He can’t help Trump with North Korean diplomacy anymore.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>02:38</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">”翻身仗”<a href="https://x.com/niubi/status/2105729197885083848" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/chrisnyeeee/status/2105714466444996705" target="_blank" rel="noopener">@chrisnyeeee</a>New for @ChinaBriefJT with @Charles_T_Sun.
+
+Beijing set out to master the core technologies of the seed industry, and it is succeeding.
+
+Chinese gene chips have broken a long U.S. monopoly. Chinese institutions control nearly all GM crop traits planted in the PRC. AI breeding tools are entering pilot use.
+
+With thanks to @Arranjnh @JReisboard @JamestownTweets for the edit:
+
+https://jamestown.org/beijing-makes-rapid-gains-toward-seed-self-reliance/</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>02:10</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span><span class="thr"><span class="t-en">thread · 2 posts</span><span class="t-zh">推文串 · 2 条</span></span></div>
+      
+      <div class="ptext seg">Watch this space -- China needs jet engines, and jet engine turbine blades need yttrium, which is in short supply as a result of Chinese export controls
+
+1/2<a href="https://x.com/Brad_Setser/status/2105722078523723785" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/niubi/status/2105628229998658011" target="_blank" rel="noopener">@niubi</a>US slows aircraft-part exports to China as Trump seeks leverage in trade negotiations, sources say https://www.reuters.com/business/autos-transportation/us-slows-aircraft-part-exports-china-trump-seeks-leverage-trade-negotiations-2026-10-01/  guess Trump got tired of being tapped along over the rare earths deal that was not being honored</blockquote></div>
+      
+      <div class="ptext seg">Boeing order got tied up with the rare earths debate ...
+
+as all parties try to address vulnerabilities/ use available leverage (under the radar)
+
+https://www.reuters.com/business/autos-transportation/us-slows-aircraft-part-exports-china-trump-seeks-leverage-trade-negotiations-2026-10-01/
+
+2/2<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105722435110863104" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="GlennLuk">
+      <div class="meta"><span>02:05</span> ·
+        <a class="who" href="https://x.com/GlennLuk" target="_blank"
+           rel="noopener">@GlennLuk</a> <span class="cn">Glenn Luk</span><span class="thr"><span class="t-en">thread · 2 posts</span><span class="t-zh">推文串 · 2 条</span></span></div>
+      
+      <div class="ptext seg">The new Fuzhou-Xiamen 350 km/hr line offloaded capacity from the original 250 km/hr line.
+
+This new line has ramped up to 60-80 daily train pairs.
+
+https://x.com/GlennLuk/status/1708016653219529030<a href="https://x.com/GlennLuk/status/2105720899747897679" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/GlennLuk/status/1708016653219529030" target="_blank" rel="noopener">@GlennLuk</a>The new Fuzhou-Xiamen line also connected two major cities already served by HSR, albeit more directly (featuring three cross-sea bridges) allowing for higher speeds (350 vs 250 km/hr) — shaving about a third of the time off the journey.</blockquote></div>
+      
+      <div class="ptext seg">This has relieved congestion on the original line (which opened in 2010), which had been one of the most capacity-constrained lines in China&#39;s network.  
+
+Passenger traffic has also shifted to more regional commuter-type traffic and lower-cost D trains.
+
+One thing I also learned recently is that this line was another dual-use (passenger/freight) line and is now able to accommodate more freight along one of China&#39;s most industrialized corridors.<a href="https://x.com/GlennLuk/status/2105721457481220364" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>01:53</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">This....industrial policy disguised as technology control?<a href="https://x.com/pstAsiatech/status/2105717636554539140" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/pequityresearch/status/2105689949039370316" target="_blank" rel="noopener">@pequityresearch</a>Morgan Stanley: After meeting a senior Washington telecom, FCC and export-control legal team, policy discussions suggest 3.2T transceivers would likely be where restrictions would be phased in, potentially as soon as October. 
+
+Chinese transceivers could still be imported, even at 3.2T, as long as 65% of the BOM comes from US-based companies. 
+
+Initial 3.2T volumes are not expected to ramp in volume until 2029. 
+
+$AAOI $LITE $COHR $MTSI</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="ewong">
+      <div class="meta"><span>01:06</span> ·
+        <a class="who" href="https://x.com/ewong" target="_blank"
+           rel="noopener">@ewong</a> <span class="cn">Edward Wong 黄安伟</span></div>
+      
+      <div class="ptext seg">Ahead of the November midterms, Trump wants Americans to keep Vietnam and Afghanistan in mind when they think of the Iran war<a href="https://x.com/ewong/status/2105706015203467637" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/kaitlancollins/status/2105644013264961696" target="_blank" rel="noopener">@kaitlancollins</a>TIME: Do you think the American people misunderstood that? I feel like most people heard you say four to six weeks.
+
+Trump: &#34;No, I think the press fed it to them, so that—look, we were in Vietnam for 21, 20, years. We were in Afghanistan for many years. We were in Korea for many. We&#39;re everywhere for many years. I&#39;m in there now for six months, and I&#39;ve destroyed their nuclear capability...&#34;
+
+https://time.com/article/2026/10/01/donald-trump-2026-interview-transcript/</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="fbermingham">
+      <div class="meta"><span>01:01</span> ·
+        <a class="who" href="https://x.com/fbermingham" target="_blank"
+           rel="noopener">@fbermingham</a> <span class="cn">Finbarr Bermingham</span></div>
+      
+      <div class="ptext seg">Didn&#39;t take long for the lads at Lego Ninjago HQ to get the Drumcree 2026 magazine issue out...<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/fbermingham/status/2105704695801024767" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="ewong">
+      <div class="meta"><span>00:59</span> ·
+        <a class="who" href="https://x.com/ewong" target="_blank"
+           rel="noopener">@ewong</a> <span class="cn">Edward Wong 黄安伟</span></div>
+      
+      <div class="ptext seg">From a senior Middle East adviser in the Biden administration<a href="https://x.com/ewong/status/2105704272838947006" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/ilangoldenberg/status/2105451897708851592" target="_blank" rel="noopener">@ilangoldenberg</a>Also, this is just a genuinely insane thing to recommend.  How is this possibly in the US interest?</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>00:53</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span></div>
+      
+      <div class="ptext seg">Japanese investors have lightened up a bit in recent years (per the IMF&#39;s coordinated portfolio investment data).   
+
+Biggest external holders in aggreate though are reserve managers ...  more OAT holdings than bund holdings I think.<a href="https://x.com/Brad_Setser/status/2105702653145514447" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/ClausVistesen/status/2105668655874736193" target="_blank" rel="noopener">@ClausVistesen</a>Oh yeah, this ... guess who owns a very big chunk of French sovereign bonds?</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>00:16</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span><span class="thr"><span class="t-en">thread · 2 posts</span><span class="t-zh">推文串 · 2 条</span></span></div>
+      
+      <div class="ptext seg">Too late. Long-term contract for access. This is clearly a losing game, and highlights the futility of the effort. Let&#39;s maybe instead update overall US China technology policy to reflect the realities the industry faces in 2026?
+See comments.<a href="https://x.com/pstAsiatech/status/2105693289072447847" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/ChrisRMcGuire/status/2105502370499326170" target="_blank" rel="noopener">@ChrisRMcGuire</a>There’s no point in having export controls on selling AI chips to China if US companies can circumvent them by renting access to those chips, including to designated Chinese Military Companies like Tencent. This is absurd, the Trump admin needs to close these loopholes ASAP.</blockquote></div>
+      
+      <div class="ptext seg">For a more forward, rather than backward looking proposal to update US policy for the Age of Agentic Super Intelligence, see: https://pstaidecrypted.substack.com/p/proposing-a-board-of-technology-to<a href="https://x.com/pstAsiatech/status/2105693290825744386" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>00:11</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">Huawei steps up Tau chip roll-out, with Mate XT 2 on track for 1 million sales
+Tech giant plans to use its self-developed advanced chips across the new Mate 90 series as it overcomes stringent US tech curbs
+Yes, tau scaling is real...see comments
+https://www.scmp.com/tech/big-tech/article/3369400/huawei-steps-tau-chip-roll-out-mate-xt-2-track-1-million-sales<a href="https://x.com/pstAsiatech/status/2105692154437697742" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="fbermingham">
+      <div class="meta"><span>00:03</span> ·
+        <a class="who" href="https://x.com/fbermingham" target="_blank"
+           rel="noopener">@fbermingham</a> <span class="cn">Finbarr Bermingham</span></div>
+      
+      <div class="ptext seg">Sefcovic met China&#39;s trade envoy Li Chenggang at the G20 trade ministerial<a href="https://x.com/fbermingham/status/2105690180187459765" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/MarosSefcovic/status/2105669582585532819" target="_blank" rel="noopener">@MarosSefcovic</a>As I prepare for my trip to Beijing next week, I&#39;m glad to have met 🇨🇳 Vice Minister Li Chenggang at the G20. My team and I are genuinely invested in the much-needed rebalancing of EU-China trade. Contacts are non-stop so that engagement produces credible results.</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+<section class="day">
+  <h2><span class="t-en">Thursday, October 1</span><span class="t-zh">10月1日 星期四</span></h2>
+  <ul class="posts">
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>23:28</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span><span class="thr"><span class="t-en">thread · 3 posts</span><span class="t-zh">推文串 · 3 条</span></span></div>
+      
+      <div class="ptext seg">Global holdings of dollar reserves were flat in q2 (lagged, I know) as Japanese fx sales offset growth elsewhere.  Continues the post 2015 trend -- dollar reserve growth isn&#39;t funding either the US fiscal or current account deficit these days
+
+1/<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105681222580208010" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">But, zeroing in on q2 2026 alone, Treasury &amp; Agency inflows were actually fairly strong relative to (modest) dollar reserve growth.   Don&#39;t think that necessarily continued in q3.
+
+5/5<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105683517317468190" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">p.s.  total flows into dollar assets for all government investors -- SWFs, sovereign pension funds, Chinese state banks -- isn&#39;t that low.   But as Alex Etra and I have emphasized, this flow is much less of a reserve driven flow than in the past, and it doesn&#39;t naturally flow to Treasuries<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105684297961390228" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>23:03</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span><span class="thr"><span class="t-en">thread · 3 posts</span><span class="t-zh">推文串 · 3 条</span></span></div>
+      
+      <div class="ptext seg">US slows aircraft-part exports to China as Trump seeks leverage in trade negotiations, sources say 
+Really badly conceived policy? 
+Is this part of a constructive, strategic approach designed to produce stability?
+https://www.reuters.com/business/autos-transportation/us-slows-aircraft-part-exports-china-trump-seeks-leverage-trade-negotiations-2026-10-01/<a href="https://x.com/pstAsiatech/status/2105675065836679180" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">Officials ​have also expressed interest in issuing an export regulation that could make it easier to restrict landing gear and other aircraft parts to China, two sources said. A draft version ​included a new licensing requirement on aviation hydraulic fluid shipped by US suppliers like ExxonMobil, opens new tab, one of the people said.
+Brilliant.<a href="https://x.com/pstAsiatech/status/2105675309395652978" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">See: https://pstaidecrypted.substack.com/p/huaweis-scaling-law-isnt-just-marketing<a href="https://x.com/pstAsiatech/status/2105692156757451247" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="niubi">
+      <div class="meta"><span>21:59</span> ·
+        <a class="who" href="https://x.com/niubi" target="_blank"
+           rel="noopener">@niubi</a> <span class="cn">Bill Bishop 利明璋</span></div>
+      
+      <div class="ptext seg">NSA and MSS probably love it<a href="https://x.com/niubi/status/2105658939476201938" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/POLITICOEurope/status/2105569648414523832" target="_blank" rel="noopener">@POLITICOEurope</a>The European Commission has rolled out an alternative to Microsoft Teams.
+
+But officials using it aren&#39;t impressed, with one describing the tool as “absolute shit.”
+https://vist.ly/5kje9</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="fbermingham">
+      <div class="meta"><span>21:56</span> ·
+        <a class="who" href="https://x.com/fbermingham" target="_blank"
+           rel="noopener">@fbermingham</a> <span class="cn">Finbarr Bermingham</span><span class="thr"><span class="t-en">thread · 3 posts</span><span class="t-zh">推文串 · 3 条</span></span></div>
+      
+      <div class="ptext seg">New from me: EU retools Trump trade war tripwire into China shipments surge alarm
+
+An obscure import surveillance tool developed to monitor Trump&#39;s trade war vs China has been repurposed, as the EU stands on the cusp of its own trade war with Beijing
+
+https://www.scmp.com/news/china/diplomacy/article/3369477/eu-retools-trump-trade-war-tripwire-china-shipments-surge-alarm<a href="https://x.com/fbermingham/status/2105658054666489955" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">Sanchez said the two countries were “not so far apart” on China policy. “On the contrary, it has to be common across Europe as a whole because our objective is the same,” he said.<a href="https://x.com/fbermingham/status/2105658495596925057" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+      <div class="ptext seg">Sanchez described China’s trade surplus as “not acceptable and cannot be borne by any economy”, but cautioned that the EU must pursue “cooperation wherever possible, competition whenever necessary, and the constructive management of disagreements”.<a href="https://x.com/fbermingham/status/2105658517784768879" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>21:30</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span></div>
+      
+      <div class="ptext seg">The dollar value of Korea&#39;s exports has basically doubled -- and the September Korean export numbers suggest that Korea&#39;s surplus still hasn&#39;t peaked.   A little hard to believe, but clearly true.<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105651473405346107" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/BobEUnlimited/status/2105647713064812740" target="_blank" rel="noopener">@BobEUnlimited</a>The vast majority of the surge in AI-related capex value is imported.  Good for growth in Asia, but not so much in the US.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>21:24</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">👇👇👇<a href="https://x.com/pstAsiatech/status/2105650057961967648" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/sundarpichai/status/2105387952478277979" target="_blank" rel="noopener">@sundarpichai</a>Lots of discussion out there about our next model(!), so I wanted to give an early look as soon as possible. Introducing Gemini 4 Argon!
+
+It shows frontier performance in complex workflows, cyber defense and software engineering. Teams are using it extensively at Google, from coding to quantum computing, great feedback. 
+
+Here’s a look at the benchmarks:</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>21:24</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">Agreed....<a href="https://x.com/pstAsiatech/status/2105649963107790885" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/USAmbChina/status/2105598610050371604" target="_blank" rel="noopener">@USAmbChina</a><span class="t-en">(media post)</span><span class="t-zh">(图片/媒体帖)</span></blockquote></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>21:23</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">Yup...Trump pulled him forward during tech titan presser...<a href="https://x.com/pstAsiatech/status/2105649745196667163" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/AndrewCurran_/status/2105384000915493179" target="_blank" rel="noopener">@AndrewCurran_</a>Rumors persist that Director of National Intelligence Jay Clayton will be named as the White House SI Czar by the end of the week. He told CNBC this morning that &#39;Super Intelligence is a national security issue.&#39; He does not appear to be a fan of Pacing the Frontier.</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>21:20</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">SpaceX’s AI unit held talks over the summer about leasing computing capacity to Microsoft, a sign of how fully Elon Musk has embraced the neocloud business after his initial reluctance.
+
+ https://www.theinformation.com/articles/spacexs-ai-unit-turned-ai-cloud-firm?rc=hlqv2n&amp;shared=26750b7e34be999f<a href="https://x.com/pstAsiatech/status/2105649112687460500" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>21:07</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">China’s Tencent leases 100,000 chips from Oracle to accelerate AI push https://www.ft.com/content/8799b33d-f07c-4a03-82f0-bf5d3d1d29e9 via @ft<a href="https://x.com/pstAsiatech/status/2105645677170545088" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="GlennLuk">
+      <div class="meta"><span>18:43</span> ·
+        <a class="who" href="https://x.com/GlennLuk" target="_blank"
+           rel="noopener">@GlennLuk</a> <span class="cn">Glenn Luk</span><span class="reply"><span class="t-en">reply</span><span class="t-zh">回复</span></span></div>
+      
+      <div class="ptext seg">More indications that coal use is now declining in China, driven principally by the renewables transition:<a href="https://x.com/GlennLuk/status/2105609427181244456" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/laurimyllyvirta/status/2105559233378857350" target="_blank" rel="noopener">@laurimyllyvirta</a>Why did China&#39;s coal&amp;gas power output fall 4% in August? Three reasons: power generation from wind and solar grew much more than reported, as always; industrial power demand growth slowed down; and milder temperatures drove a drop in residential demand.
+
+How to parse the data 👇</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="ZichenWanghere">
+      <div class="meta"><span>16:39</span> ·
+        <a class="who" href="https://x.com/ZichenWanghere" target="_blank"
+           rel="noopener">@ZichenWanghere</a> <span class="cn">Zichen Wang 王子辰</span></div>
+      
+      <div class="ptext seg">真没意思啊<a href="https://x.com/ZichenWanghere/status/2105578243416072203" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="Brad_Setser">
+      <div class="meta"><span>15:07</span> ·
+        <a class="who" href="https://x.com/Brad_Setser" target="_blank"
+           rel="noopener">@Brad_Setser</a> <span class="cn">Brad Setser</span><span class="thr"><span class="t-en">thread · 2 posts</span><span class="t-zh">推文串 · 2 条</span></span></div>
+      
+      <div class="ptext seg">This is all getting a big ridiculous -- 
+
+Korea posted a $50 billion customs surplus for September ($600b annualized) ...
+
+1/2<a href="https://x.com/Brad_Setser/status/2105555101469245663" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/eastasiaecon/status/2105460627544375733" target="_blank" rel="noopener">@eastasiaecon</a>September was another big month for Korean exports, which more than doubled YoY, with the result that...</blockquote></div>
+      
+      <div class="ptext seg">Global economy right now is US firms borrowing huge sums to buy Korean and Taiwanese chips (the Taiwanese chips have embedded US design too ... )
+
+Trailing 3m sum of Korea&#39;s trade surplus, annualized, is approaching $500b.   China pre COVID numbers, from a much smaller economy.  WAY bigger than the EU ex Ireland surplus.
+
+2/2<span class="mbadge"><span class="t-en">media</span><span class="t-zh">带图</span></span><a href="https://x.com/Brad_Setser/status/2105555560250712182" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>10:13</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">#InPWatch<a href="https://x.com/pstAsiatech/status/2105481138978308538" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/Teo_Sinamin/status/2105259464630902793" target="_blank" rel="noopener">@Teo_Sinamin</a>Vital Optics Technology (光智科技 https://300489.SZ) is said to have secured orders for 6-inch indium phosphide substrates from a leading global customer, with mass delivery &amp; customer certification proceeding concurrently
+
+It also has the largest indium inventory globally</blockquote></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>08:50</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">OpenAI accused Chinese rival Moonshot AI of being responsible for a wide-scale effort to extract data from its GPT artificial intelligence systems that could be used to reproduce the reasoning and capabilities of its most advanced models https://www.bloomberg.com/news/articles/2026-09-30/openai-blames-moonshot-for-mass-data-extraction-on-its-ai-models?utm_source=website&amp;utm_medium=share&amp;utm_campaign=twitter<a href="https://x.com/pstAsiatech/status/2105460273620685165" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>08:48</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">OpenAI Executive Backs Out of Second $25 Million Donation to A.I. Super PAC https://www.nytimes.com/2026/09/30/technology/openai-brockman-super-pac-leading-the-future.html?smid=nytcore-ios-share via @NYTimes<a href="https://x.com/pstAsiatech/status/2105459857977704552" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a></div>
+      
+    </li>
+    
+    <li data-handle="pstAsiatech">
+      <div class="meta"><span>08:40</span> ·
+        <a class="who" href="https://x.com/pstAsiatech" target="_blank"
+           rel="noopener">@pstAsiatech</a> <span class="cn">Paul Triolo</span></div>
+      
+      <div class="ptext seg">Back in the game…<a href="https://x.com/pstAsiatech/status/2105457819071721698" target="_blank" rel="noopener"><span class="t-en">post ↗</span><span class="t-zh">原帖 ↗</span></a>
+        <blockquote class="qt"><a href="https://x.com/GoogleDeepMind/status/2105388084154056939" target="_blank" rel="noopener">@GoogleDeepMind</a>Introducing Gemini 4 Argon – our new frontier model.
+
+It’s built for complex workflows across coding, enterprise knowledge work, and cybersecurity defense – rolling out today to a set of trusted testers through our Fairwind Program.</blockquote></div>
+      
+    </li>
+    
+  </ul>
+</section>
+
+
+<footer>
+  <span class="t-en">Experimental. Original posts only — retweets are not collected; quoted tweets render indented. Views are the authors&#39; own and represent no institution.</span><span class="t-zh">实验性栏目;只收原创帖,转推不计。内容为账号作者个人观点,不代表任何机构立场。</span>
+</footer>
+
+<script>
+  (function () {
+    var active = "";   // "" = 全部
+    var chips = document.querySelectorAll("#chips .chip");
+    function apply() {
+      document.querySelectorAll("ul.posts li").forEach(function (li) {
+        li.style.display = (!active || li.dataset.handle === active) ? "" : "none";
+      });
+      document.querySelectorAll("section.day").forEach(function (sec) {
+        var any = Array.prototype.some.call(
+          sec.querySelectorAll("li"), function (li) { return li.style.display !== "none"; });
+        sec.style.display = any ? "" : "none";
+      });
+      chips.forEach(function (c) {
+        c.classList.toggle("on", c.dataset.handle === active);
+      });
+    }
+    chips.forEach(function (c) {
+      c.addEventListener("click", function () {
+        active = (active === c.dataset.handle) ? "" : c.dataset.handle;
+        apply();
+      });
+    });
+  })();
+  /* theme + language toggles: same contract as the main site; the tab
+     title is the one string CSS can't swap */
+  (function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("themeToggle");
+    if (themeBtn) themeBtn.addEventListener("click", function () {
+      var toLight = root.getAttribute("data-theme") !== "light";
+      if (toLight) root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+      try { localStorage.setItem("ttt-theme", toLight ? "light" : "dark"); }
+      catch (e) {}
+    });
+    var TITLE_EN = "ChinaX \u00b7 2026-10 (experimental)";
+    var TITLE_ZH = "\u574a\u95f4 \u00b7 2026-10 (experimental)";
+    function applyTitle() {
+      document.title = root.getAttribute("data-lang") === "zh" ? TITLE_ZH : TITLE_EN;
+    }
+    applyTitle();
+    var langBtn = document.getElementById("langToggle");
+    if (langBtn) langBtn.addEventListener("click", function () {
+      var toZh = root.getAttribute("data-lang") !== "zh";
+      if (toZh) { root.setAttribute("data-lang", "zh"); root.lang = "zh-Hans"; }
+      else { root.removeAttribute("data-lang"); root.lang = "en"; }
+      try { localStorage.setItem("ttt-lang", toZh ? "zh" : "en"); } catch (e) {}
+      applyTitle();
+    });
+  })();
+</script>
+</body>
+</html>
